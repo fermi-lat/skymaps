@@ -1,0 +1,25 @@
+package skymaps
+
+version v0
+
+# $Header$
+
+use astro *
+use healpix *
+
+apply_pattern shared_library
+
+path_remove PYTHONPATH skymaps
+path_prepend PYTHONPATH $(SKYMAPSROOT)/python;$(SKYMAPSROOT)/$(BINDIR)
+
+private
+
+
+macro source "*.cxx" WIN32 "*.cxx *.h *.py"
+
+library skymaps \
+ -s=../skymaps $(source) \
+ -s=../src $(source) 
+
+application test_skymaps -s=test $(source)
+
