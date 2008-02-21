@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: burnett  Thu Feb 21 14:48:58 PST 2008
+skymaps
+
+Added Files:
+      Tag: THB
+	SConscript skymapsLib.py 
+Log Message:
+scons additions
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-00-01-00, operation: add
 Package: skymaps
