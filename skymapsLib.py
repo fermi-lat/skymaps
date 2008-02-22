@@ -1,9 +1,9 @@
 # @file skymapsLib.py
-# @brief scons package dependencies
+# @brief scons package dependencies for skymaps
 #
 #$Header$
 def generate(env, **kw):
-	env.Tool('addLibrary', library=['astro'], package = 'astro')
+	env.Tool('addLibrary', library=['skymaps'], package = 'skymaps')
         depends = 'facilities tip'.split()
         for pack in depends: env.Tool(pack+'Lib')
 
