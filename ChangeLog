@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: glastrm  Mon Feb 25 21:39:19 PST 2008
+ScienceTools-scons/skymaps
+
+Modified Files:
+	skymapsLib.py SConscript 
+Log Message:
+Set lib dependencies up for when building libraries
+    *
+------------------------------------------------------------
 User: burnett  Fri Feb 22 14:40:31 PST 2008
 skymaps
 
