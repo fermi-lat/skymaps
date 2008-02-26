@@ -5,6 +5,7 @@
 $Id$
 @verbatim
  --------- -----   --- -----------------------------------------------------------------------
+ 19-feb-08 v0r1    THB fixed default coord system: galactic for HealPixel
  26-jan-08         THB Initial version
 
 @endverbatim

@@ -1,0 +1,39 @@
+------------------------------------------------------------
+User: burnett  Sat Jan 26 14:53:55 PST 2008
+skymaps
+
+Log Message:
+initial import
+
+Status:
+
+Vendor Tag:	THB
+Release Tags:	v0
+		
+N skymaps/.cvsignore
+N skymaps/cmt/.cvsignore
+N skymaps/cmt/requirements
+N skymaps/doc/release.notes
+N skymaps/python/swig_setup.in
+N skymaps/skymaps/CompositeSkySpectrum.h
+N skymaps/skymaps/Convolution.h
+N skymaps/skymaps/DiffuseFunction.h
+N skymaps/skymaps/Exposure.h
+N skymaps/skymaps/PhotonMap.h
+N skymaps/skymaps/PsfFunction.h
+N skymaps/skymaps/SkyImage.h
+N skymaps/skymaps/SkySpectrum.h
+N skymaps/src/CompositeSkySpectrum.cxx
+N skymaps/src/Convolution.cxx
+N skymaps/src/DiffuseFunction.cxx
+N skymaps/src/Exposure.cxx
+N skymaps/src/mainpage.h
+N skymaps/src/PhotonMap.cxx
+N skymaps/src/PsfFunction.cxx
+N skymaps/src/SkyImage.cxx
+N skymaps/src/SkySpectrum.cxx
+N skymaps/src/test/test_main.cxx
+
+No conflicts created by this import
+
+    *
