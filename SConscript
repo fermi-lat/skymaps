@@ -2,8 +2,6 @@
 # @brief scons build specifications for skymaps
 #
 #$Header$
-import glob,os
-
 Import('baseEnv')
 Import('listFiles')
 progEnv = baseEnv.Clone()
