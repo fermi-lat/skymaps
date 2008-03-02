@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Sat Mar  1 20:16:02 PST 2008
+skymaps/doc
+
+Modified Files:
+	release.notes 
+Log Message:
+bypass wcs FITS header processing that fails; add copies of fantastically well done GTI classes for convenience (avoiding unnecssary dependencies); then tagggg
+    *
+------------------------------------------------------------
 User: burnett  Sat Mar  1 20:16:01 PST 2008
 skymaps/cmt
 
