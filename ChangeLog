@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Sat Mar  1 20:16:01 PST 2008
+skymaps/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+bypass wcs FITS header processing that fails; add copies of fantastically well done GTI classes for convenience (avoiding unnecssary dependencies); then tagggg
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-00-01-00, operation: mov
 Package: skymaps
