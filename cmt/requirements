@@ -1,11 +1,12 @@
 package skymaps
 
-version v0r1
+version v0r2
 
 # $Header$
 
 use astro *
 use healpix *
+use st_facilities *
 
 apply_pattern shared_library
 
