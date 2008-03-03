@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Mon Mar  3 07:03:51 PST 2008
+skymaps/skymaps
+
+Modified Files:
+	PhotonMap.h 
+Log Message:
+manage GTI
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-00-02-00, operation: add
 Package: skymaps
