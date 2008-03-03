@@ -335,3 +335,7 @@ void PhotonMap::write(const std::string & outputFile,
     delete &table;
 }
 
+void PhotonMap::writegti(const std::string & outputFile) const
+{
+	m_gti.writeExtension(outputFile);
+}
