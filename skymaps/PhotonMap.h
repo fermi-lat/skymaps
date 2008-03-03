@@ -117,6 +117,10 @@ namespace skymaps {
             const std::string & tablename="PHOTONMAP",
             bool clobber = true) const;
 
+        /**@brief add GTI info to the current gti
+        */
+        void addgti(const skymaps::Gti& other);
+
         /**@brief Write a PhotonMap gti info to a fits file
         @param outputFile Fully qualified fits output file name
         */

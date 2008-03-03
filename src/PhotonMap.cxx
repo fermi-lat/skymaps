@@ -99,6 +99,14 @@ PhotonMap::PhotonMap(const std::string & inputFile, const std::string & tablenam
     std::cout << "Photons loaded: " << m_photons 
         << "  Pixels created: " << m_pixels <<std::endl;
     setName("PhotonMap from " +inputFile); // default name is the name of the file
+    try{
+        // now load the GTI info, if there
+        gti() = Gti(inputFile);
+        std::cout << "  GTI interval: "
+            << int(gti().minValue())<<"-"<<int(gti().maxValue())<<std::endl; 
+    }catch(const std::exception&){
+        std::cerr << "PhotonMap:: warning: no GTI information found" << std::endl;
+    }
 }
 
 
@@ -333,9 +341,15 @@ void PhotonMap::write(const std::string & outputFile,
 
     // close it?
     delete &table;
+    // and set the gti
+    m_gti.writeExtension(outputFile);
 }
 
 void PhotonMap::writegti(const std::string & outputFile) const
 {
-	m_gti.writeExtension(outputFile);
+    m_gti.writeExtension(outputFile);
+}
+void PhotonMap::addgti(const skymaps::Gti& other)
+{
+    m_gti |= other;
 }
