@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: glastrm  Thu Mar  6 12:51:48 PST 2008
+ScienceTools-scons/skymaps
+
+Modified Files:
+	skymapsLib.py 
+Log Message:
+skymaps depends on healpix
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-00-03-00, operation: mov
 Package: skymaps
