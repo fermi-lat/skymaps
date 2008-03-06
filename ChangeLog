@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+TAG
+Tag name: v0r3, operation: mov
+Package: skymaps
+User: glast  Thu Mar  6 12:52:21 2008
+Files:
+  skymaps/skymapsLib.py  1.6
+
+    *
+------------------------------------------------------------
 User: glastrm  Thu Mar  6 12:51:48 PST 2008
 ScienceTools-scons/skymaps
 
