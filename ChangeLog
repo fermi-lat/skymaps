@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: glastrm  Thu Mar  6 11:51:38 PST 2008
+ScienceTools-scons/skymaps
+
+Modified Files:
+	skymapsLib.py 
+Log Message:
+add st_facilities as a dependency of skymaps
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-00-03-00, operation: add
 Package: skymaps
