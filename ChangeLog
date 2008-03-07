@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: glastrm  Fri Mar  7 08:01:11 PST 2008
+ScienceTools-scons/skymaps
+
+Modified Files:
+	SConscript 
+Log Message:
+add lib dependencies when creating skymaps library
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-00-03-00, operation: mov
 Package: skymaps
