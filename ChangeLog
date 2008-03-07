@@ -1,0 +1,338 @@
+------------------------------------------------------------
+User: burnett  Mon Mar  3 07:03:52 PST 2008
+skymaps/src
+
+Modified Files:
+	PhotonMap.cxx 
+Log Message:
+manage GTI
+    *
+------------------------------------------------------------
+User: burnett  Mon Mar  3 07:03:51 PST 2008
+skymaps/skymaps
+
+Modified Files:
+	PhotonMap.h 
+Log Message:
+manage GTI
+    *
+------------------------------------------------------------
+TAG
+Tag name: skymaps-00-02-00, operation: add
+Package: skymaps
+User: glastrm  Sat Mar  1 20:30:45 2008
+Files:
+  skymaps/.cvsignore  1.1.1.1
+  skymaps/ChangeLog  1.10
+  skymaps/SConscript  1.2
+  skymaps/skymapsLib.py  1.3
+  skymaps/cmt/.cvsignore  1.1.1.1
+  skymaps/cmt/requirements  1.3
+  skymaps/doc/release.notes  1.3
+  skymaps/python/swig_setup.in  1.1.1.1
+  skymaps/skymaps/DiffuseFunction.h  1.1.1.1
+  skymaps/skymaps/PhotonMap.h  1.1.1.1
+  skymaps/skymaps/Exposure.h  1.1.1.1
+  skymaps/skymaps/Gti.h  1.1
+  skymaps/skymaps/SkyImage.h  1.1.1.1
+  skymaps/skymaps/SkySpectrum.h  1.1.1.1
+  skymaps/skymaps/GtiBase.h  1.1
+  skymaps/skymaps/PsfFunction.h  1.1.1.1
+  skymaps/skymaps/CompositeSkySpectrum.h  1.1.1.1
+  skymaps/skymaps/Convolution.h  1.1.1.1
+  skymaps/src/GtiBase.cxx  1.1
+  skymaps/src/Gti.cxx  1.1
+  skymaps/src/Exposure.cxx  1.1.1.1
+  skymaps/src/DiffuseFunction.cxx  1.1.1.1
+  skymaps/src/CompositeSkySpectrum.cxx  1.1.1.1
+  skymaps/src/mainpage.h  1.2
+  skymaps/src/SkySpectrum.cxx  1.1.1.1
+  skymaps/src/Convolution.cxx  1.1.1.1
+  skymaps/src/SkyImage.cxx  1.2
+  skymaps/src/PhotonMap.cxx  1.2
+  skymaps/src/PsfFunction.cxx  1.1.1.1
+  skymaps/src/test/test_main.cxx  1.1.1.1
+
+    *
+------------------------------------------------------------
+TAG
+Tag name: v0r2, operation: add
+Package: skymaps
+User: burnett  Sat Mar  1 20:17:28 2008
+Files:
+  skymaps/.cvsignore  1.1.1.1
+  skymaps/ChangeLog  1.10
+  skymaps/SConscript  1.2
+  skymaps/skymapsLib.py  1.3
+  skymaps/cmt/.cvsignore  1.1.1.1
+  skymaps/cmt/requirements  1.3
+  skymaps/doc/release.notes  1.3
+  skymaps/python/swig_setup.in  1.1.1.1
+  skymaps/skymaps/DiffuseFunction.h  1.1.1.1
+  skymaps/skymaps/PhotonMap.h  1.1.1.1
+  skymaps/skymaps/Exposure.h  1.1.1.1
+  skymaps/skymaps/Gti.h  1.1
+  skymaps/skymaps/SkyImage.h  1.1.1.1
+  skymaps/skymaps/SkySpectrum.h  1.1.1.1
+  skymaps/skymaps/GtiBase.h  1.1
+  skymaps/skymaps/PsfFunction.h  1.1.1.1
+  skymaps/skymaps/CompositeSkySpectrum.h  1.1.1.1
+  skymaps/skymaps/Convolution.h  1.1.1.1
+  skymaps/src/GtiBase.cxx  1.1
+  skymaps/src/Gti.cxx  1.1
+  skymaps/src/Exposure.cxx  1.1.1.1
+  skymaps/src/DiffuseFunction.cxx  1.1.1.1
+  skymaps/src/CompositeSkySpectrum.cxx  1.1.1.1
+  skymaps/src/mainpage.h  1.2
+  skymaps/src/SkySpectrum.cxx  1.1.1.1
+  skymaps/src/Convolution.cxx  1.1.1.1
+  skymaps/src/SkyImage.cxx  1.2
+  skymaps/src/PhotonMap.cxx  1.2
+  skymaps/src/PsfFunction.cxx  1.1.1.1
+  skymaps/src/test/test_main.cxx  1.1.1.1
+
+    *
+------------------------------------------------------------
+User: burnett  Sat Mar  1 20:16:02 PST 2008
+skymaps/skymaps
+
+Added Files:
+	Gti.h GtiBase.h 
+Log Message:
+bypass wcs FITS header processing that fails; add copies of fantastically well done GTI classes for convenience (avoiding unnecssary dependencies); then tagggg
+    *
+------------------------------------------------------------
+User: burnett  Sat Mar  1 20:16:02 PST 2008
+skymaps/src
+
+Modified Files:
+	SkyImage.cxx mainpage.h 
+Added Files:
+	Gti.cxx GtiBase.cxx 
+Log Message:
+bypass wcs FITS header processing that fails; add copies of fantastically well done GTI classes for convenience (avoiding unnecssary dependencies); then tagggg
+    *
+------------------------------------------------------------
+User: burnett  Sat Mar  1 20:16:02 PST 2008
+skymaps/doc
+
+Modified Files:
+	release.notes 
+Log Message:
+bypass wcs FITS header processing that fails; add copies of fantastically well done GTI classes for convenience (avoiding unnecssary dependencies); then tagggg
+    *
+------------------------------------------------------------
+User: burnett  Sat Mar  1 20:16:01 PST 2008
+skymaps/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+bypass wcs FITS header processing that fails; add copies of fantastically well done GTI classes for convenience (avoiding unnecssary dependencies); then tagggg
+    *
+------------------------------------------------------------
+TAG
+Tag name: skymaps-00-01-00, operation: mov
+Package: skymaps
+User: glast  Mon Feb 25 21:40:53 2008
+Files:
+  skymaps/SConscript  1.3
+  skymaps/skymapsLib.py  1.4
+
+    *
+------------------------------------------------------------
+TAG
+Tag name: v0r1, operation: mov
+Package: skymaps
+User: glast  Mon Feb 25 21:40:42 2008
+Files:
+  skymaps/SConscript  1.3
+  skymaps/skymapsLib.py  1.4
+
+    *
+------------------------------------------------------------
+User: glastrm  Mon Feb 25 21:39:19 PST 2008
+ScienceTools-scons/skymaps
+
+Modified Files:
+	skymapsLib.py SConscript 
+Log Message:
+Set lib dependencies up for when building libraries
+    *
+------------------------------------------------------------
+User: burnett  Fri Feb 22 14:40:31 PST 2008
+skymaps
+
+Modified Files:
+	skymapsLib.py 
+Log Message:
+cut and paste error :-(
+    *
+------------------------------------------------------------
+User: burnett  Fri Feb 22 08:49:31 PST 2008
+skymaps
+
+Added Files:
+	SConscript 
+Log Message:
+
+    *
+------------------------------------------------------------
+User: burnett  Fri Feb 22 08:48:14 PST 2008
+skymaps
+
+Added Files:
+	skymapsLib.py 
+Log Message:
+should be HEAD
+    *
+------------------------------------------------------------
+User: burnett  Fri Feb 22 08:39:42 PST 2008
+skymaps
+
+Modified Files:
+      Tag: THB
+	SConscript 
+Log Message:
+move to HEAD
+    *
+------------------------------------------------------------
+User: burnett  Thu Feb 21 14:48:58 PST 2008
+skymaps
+
+Added Files:
+      Tag: THB
+	SConscript skymapsLib.py 
+Log Message:
+scons additions
+    *
+------------------------------------------------------------
+TAG
+Tag name: skymaps-00-01-00, operation: add
+Package: skymaps
+User: glastrm  Tue Feb 19 17:01:32 2008
+Files:
+  skymaps/.cvsignore  1.1.1.1
+  skymaps/ChangeLog  1.1
+  skymaps/cmt/.cvsignore  1.1.1.1
+  skymaps/cmt/requirements  1.2
+  skymaps/doc/release.notes  1.2
+  skymaps/python/swig_setup.in  1.1.1.1
+  skymaps/skymaps/DiffuseFunction.h  1.1.1.1
+  skymaps/skymaps/SkySpectrum.h  1.1.1.1
+  skymaps/skymaps/PsfFunction.h  1.1.1.1
+  skymaps/skymaps/PhotonMap.h  1.1.1.1
+  skymaps/skymaps/Exposure.h  1.1.1.1
+  skymaps/skymaps/CompositeSkySpectrum.h  1.1.1.1
+  skymaps/skymaps/Convolution.h  1.1.1.1
+  skymaps/skymaps/SkyImage.h  1.1.1.1
+  skymaps/src/Exposure.cxx  1.1.1.1
+  skymaps/src/DiffuseFunction.cxx  1.1.1.1
+  skymaps/src/CompositeSkySpectrum.cxx  1.1.1.1
+  skymaps/src/mainpage.h  1.1.1.1
+  skymaps/src/Convolution.cxx  1.1.1.1
+  skymaps/src/SkySpectrum.cxx  1.1.1.1
+  skymaps/src/PhotonMap.cxx  1.2
+  skymaps/src/PsfFunction.cxx  1.1.1.1
+  skymaps/src/SkyImage.cxx  1.1.1.1
+  skymaps/src/test/test_main.cxx  1.1.1.1
+
+    *
+------------------------------------------------------------
+TAG
+Tag name: v0r1, operation: add
+Package: skymaps
+User: burnett  Tue Feb 19 16:49:12 2008
+Files:
+  skymaps/.cvsignore  1.1.1.1
+  skymaps/ChangeLog  1.1
+  skymaps/cmt/.cvsignore  1.1.1.1
+  skymaps/cmt/requirements  1.2
+  skymaps/doc/release.notes  1.2
+  skymaps/python/swig_setup.in  1.1.1.1
+  skymaps/skymaps/DiffuseFunction.h  1.1.1.1
+  skymaps/skymaps/SkySpectrum.h  1.1.1.1
+  skymaps/skymaps/PsfFunction.h  1.1.1.1
+  skymaps/skymaps/PhotonMap.h  1.1.1.1
+  skymaps/skymaps/Exposure.h  1.1.1.1
+  skymaps/skymaps/CompositeSkySpectrum.h  1.1.1.1
+  skymaps/skymaps/Convolution.h  1.1.1.1
+  skymaps/skymaps/SkyImage.h  1.1.1.1
+  skymaps/src/Exposure.cxx  1.1.1.1
+  skymaps/src/DiffuseFunction.cxx  1.1.1.1
+  skymaps/src/CompositeSkySpectrum.cxx  1.1.1.1
+  skymaps/src/mainpage.h  1.1.1.1
+  skymaps/src/Convolution.cxx  1.1.1.1
+  skymaps/src/SkySpectrum.cxx  1.1.1.1
+  skymaps/src/PhotonMap.cxx  1.2
+  skymaps/src/PsfFunction.cxx  1.1.1.1
+  skymaps/src/SkyImage.cxx  1.1.1.1
+  skymaps/src/test/test_main.cxx  1.1.1.1
+
+    *
+------------------------------------------------------------
+User: burnett  Tue Feb 19 16:48:43 PST 2008
+skymaps/doc
+
+Modified Files:
+	release.notes 
+Log Message:
+tagging
+    *
+------------------------------------------------------------
+User: burnett  Tue Feb 19 16:48:43 PST 2008
+skymaps/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+tagging
+    *
+------------------------------------------------------------
+User: burnett  Tue Feb 19 16:39:06 PST 2008
+skymaps/src
+
+Modified Files:
+	PhotonMap.cxx 
+Log Message:
+
+    *
+------------------------------------------------------------
+User: burnett  Sat Jan 26 14:53:55 PST 2008
+skymaps
+
+Log Message:
+initial import
+
+Status:
+
+Vendor Tag:	THB
+Release Tags:	v0
+		
+N skymaps/.cvsignore
+N skymaps/cmt/.cvsignore
+N skymaps/cmt/requirements
+N skymaps/doc/release.notes
+N skymaps/python/swig_setup.in
+N skymaps/skymaps/CompositeSkySpectrum.h
+N skymaps/skymaps/Convolution.h
+N skymaps/skymaps/DiffuseFunction.h
+N skymaps/skymaps/Exposure.h
+N skymaps/skymaps/PhotonMap.h
+N skymaps/skymaps/PsfFunction.h
+N skymaps/skymaps/SkyImage.h
+N skymaps/skymaps/SkySpectrum.h
+N skymaps/src/CompositeSkySpectrum.cxx
+N skymaps/src/Convolution.cxx
+N skymaps/src/DiffuseFunction.cxx
+N skymaps/src/Exposure.cxx
+N skymaps/src/mainpage.h
+N skymaps/src/PhotonMap.cxx
+N skymaps/src/PsfFunction.cxx
+N skymaps/src/SkyImage.cxx
+N skymaps/src/SkySpectrum.cxx
+N skymaps/src/test/test_main.cxx
+
+No conflicts created by this import
+
+    *

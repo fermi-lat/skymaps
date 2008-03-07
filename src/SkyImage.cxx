@@ -126,7 +126,11 @@ SkyImage::SkyImage(const std::string& fits_file, const std::string& extension, b
     header["NAXIS3"].get(m_naxis3);
     m_pixelCount = m_naxis1*m_naxis2*m_naxis3;
 
+#if 0 // this seems not to interpret CAR properly
     m_wcs = new astro::SkyProj(fits_file,1);
+#else
+    m_wcs = new astro::SkyProj(fits_file, "");
+#endif
     // finally, read in the image: assume it is float
     dynamic_cast<tip::TypedImage<float>*>(m_image)->get(m_imageData);
 
@@ -230,7 +234,7 @@ double SkyImage::pixelValue(const astro::SkyDir& pos,unsigned  int layer)const
                dx( p.first-x -1 ),
                dy( p.second-y-1 );
         unsigned int k = static_cast<unsigned int>(x + m_naxis1*(y+layer*m_naxis2));
-        v = m_imageData[k];
+        v = m_imageData.at(k);
         if( dx>0. && x < m_naxis1){ 
             v = v*(1.-dx) + m_imageData[k+1]*dx;
         }else if( x >1) {
@@ -243,7 +247,7 @@ double SkyImage::pixelValue(const astro::SkyDir& pos,unsigned  int layer)const
         }
     }else{
         unsigned int k = pixel_index(pos,layer);
-        v = m_imageData[k];
+        v = m_imageData.at(k);
     }
    
     return v;        

@@ -1,5 +1,5 @@
 /** @file PhotonMap.cxx
-    @brief implement class PhotonMap 
+@brief implement class PhotonMap 
 
 $Header$
 */
@@ -21,13 +21,12 @@ using healpix::Healpix;
 using astro::SkyDir;
 
 using astro::Photon;
-using healpix::HealPixel;
 
 using namespace skymaps;
 
 
-   ///@brief data value for bin with given energy 
-    ///@param e energy in MeV
+///@brief data value for bin with given energy 
+///@param e energy in MeV
 double PhotonMap::value(const SkyDir& dir, double energy)const
 {
     Photon gam(dir, energy, 0); // just for the next interface :-)
@@ -36,8 +35,8 @@ double PhotonMap::value(const SkyDir& dir, double energy)const
     return photonCount(pix) ;
 }
 
-    ///@brief integral for the energy limits, in the given direction
-    /// Assume that request is for an energy bin.
+///@brief integral for the energy limits, in the given direction
+/// Assume that request is for an energy bin.
 double PhotonMap::integral(const SkyDir& dir, double a, double b)const
 {
     return value(dir, sqrt(a*b));
@@ -62,23 +61,23 @@ PhotonMap::PhotonMap(const std::string & inputFile, const std::string & tablenam
     double eratio;
     int stored_photons(0), stored_pixels(0);
 
-	// Guard against headers not being found in fits file.  Set to default on error
+    // Guard against headers not being found in fits file.  Set to default on error
 
-	try	{hdr["EMIN"].get(m_emin);} catch (const std::exception& ) {m_emin = 100.;}
-	try
-	{
-		hdr["ERATIO"].get(eratio);
-		m_logeratio = log(eratio);
-	}
-	catch (const std::exception& ) {m_logeratio = log(2.35);}
+    try	{hdr["EMIN"].get(m_emin);} catch (const std::exception& ) {m_emin = 100.;}
+    try
+    {
+        hdr["ERATIO"].get(eratio);
+        m_logeratio = log(eratio);
+    }
+    catch (const std::exception& ) {m_logeratio = log(2.35);}
     try	{hdr["LEVELS"].get(m_levels);} catch (const std::exception& ) {m_levels = 8;}
     try	{hdr["MINLEVEL"].get(m_minlevel);} catch (const std::exception& ) {m_minlevel = 6;}
-	try
-	{
-		hdr["PHOTONS"].get(stored_photons);
-		hdr["PIXELS"].get(stored_pixels);
-	}
-	catch (const std::exception& ) {}
+    try
+    {
+        hdr["PHOTONS"].get(stored_photons);
+        hdr["PIXELS"].get(stored_pixels);
+    }
+    catch (const std::exception& ) {}
 
     tip::Table::ConstIterator itor = table.begin();
     std::cout << "Creating PhotonMap from file " << inputFile << ", table " << tablename << std::endl;
@@ -99,6 +98,15 @@ PhotonMap::PhotonMap(const std::string & inputFile, const std::string & tablenam
         << "  Pixels available: " << stored_pixels <<std::endl;
     std::cout << "Photons loaded: " << m_photons 
         << "  Pixels created: " << m_pixels <<std::endl;
+    setName("PhotonMap from " +inputFile); // default name is the name of the file
+    try{
+        // now load the GTI info, if there
+        gti() = Gti(inputFile);
+        std::cout << "  GTI interval: "
+            << int(gti().minValue())<<"-"<<int(gti().maxValue())<<std::endl; 
+    }catch(const std::exception&){
+        std::cerr << "PhotonMap:: warning: no GTI information found" << std::endl;
+    }
 }
 
 
@@ -160,13 +168,13 @@ int PhotonMap::extract(const SkyDir& dir, double radius,
     if (summary_level == -1)
         summary_level = m_minlevel; // default level to test
     int nside( 1<< summary_level);
-    int npix( 12 * nside * nside);
+    //int npix( 12 * nside * nside);
     int total(0);
     vec.clear();
 
     // Get pixels in summary level that are within radius
     std::vector<int> v;
-    healpix::Healpix hpx(nside, Healpix::NESTED);
+    healpix::Healpix hpx(nside, Healpix::NESTED, SkyDir::GALACTIC);
     hpx.query_disc(dir, radius, v);  
     int max_level = m_minlevel + m_levels - 1;
 
@@ -190,10 +198,10 @@ int PhotonMap::extract(const SkyDir& dir, double radius,
 }
 
 int PhotonMap::extract_level(const SkyDir& dir, double radius,
-                       std::vector<std::pair<HealPixel, int> >& vec,
-                       int select_level, bool include_all) const
+                             std::vector<std::pair<HealPixel, int> >& vec,
+                             int select_level, bool include_all) const
 {
-    bool allsky(radius>=180); // maybe use to simplify below, but seems fast
+    //bool allsky(radius>=180); // maybe use to simplify below, but seems fast
     radius *= (M_PI / 180); // convert to radians
     if (select_level == -1)
         select_level = m_minlevel; // default level to select
@@ -203,7 +211,7 @@ int PhotonMap::extract_level(const SkyDir& dir, double radius,
 
     // Get pixels in select level that are within radius
     std::vector<int> v;
-    healpix::Healpix hpx(nside, Healpix::NESTED);
+    healpix::Healpix hpx(nside, Healpix::NESTED, SkyDir::GALACTIC);
 
     hpx.query_disc(dir, radius, v);  
 
@@ -290,8 +298,8 @@ std::vector<double> PhotonMap::energyBins()const
 }
 
 void PhotonMap::write(const std::string & outputFile,
-                                           const std::string & tablename,
-                                           bool clobber) const
+                      const std::string & tablename,
+                      bool clobber) const
 {
     if (clobber)
     {
@@ -333,5 +341,15 @@ void PhotonMap::write(const std::string & outputFile,
 
     // close it?
     delete &table;
+    // and set the gti
+    m_gti.writeExtension(outputFile);
 }
 
+void PhotonMap::writegti(const std::string & outputFile) const
+{
+    m_gti.writeExtension(outputFile);
+}
+void PhotonMap::addgti(const skymaps::Gti& other)
+{
+    m_gti |= other;
+}
