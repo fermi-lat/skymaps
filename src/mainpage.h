@@ -17,6 +17,10 @@
 - skymaps::CompositeSkySpectrum - linear combination of SkySpectrum objects. Used to combine the galactic diffuse with nearby (< 1deg) strong sources
 - skymaps::Exposure - Integrate an expouse cube over the acceptance to define the exposure at any point.
 
+Also include copies of the two good time interval (GTI) classes from the rest of the Science Tools,
+to avoid considerable unrelated dependencies
+
+- skymaps::GTI -- Manage good time intervals
 
 \section notes release notes
   release.notes
