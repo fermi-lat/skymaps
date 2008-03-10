@@ -63,10 +63,13 @@ double DiffuseFunction::extraGal(double energy)const
 
 size_t DiffuseFunction::layer(double e)const
 {
-    if( e< m_emin || e>m_emax ){
+    if( e< m_emin  ){
         std::stringstream error; 
         error << "Diffuse function: energy out of range: "<< e ;
         throw std::invalid_argument(error.str());
+    }
+    if( e>m_emax ) {
+        return m_energies.size();
     }
     size_t step(0);
     for( std::vector<double>::const_iterator it( m_energies.begin()); it!=m_energies.end(); ++it, ++step){
@@ -79,6 +82,9 @@ size_t DiffuseFunction::layer(double e)const
 double DiffuseFunction::value(const astro::SkyDir& dir, double e)const
 {
     size_t l(layer(e)); 
+    
+    if( l==m_energies.size()) return m_data.pixelValue(dir,l-1);
+
     double e1(m_energies[l]), e2(m_energies[l+1]);
     double f1( m_data.pixelValue(dir,l) ), f2(m_data.pixelValue(dir,l+1) );
     double alpha ( log(f1/f2)/log(e2/e1) );
