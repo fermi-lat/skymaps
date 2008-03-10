@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Mon Mar 10 09:38:43 PDT 2008
+skymaps/src
+
+Modified Files:
+	DiffuseFunction.cxx 
+Log Message:
+extend range to infinity
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-00-03-00, operation: mov
 Package: skymaps
