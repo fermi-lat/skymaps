@@ -125,4 +125,13 @@ double SkySpectrum::level_ave(const astro::SkyDir& dir, double angle, int level)
     return av/v.size();
 }
 
+std::string SkySpectrum::name()const
+{
+    return m_name;
+}
+
+void SkySpectrum::setName(const std::string& name)
+{
+    m_name = name;
+}
     
