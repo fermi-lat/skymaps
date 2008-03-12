@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: burnett  Wed Mar 12 11:26:07 PDT 2008
+skymaps/skymaps
+
+Modified Files:
+	SkySpectrum.h 
+Added Files:
+	IsotropicPowerLaw.h 
+Log Message:
+add simple isotropic, powerlaw spectrum
+    *
+------------------------------------------------------------
 User: burnett  Mon Mar 10 09:38:43 PDT 2008
 skymaps/src
 
