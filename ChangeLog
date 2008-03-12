@@ -1,5 +1,16 @@
 ------------------------------------------------------------
 User: burnett  Wed Mar 12 11:26:07 PDT 2008
+skymaps/src
+
+Modified Files:
+	SkySpectrum.cxx 
+Added Files:
+	IsotropicPowerLaw.cxx 
+Log Message:
+add simple isotropic, powerlaw spectrum
+    *
+------------------------------------------------------------
+User: burnett  Wed Mar 12 11:26:07 PDT 2008
 skymaps/skymaps
 
 Modified Files:
