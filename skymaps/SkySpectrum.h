@@ -38,7 +38,8 @@ public:
     virtual double integral(const astro::SkyDir& dir, double a, double b)const=0;
 
     ///@brief name for identification
-    virtual std::string name()const=0;
+    virtual std::string name()const;
+    void setName(const std::string& name);
 
     /// @brief Implement the SkyFunction interface, convenient for creating a SkyImage.
     /// @return value for given direction and currently selected energy, or integral over the energy range 
@@ -53,14 +54,13 @@ public:
     ///! average, for the given energy or energy range, about the direction and cone angle(radians)
     double average(const astro::SkyDir& dir, double angle, double tolerance)const;
 
-
 private:
     mutable double m_energy;
     mutable double m_emin, m_emax; ///< range for integral
     mutable bool m_use_range; ///< true: evaluate specified energy range; false: value at energy
 
     double level_ave(const astro::SkyDir& dir, double angle, int level) const;
-
+    std::string m_name;
 
 };
 
