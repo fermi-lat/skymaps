@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Thu Mar 20 19:10:58 PDT 2008
+skymaps/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+update to use SwigModule
+    *
+------------------------------------------------------------
 TAG
 Tag name: v0r5, operation: add
 Package: skymaps
