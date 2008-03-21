@@ -1,5 +1,43 @@
 ------------------------------------------------------------
 TAG
+Tag name: v0r5, operation: add
+Package: skymaps
+User: burnett  Thu Mar 20 19:10:30 2008
+Files:
+  skymaps/.cvsignore  1.1.1.1
+  skymaps/ChangeLog  1.44
+  skymaps/SConscript  1.4
+  skymaps/skymapsLib.py  1.6
+  skymaps/cmt/.cvsignore  1.1.1.1
+  skymaps/python/swig_setup.in  1.1.1.1
+  skymaps/skymaps/DiffuseFunction.h  1.1.1.1
+  skymaps/skymaps/PhotonMap.h  1.3
+  skymaps/skymaps/Exposure.h  1.1.1.1
+  skymaps/skymaps/Gti.h  1.1
+  skymaps/skymaps/SkyImage.h  1.1.1.1
+  skymaps/skymaps/SkySpectrum.h  1.2
+  skymaps/skymaps/PsfFunction.h  1.1.1.1
+  skymaps/skymaps/GtiBase.h  1.1
+  skymaps/skymaps/CompositeSkySpectrum.h  1.1.1.1
+  skymaps/skymaps/Convolution.h  1.1.1.1
+  skymaps/skymaps/IsotropicPowerLaw.h  1.1
+  skymaps/src/GtiBase.cxx  1.1
+  skymaps/src/Gti.cxx  1.1
+  skymaps/src/Exposure.cxx  1.1.1.1
+  skymaps/src/DiffuseFunction.cxx  1.2
+  skymaps/src/IsotropicPowerLaw.cxx  1.1
+  skymaps/src/CompositeSkySpectrum.cxx  1.1.1.1
+  skymaps/src/mainpage.h  1.2
+  skymaps/src/SkySpectrum.cxx  1.2
+  skymaps/src/Convolution.cxx  1.1.1.1
+  skymaps/src/SkyImage.cxx  1.2
+  skymaps/src/PhotonMap.cxx  1.4
+  skymaps/src/PsfFunction.cxx  1.1.1.1
+  skymaps/src/test/test_main.cxx  1.1.1.1
+
+    *
+------------------------------------------------------------
+TAG
 Tag name: skymaps-00-04-00, operation: add
 Package: skymaps
 User: glastrm  Wed Mar 12 12:00:43 2008
