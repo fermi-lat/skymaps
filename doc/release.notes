@@ -5,6 +5,7 @@
 $Id$
 @verbatim
  --------- -----   --- -----------------------------------------------------------------------
+ 20-mar-08 v0r5    THB use SwigModule for python
  12-mar-08 v0r4    THB add IsotropicPowerLaw
  01-mar-08 v0r3    THB copy in GTI classes for convenience
  19-feb-08 v0r1    THB fixed default coord system: galactic for HealPixel
