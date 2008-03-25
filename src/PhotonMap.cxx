@@ -353,3 +353,10 @@ void PhotonMap::addgti(const skymaps::Gti& other)
 {
     m_gti |= other;
 }
+
+void PhotonMap::operator+(skymaps::PhotonMap& other) {
+    for(const_iterator it=other.begin();it!=other.end();++it){
+        addPixel(it->first,it->second);
+    }
+    addgti(other.gti());
+}

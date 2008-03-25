@@ -71,6 +71,9 @@ namespace skymaps {
         ///  implement the SkyFunction class by returning density
         double operator()(const astro::SkyDir & sd) const{ return density(sd);}
 
+        ///   combines photonmaps and their gti's
+        void operator+(skymaps::PhotonMap& other);
+
         /// the binning function: return a HealPixel corresponding to the 
         /// direction and energy
         healpix::HealPixel pixel(const astro::Photon& gamma);
