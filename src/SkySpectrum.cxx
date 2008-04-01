@@ -30,7 +30,8 @@ void SkySpectrum::setEnergy(double e)const
 void SkySpectrum::setEnergyRange(double emin, double emax)const
 {
     m_emin = emin; m_emax=emax;
-    assert( emin>0 && emax/emin<3); // otherwise integral not (now) valid
+    // allow for high level? 
+    // assert( emin>0 && emax/emin<3); // otherwise integral not (now) valid
     m_use_range=true;
 }
 
