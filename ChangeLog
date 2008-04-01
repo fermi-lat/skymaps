@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Tue Apr  1 06:29:53 PDT 2008
+skymaps/src
+
+Modified Files:
+	PhotonMap.cxx 
+Log Message:
+convert += cperator; some SWIG kluge hides
+    *
+------------------------------------------------------------
+User: burnett  Tue Apr  1 06:29:53 PDT 2008
 skymaps/skymaps
 
 Modified Files:
