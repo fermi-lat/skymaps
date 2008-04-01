@@ -70,9 +70,10 @@ namespace skymaps {
 
         ///  implement the SkyFunction class by returning density
         double operator()(const astro::SkyDir & sd) const{ return density(sd);}
-
+#ifndef SWIG // don't understand why this causes problems
         ///   combines photonmaps and their gti's
-        void operator+(skymaps::PhotonMap& other);
+        void operator+=(const skymaps::PhotonMap& other);
+#endif
 
         /// the binning function: return a HealPixel corresponding to the 
         /// direction and energy
@@ -128,9 +129,12 @@ namespace skymaps {
         @param outputFile Fully qualified fits output file name
         */
         void writegti(const std::string & outputFile) const;
-
         /// @return a modifyable reference to gti info
         skymaps::Gti & gti() {return m_gti;};
+#ifndef SWIG
+        /// @return a const reference to the gti
+        const skymaps::Gti & gti()const {return m_gti;};
+#endif
 
 
     private:

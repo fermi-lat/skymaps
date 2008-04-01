@@ -5,6 +5,7 @@
 $Id$
 @verbatim
  --------- -----   --- -----------------------------------------------------------------------
+ 01-apr-08 v0r6p1  THB Hide some stuff that SWIG could not understand
  01-apr-08 v0r6    MR  Added addition operator to PhotonMap
  20-mar-08 v0r5    THB use SwigModule for python
  12-mar-08 v0r4    THB add IsotropicPowerLaw
