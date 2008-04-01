@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Tue Apr  1 06:29:53 PDT 2008
+skymaps/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+convert += cperator; some SWIG kluge hides
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-00-06-00, operation: add
 Package: skymaps
