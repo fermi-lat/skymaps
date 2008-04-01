@@ -5,7 +5,7 @@
 $Id$
 @verbatim
  --------- -----   --- -----------------------------------------------------------------------
- 25-mar-08 v0r5p1  MR  Added addition operator to PhotonMap
+ 01-apr-08 v0r6    MR  Added addition operator to PhotonMap
  20-mar-08 v0r5    THB use SwigModule for python
  12-mar-08 v0r4    THB add IsotropicPowerLaw
  01-mar-08 v0r3    THB copy in GTI classes for convenience
