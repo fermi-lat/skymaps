@@ -2,6 +2,14 @@
 TAG
 Tag name: skymaps-00-06-01, operation: add
 Package: skymaps
+User: glastrm  Tue Apr  1 07:00:50 2008
+Files:
+
+    *
+------------------------------------------------------------
+TAG
+Tag name: skymaps-00-06-01, operation: add
+Package: skymaps
 User: glastrm  Tue Apr  1 06:45:58 2008
 Files:
   skymaps/.cvsignore  1.1.1.1
