@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Tue Apr  1 03:31:33 PDT 2008
+skymaps/src
+
+Modified Files:
+	SkySpectrum.cxx 
+Log Message:
+relax cut on energy range for a bin
+    *
+------------------------------------------------------------
 User: mar0  Tue Mar 25 15:14:06 PDT 2008
 skymaps/doc
 
