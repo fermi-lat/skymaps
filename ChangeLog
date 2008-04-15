@@ -1,4 +1,46 @@
 ------------------------------------------------------------
+TAG
+Tag name: v0r7, operation: add
+Package: skymaps
+User: burnett  Tue Apr 15 13:38:44 2008
+Files:
+  skymaps/.cvsignore  1.1.1.1
+  skymaps/ChangeLog  1.64
+  skymaps/SConscript  1.4
+  skymaps/skymapsLib.py  1.6
+  skymaps/cmt/.cvsignore  1.1.1.1
+  skymaps/cmt/requirements  1.9
+  skymaps/doc/release.notes  1.10
+  skymaps/python/swig_setup.in  1.1.1.1
+  skymaps/skymaps/DiffuseFunction.h  1.1.1.1
+  skymaps/skymaps/PhotonMap.h  1.5
+  skymaps/skymaps/Exposure.h  1.1.1.1
+  skymaps/skymaps/Gti.h  1.1
+  skymaps/skymaps/SkyImage.h  1.1.1.1
+  skymaps/skymaps/SkySpectrum.h  1.2
+  skymaps/skymaps/PsfFunction.h  1.1.1.1
+  skymaps/skymaps/Background.h  1.1
+  skymaps/skymaps/GtiBase.h  1.1
+  skymaps/skymaps/CompositeSkySpectrum.h  1.1.1.1
+  skymaps/skymaps/Convolution.h  1.1.1.1
+  skymaps/skymaps/IsotropicPowerLaw.h  1.1
+  skymaps/src/GtiBase.cxx  1.1
+  skymaps/src/Gti.cxx  1.1
+  skymaps/src/Exposure.cxx  1.1.1.1
+  skymaps/src/DiffuseFunction.cxx  1.2
+  skymaps/src/IsotropicPowerLaw.cxx  1.1
+  skymaps/src/CompositeSkySpectrum.cxx  1.1.1.1
+  skymaps/src/mainpage.h  1.2
+  skymaps/src/Background.cxx  1.1
+  skymaps/src/SkySpectrum.cxx  1.3
+  skymaps/src/Convolution.cxx  1.1.1.1
+  skymaps/src/SkyImage.cxx  1.2
+  skymaps/src/PsfFunction.cxx  1.1.1.1
+  skymaps/src/PhotonMap.cxx  1.6
+  skymaps/src/test/test_main.cxx  1.1.1.1
+
+    *
+------------------------------------------------------------
 User: burnett  Tue Apr 15 13:38:24 PDT 2008
 skymaps/src
 
