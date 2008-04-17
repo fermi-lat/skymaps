@@ -1,5 +1,16 @@
 ------------------------------------------------------------
 User: mar0  Thu Apr 17 14:56:54 PDT 2008
+skymaps/src
+
+Modified Files:
+	PhotonMap.cxx 
+Added Files:
+	EnergyBinner.cxx 
+Log Message:
+Added EnergyBinner and interaction with photonmap
+    *
+------------------------------------------------------------
+User: mar0  Thu Apr 17 14:56:54 PDT 2008
 skymaps/skymaps
 
 Modified Files:
