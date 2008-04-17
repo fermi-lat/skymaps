@@ -50,11 +50,13 @@ PhotonMap::PhotonMap(double emin, double eratio, int nlevels, int minlevel)
 , m_minlevel(minlevel)
 , m_photons(0)
 , m_pixels(0)
+, m_eb(true)
 {}
 
 PhotonMap::PhotonMap(const std::string & inputFile, const std::string & tablename)
 : m_photons(0)
 , m_pixels(0)
+, m_eb(true)
 {
     const tip::Table & table=*tip::IFileSvc::instance().readTable(inputFile, tablename);
     const tip::Header& hdr = table.getHeader();
@@ -113,7 +115,7 @@ PhotonMap::PhotonMap(const std::string & inputFile, const std::string & tablenam
 
 void PhotonMap::addPhoton(const Photon& gamma)
 {
-    if( gamma.energy() < m_emin) return;
+    if(m_eb.band(gamma)<0) return;
     HealPixel p = pixel(gamma);
     iterator it = this->find(p);
     if( it==this->end()){
@@ -137,9 +139,9 @@ void PhotonMap::addPixel(const healpix::HealPixel & px, int count)
 
 HealPixel PhotonMap::pixel(const Photon& gamma)
 {
-    int i( static_cast<int>(log(gamma.energy()/m_emin)/m_logeratio) );
-    if( i>m_levels-1) i= m_levels-1;
-    return HealPixel(gamma.dir(), i+m_minlevel);
+    unsigned int band = m_eb.band(gamma);
+    unsigned int level = m_eb.level(gamma);
+    return HealPixel(gamma.dir(),level,band);
 }
 
 // Return density for a given direction, in photons/area of base pixel.

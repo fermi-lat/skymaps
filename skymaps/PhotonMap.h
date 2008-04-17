@@ -7,6 +7,7 @@ $Header$
 #ifndef skymaps_PhotonMap_h
 #define skymaps_PhotonMap_h
 
+#include "skymaps/EnergyBinner.h"
 #include "skymaps/SkySpectrum.h"
 #include "healpix/Healpix.h"
 #include "healpix/HealPixel.h"
@@ -146,6 +147,7 @@ namespace skymaps {
         int    m_photons;  ///< total number of photons added
         int    m_pixels;   ///< keep track of total number of pixels
         skymaps::Gti m_gti;   ///< gti information associated with this photon map
+        skymaps::EnergyBinner m_eb;
         };
 
 
