@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: mar0  Thu Apr 17 14:56:54 PDT 2008
+skymaps/skymaps
+
+Modified Files:
+	PhotonMap.h 
+Added Files:
+	EnergyBinner.h 
+Log Message:
+Added EnergyBinner and interaction with photonmap
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-00-07-00, operation: add
 Package: skymaps
