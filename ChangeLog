@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: mar0  Mon Apr 21 17:27:33 PDT 2008
+skymaps/src
+
+Modified Files:
+	EnergyBinner.cxx PhotonMap.cxx 
+Log Message:
+Fixed functionality for the new energy binning scheme, changed energy binner to a singleton
+    *
+------------------------------------------------------------
+User: mar0  Mon Apr 21 17:27:33 PDT 2008
 skymaps/skymaps
 
 Modified Files:
