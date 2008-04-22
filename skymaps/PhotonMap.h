@@ -7,7 +7,7 @@ $Header$
 #ifndef skymaps_PhotonMap_h
 #define skymaps_PhotonMap_h
 
-#include "skymaps/EnergyBinner.h"
+
 #include "skymaps/SkySpectrum.h"
 #include "healpix/Healpix.h"
 #include "healpix/HealPixel.h"
@@ -19,6 +19,9 @@ namespace astro {class Photon;}
 #include <string>
 
 namespace skymaps {
+    
+    class EnergyBinner;
+
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     /** @class PhotonMap
     @brief a SkySpectrum that adapts the class map_tools::PhotonMap. 
@@ -103,6 +106,10 @@ namespace skymaps {
             std::vector<std::pair<healpix::HealPixel, int> >& vec,
             int select_level = -1, bool include_all = false) const;
 
+        int extract_band(const astro::SkyDir& dir, double radius,
+            std::vector<std::pair<healpix::HealPixel, int> >& vec,
+            int select_band, bool include_all) const;
+
         int photonCount()const { return m_photons;} ///< current number of photons
         int pixelCount()const { return m_pixels; } ///< current nubmer of pixesl
 
@@ -137,7 +144,6 @@ namespace skymaps {
         const skymaps::Gti & gti()const {return m_gti;};
 #endif
 
-
     private:
         std::string m_name; ///< use name of file as descriptive name
         double m_emin;     ///< minimum energy for first bin
@@ -147,8 +153,8 @@ namespace skymaps {
         int    m_photons;  ///< total number of photons added
         int    m_pixels;   ///< keep track of total number of pixels
         skymaps::Gti m_gti;   ///< gti information associated with this photon map
-        skymaps::EnergyBinner m_eb;
-        };
+        skymaps::EnergyBinner* m_eb;
+    };
 
 
 }
