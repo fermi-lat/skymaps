@@ -5,6 +5,7 @@ $Header$
 */
 
 #include "skymaps/PhotonMap.h"
+#include "skymaps/EnergyBinner.h"
 #include "astro/Photon.h"
 
 #include "CLHEP/Vector/ThreeVector.h"
@@ -50,13 +51,13 @@ PhotonMap::PhotonMap(double emin, double eratio, int nlevels, int minlevel)
 , m_minlevel(minlevel)
 , m_photons(0)
 , m_pixels(0)
-, m_eb(true)
-{}
+{
+    m_eb=skymaps::EnergyBinner::Instance(emin,eratio,nlevels);
+}
 
 PhotonMap::PhotonMap(const std::string & inputFile, const std::string & tablename)
 : m_photons(0)
 , m_pixels(0)
-, m_eb(true)
 {
     const tip::Table & table=*tip::IFileSvc::instance().readTable(inputFile, tablename);
     const tip::Header& hdr = table.getHeader();
@@ -81,6 +82,7 @@ PhotonMap::PhotonMap(const std::string & inputFile, const std::string & tablenam
     }
     catch (const std::exception& ) {}
 
+    m_eb = EnergyBinner::Instance(m_emin,eratio,m_levels);
     tip::Table::ConstIterator itor = table.begin();
     std::cout << "Creating PhotonMap from file " << inputFile << ", table " << tablename << std::endl;
 
@@ -90,7 +92,7 @@ PhotonMap::PhotonMap(const std::string & inputFile, const std::string & tablenam
         (*itor)["LEVEL"].get(level);
         (*itor)["INDEX"].get(index);
         (*itor)["COUNT"].get(count);
-        HealPixel p(index, level);
+        HealPixel p(index, level,2*(level-m_minlevel));
         this->insert( value_type(p, count) );
         m_pixels ++;
         m_photons += count;
@@ -115,7 +117,7 @@ PhotonMap::PhotonMap(const std::string & inputFile, const std::string & tablenam
 
 void PhotonMap::addPhoton(const Photon& gamma)
 {
-    if(m_eb.band(gamma)<0) return;
+    if(m_eb->band(gamma)<0) return;
     HealPixel p = pixel(gamma);
     iterator it = this->find(p);
     if( it==this->end()){
@@ -139,8 +141,9 @@ void PhotonMap::addPixel(const healpix::HealPixel & px, int count)
 
 HealPixel PhotonMap::pixel(const Photon& gamma)
 {
-    unsigned int band = m_eb.band(gamma);
-    unsigned int level = m_eb.level(gamma);
+    unsigned int band = 2*m_eb->band(gamma)+gamma.eventClass();
+    if(m_eb->comb()) band = 0;
+    unsigned int level = m_eb->level(gamma);
     return HealPixel(gamma.dir(),level,band);
 }
 
@@ -167,8 +170,7 @@ int PhotonMap::extract(const SkyDir& dir, double radius,
 {
     //unused bool allsky(radius>=180); // maybe use to simplify below, but seems fast
     radius *= (M_PI / 180); // convert to radians
-    if (summary_level == -1)
-        summary_level = m_minlevel; // default level to test
+    summary_level = summary_level==-1?m_eb->level(0,1):summary_level;
     int nside( 1<< summary_level);
     //int npix( 12 * nside * nside);
     int total(0);
@@ -178,14 +180,14 @@ int PhotonMap::extract(const SkyDir& dir, double radius,
     std::vector<int> v;
     healpix::Healpix hpx(nside, Healpix::NESTED, SkyDir::GALACTIC);
     hpx.query_disc(dir, radius, v);  
-    int max_level = m_minlevel + m_levels - 1;
+    int max_level = m_eb->level(m_eb->bands()-1,0);
 
     // Add summary level pixels and all their children to return vector
     for (std::vector<int>::const_iterator it = v.begin(); it != v.end(); ++it)
     {
 
-        HealPixel hp(*it, summary_level);
-        HealPixel boundary(hp.lastChildIndex(max_level), max_level);
+        HealPixel hp(*it, summary_level, 0);
+        HealPixel boundary(hp.lastChildIndex(max_level), max_level, m_eb->bands()-1);
         for(const_iterator it2 = lower_bound(hp);
             it2 != end() && it2->first <= boundary; ++it2)
         {
@@ -195,7 +197,6 @@ int PhotonMap::extract(const SkyDir& dir, double radius,
             total+=count;
         }
     }
-
     return total;
 }
 
@@ -205,8 +206,6 @@ int PhotonMap::extract_level(const SkyDir& dir, double radius,
 {
     //bool allsky(radius>=180); // maybe use to simplify below, but seems fast
     radius *= (M_PI / 180); // convert to radians
-    if (select_level == -1)
-        select_level = m_minlevel; // default level to select
     int nside( 1<< select_level);
     int total(0);
     vec.clear();
@@ -221,7 +220,7 @@ int PhotonMap::extract_level(const SkyDir& dir, double radius,
     for (std::vector<int>::const_iterator it = v.begin(); it != v.end(); ++it)
     {
 
-        HealPixel hp(*it, select_level);
+        HealPixel hp(*it, select_level, 2*(select_level-m_minlevel));
         const_iterator it2 = find(hp);
         if (it2 == end()) // Not in PhotonMap
         {
@@ -238,6 +237,48 @@ int PhotonMap::extract_level(const SkyDir& dir, double radius,
 
     return total;
 }
+
+int PhotonMap::extract_band(const SkyDir& dir, double radius,
+                            std::vector<std::pair<HealPixel, int> >& vec,
+                            int select_band, bool include_all) const
+{
+    //bool allsky(radius>=180); // maybe use to simplify below, but seems fast
+    radius *= (M_PI / 180); // convert to radians
+    int select_side=select_band%2;
+    select_band/=2;
+    int select_level = m_eb->level(select_band,select_side);
+    int nside( 1<< select_level);
+    int total(0);
+    vec.clear();
+
+    // Get pixels in select level that are within radius
+    std::vector<int> v;
+    healpix::Healpix hpx(nside, Healpix::NESTED, SkyDir::GALACTIC);
+
+    hpx.query_disc(dir, radius, v);  
+
+    // Add select level pixels to return vector
+    for (std::vector<int>::const_iterator it = v.begin(); it != v.end(); ++it)
+    {
+
+        HealPixel hp(*it, select_level, 2*select_band+select_side);
+        const_iterator it2 = find(hp);
+        if (it2 == end()) // Not in PhotonMap
+        {
+            if (include_all) // Add anyway
+                vec.push_back(std::make_pair(hp, 0));
+        }
+        else // In PhotonMap
+        {
+            int count = it2->second;
+            vec.push_back(std::make_pair(it2->first, count));
+            total += count;
+        }
+    }
+
+    return total;
+}
+
 //! Count the photons, perhaps weighted, within a given pixel.
 double PhotonMap::photonCount(const HealPixel & px, bool includeChildren,
                               bool weighted) const
@@ -293,10 +334,7 @@ double PhotonMap::photonCount(const HealPixel & px, SkyDir & NewDir) const
 
 std::vector<double> PhotonMap::energyBins()const
 {
-    std::vector<double> result; result.push_back(m_emin);
-    double eratio(exp(m_logeratio));
-    for(int i = 1; i< m_levels; ++i) result.push_back(result.back()*eratio);
-    return result;
+    return m_eb->ebins();
 }
 
 void PhotonMap::write(const std::string & outputFile,
