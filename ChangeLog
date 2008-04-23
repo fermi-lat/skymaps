@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Wed Apr 23 15:05:03 PDT 2008
+skymaps/skymaps
+
+Added Files:
+	Band.h BinnedPhoton.h BinnedPhotonData.h PhotonBinner.h 
+Log Message:
+new classes for redesign of binned photon data.
+    *
+------------------------------------------------------------
 User: mar0  Mon Apr 21 17:27:33 PDT 2008
 skymaps/src
 
