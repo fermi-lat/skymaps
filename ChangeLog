@@ -1,5 +1,15 @@
 ------------------------------------------------------------
 User: burnett  Wed Apr 23 15:05:03 PDT 2008
+skymaps/src
+
+Added Files:
+	Band.cxx BinnedPhoton.cxx BinnedPhotonData.cxx 
+	PhotonBinner.cxx 
+Log Message:
+new classes for redesign of binned photon data.
+    *
+------------------------------------------------------------
+User: burnett  Wed Apr 23 15:05:03 PDT 2008
 skymaps/skymaps
 
 Added Files:
