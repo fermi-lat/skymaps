@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Thu Apr 24 12:25:17 PDT 2008
+skymaps/src/test
+
+Modified Files:
+	test_main.cxx 
+Log Message:
+change to use band identifer in BinnedPhotonData
+    *
+------------------------------------------------------------
+User: burnett  Thu Apr 24 12:25:17 PDT 2008
 skymaps/src
 
 Modified Files:
