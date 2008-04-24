@@ -7,18 +7,15 @@ $Header$
 #include "skymaps/BinnedPhotonData.h"
 #include "skymaps/BinnedPhoton.h"
 #include "astro/Photon.h"
-#include "healpix/Healpix.h"
-#include "CLHEP/Vector/ThreeVector.h"
+
 #include "tip/IFileSvc.h"
 #include "tip/Table.h"
 
 #include <cmath>
 #include <utility>
 #include <stdexcept>
-#include <errno.h>
 #include <iomanip>
 
-using healpix::Healpix;
 using astro::SkyDir;
 using astro::Photon;
 
@@ -40,7 +37,8 @@ void BinnedPhotonData::addPhoton(const astro::Photon& gamma)
 {
     BinnedPhoton b(m_binner(gamma));
 //    if( b.invalid() ) return; // check that photon was within bins
-    (*this)[b.band()][b.index()]++;  // create and/or increment the bin
+    const Band& band( *b.band());
+    (*this)[band][b.index()]++;  // create and/or increment the bin
     ++m_photons;
 }
 
@@ -54,13 +52,11 @@ int BinnedPhotonData::extract(const BinnedPhoton& bin, double radius,
 
     // Get pixels for nside that are within radius
     std::vector<int> v;
-    const Band* band (bin.band());
-    healpix::Healpix hpx(band->nside(), Healpix::RING, SkyDir::GALACTIC);
-
-    hpx.query_disc(bin.dir(), radius, v);  
+    const Band& band (*bin.band());
+    bin.query_disk(radius, v);
 
     // select band data to search
-    std::map<const Band*, std::map<unsigned int, unsigned int> >::const_iterator
+    std::map<int, std::map<unsigned int, unsigned int> >::const_iterator
         subit = find(band);
     if( subit==end()){
         throw std::invalid_argument("BinnedPhotonData: band not found");
@@ -72,8 +68,7 @@ int BinnedPhotonData::extract(const BinnedPhoton& bin, double radius,
     for (std::vector<int>::const_iterator it = v.begin(); it != v.end(); ++it)
     {
 
-        Healpix::Pixel hp(*it, hpx);
-        std::map<unsigned int, unsigned int>::const_iterator it2 = submap.find(hp.index());
+        std::map<unsigned int, unsigned int>::const_iterator it2 = submap.find(*it);
         if (it2 != submap.end()) // Not in PhotonMap
         {
             int count = it2->second;
@@ -102,19 +97,20 @@ double BinnedPhotonData::integral(const astro::SkyDir& dir, double a, double b)c
 void BinnedPhotonData::info(std::ostream& out)const
 {
     int total_pixels(0), total_photons(0);
-    out << "  band    pixels    photons\n";
-    for( std::map<const Band*, std::map<unsigned int, unsigned int> >::const_iterator it=begin();
+    out << "  bandid  pixels    photons\n";
+    for( std::map<int, std::map<unsigned int, unsigned int> >::const_iterator it=begin();
         it!=end(); ++it)
     {
         const std::map<unsigned int, unsigned int>& pixel_data = it->second;
         int pixels(pixel_data.size()), photons(0);
         for( std::map<unsigned int, unsigned int>::const_iterator it2=pixel_data.begin(); 
-            it2!=pixel_data.end();++it2){
+            it2!=pixel_data.end();++it2)
+        {
             photons += it2->second;
         }
-
-            out 
-            <<std::setw(6) <<it->first->nside() 
+        const Band& band( m_binner.band(it->first));
+        out 
+            <<std::setw(6) <<band 
             <<std::setw(10)<<pixels
             <<std::setw(10)<<photons << std::endl;
         total_photons += photons; total_pixels+=pixels;

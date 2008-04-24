@@ -6,6 +6,9 @@ $Header$
 #include "skymaps/PhotonMap.h"
 #include "skymaps/DiffuseFunction.h"
 #include "skymaps/Exposure.h"
+#include "skymaps/BinnedPhotonData.h"
+#include "skymaps/PhotonBinner.h"
+#include "astro/Photon.h"
 
 
 #include <iostream>
@@ -31,7 +34,7 @@ int main(int , char** )
         std::cout << "exposure check: " << t << std::endl;
 #endif
 
-#if 1  // test code for the DiffuseFunction
+#if 0  // test code for the DiffuseFunction
         std::string path( ::getenv("EXTFILESSYS"));
 //        DiffuseFunction df( path + "/galdiffuse/GP_gamma_v0r0p1.fits");
         DiffuseFunction df( path + "/galdiffuse/GP_gamma.fits");
@@ -49,6 +52,20 @@ int main(int , char** )
         }
         
 #endif
+
+    BinnedPhotonData* bpd= new BinnedPhotonData(PhotonBinner());
+
+    bpd->addPhoton(astro::Photon(astro::SkyDir(0,0),150.0, 0, 0));
+    bpd->addPhoton(astro::Photon(astro::SkyDir(0,0),300.0, 0, 0));
+    bpd->addPhoton(astro::Photon(astro::SkyDir(0,0),600.0, 0, 0));
+    bpd->addPhoton(astro::Photon(astro::SkyDir(0,0),1000.0, 0, 0));
+    bpd->addPhoton(astro::Photon(astro::SkyDir(0,0),10000.0, 0, 0));
+    bpd->addPhoton(astro::Photon(astro::SkyDir(0,0),100000.0, 0, 0));
+    // a few back guys
+    bpd->addPhoton(astro::Photon(astro::SkyDir(0,0),150.0, 0, 1));
+    bpd->addPhoton(astro::Photon(astro::SkyDir(0,0),300.0, 0, 1));
+    bpd->addPhoton(astro::Photon(astro::SkyDir(0,0),600.0, 0, 1));
+    bpd->info();
 
     }catch(const std::exception& e){
         std::cerr << "Caught exception " << typeid(e).name() 

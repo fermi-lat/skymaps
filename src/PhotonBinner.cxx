@@ -11,6 +11,7 @@ $Header$
 #include <algorithm>
 #include <functional>
 #include <map>
+#include <stdexcept>
 using namespace skymaps;
 
 namespace {
@@ -40,7 +41,6 @@ std::vector<double> PhotonBinner::s_benergy(back_list,  back_list+sizeof(back_li
 std::vector<double> PhotonBinner::s_gamma_level(gamma_list,gamma_list+14);
 std::vector<double> PhotonBinner::s_sigma_level(sigma_list,sigma_list+14);
 
-std::map<int,skymaps::Band> PhotonBinner::s_bands;
 
 PhotonBinner::PhotonBinner(bool combine):m_comb(combine) 
 {
@@ -80,7 +80,7 @@ BinnedPhoton PhotonBinner::operator() (const astro::Photon& p) const
     int level ( it-elist.begin()-1);
 
     unsigned int nside ( 1<<level );
-
+    event_class = 0; // combine front, back
     const Band* b = addBand(
         Band(nside, event_class, elist[level], elist[level+1], 
             s_sigma_level[level], s_gamma_level[level])
@@ -94,7 +94,7 @@ const Band* PhotonBinner::addBand(const Band& band) const
 {
     typedef std::map<int, Band>::iterator BandIter;
     int key(band);
-    std::pair<BandIter,bool> q = s_bands.insert(std::make_pair(key,band));
+    std::pair<BandIter,bool> q = m_bands.insert(std::make_pair(key,band));
     BandIter it = q.first;
     const Band & b= it->second;
     return & b;
@@ -127,6 +127,16 @@ void PhotonBinner::setupbins() {
         }
         if(flag==0) m_binlevelmap.push_back(j-1);
     }
+}
+
+const Band& PhotonBinner::band(int index)const
+{
+    std::map<int, Band>::const_iterator it( m_bands.find(index) );
+    if( it== m_bands.end()){
+        throw std::invalid_argument("PhotonBinner::band -- band id not found");
+    }
+    return it->second;
+
 }
 
 int PhotonBinner::level(int band, int event_class) const

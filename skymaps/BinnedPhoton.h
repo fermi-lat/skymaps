@@ -9,6 +9,7 @@ $Header$
 
 #ifndef skymaps_BinnedPhoton_h
 #define skymaps_BinnedPhoton_h
+#include <vector>
 
 namespace skymaps {
 
@@ -29,6 +30,8 @@ namespace skymaps {
         astro::SkyDir dir()const;  
 
         bool invalid()const {return (m_band==0);}
+
+        void query_disk( double radius, std::vector<int>& v)const;
 
     private:
         const Band* m_band;
