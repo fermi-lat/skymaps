@@ -3,20 +3,24 @@
 $Header$
 
 */
-#include "skymaps/PhotonMap.h"
+//#include "skymaps/PhotonMap.h"
 #include "skymaps/DiffuseFunction.h"
 #include "skymaps/Exposure.h"
 #include "skymaps/BinnedPhotonData.h"
 #include "skymaps/PhotonBinner.h"
+#include "skymaps/BinnedPhoton.h"
 #include "astro/Photon.h"
+#include "astro/SkyDir.h"
 
 
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
+#include <vector>
 
+using astro::Photon;
+using astro::SkyDir;
 
-using namespace astro;
 using namespace skymaps;
 
 
@@ -53,19 +57,23 @@ int main(int , char** )
         
 #endif
 
-    BinnedPhotonData* bpd= new BinnedPhotonData(PhotonBinner());
-
-    bpd->addPhoton(astro::Photon(astro::SkyDir(0,0),150.0, 0, 0));
-    bpd->addPhoton(astro::Photon(astro::SkyDir(0,0),300.0, 0, 0));
-    bpd->addPhoton(astro::Photon(astro::SkyDir(0,0),600.0, 0, 0));
-    bpd->addPhoton(astro::Photon(astro::SkyDir(0,0),1000.0, 0, 0));
-    bpd->addPhoton(astro::Photon(astro::SkyDir(0,0),10000.0, 0, 0));
-    bpd->addPhoton(astro::Photon(astro::SkyDir(0,0),100000.0, 0, 0));
+    PhotonBinner binner;
+    BinnedPhotonData* bpd= new BinnedPhotonData(binner);
+    bpd->addPhoton(Photon(SkyDir(0,0),150.0, 0, 0));
+    bpd->addPhoton(Photon(SkyDir(0,0),300.0, 0, 0));
+    bpd->addPhoton(Photon(SkyDir(0,0),600.0, 0, 0));
+    bpd->addPhoton(Photon(SkyDir(0,0),1000.0, 0, 0));
+    bpd->addPhoton(Photon(SkyDir(0,0),10000.0, 0, 0));
+    bpd->addPhoton(Photon(SkyDir(0,0),100000.0, 0, 0));
     // a few back guys
-    bpd->addPhoton(astro::Photon(astro::SkyDir(0,0),150.0, 0, 1));
-    bpd->addPhoton(astro::Photon(astro::SkyDir(0,0),300.0, 0, 1));
-    bpd->addPhoton(astro::Photon(astro::SkyDir(0,0),600.0, 0, 1));
+    bpd->addPhoton(Photon(SkyDir(0,0),150.0, 0, 1));
+    bpd->addPhoton(Photon(SkyDir(0,0),300.0, 0, 1));
+    bpd->addPhoton(Photon(SkyDir(0,0),600.0, 0, 1));
     bpd->info();
+    // now check that we can find somthing
+    std::vector<std::pair<unsigned int, unsigned int> >vec;
+    int n = bpd->extract( binner(Photon(SkyDir(),100, 0.,0)), 10. ,vec);
+    std::cout << "found " << vec.size() << std::endl;
 
     }catch(const std::exception& e){
         std::cerr << "Caught exception " << typeid(e).name() 

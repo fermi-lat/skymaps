@@ -34,3 +34,10 @@ void Band::query_disk(const astro::SkyDir&dir, double radius, std::vector<int>& 
     hpx.query_disc( dir, radius, v);  
 
 }
+
+double Band::pixelArea()const
+{
+   Healpix hpx(m_nside, Healpix::RING, SkyDir::GALACTIC);
+   return hpx.pixelArea();
+}
+
