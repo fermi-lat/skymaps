@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Thu Apr 24 12:25:17 PDT 2008
+skymaps/skymaps
+
+Modified Files:
+	Band.h BinnedPhoton.h BinnedPhotonData.h PhotonBinner.h 
+Log Message:
+change to use band identifer in BinnedPhotonData
+    *
+------------------------------------------------------------
 User: burnett  Wed Apr 23 15:05:03 PDT 2008
 skymaps/src
 
