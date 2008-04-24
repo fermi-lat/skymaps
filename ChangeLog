@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: burnett  Thu Apr 24 13:39:38 PDT 2008
+skymaps/skymaps
+
+Modified Files:
+	BinnedPhotonData.h 
+Log Message:
+add features of old PhotonMap to be plug-compatible
+(not all implemented)
+    *
+------------------------------------------------------------
 User: burnett  Thu Apr 24 13:11:27 PDT 2008
 skymaps/src/test
 
