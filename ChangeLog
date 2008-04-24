@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Thu Apr 24 13:11:27 PDT 2008
+skymaps/src/test
+
+Modified Files:
+	test_main.cxx 
+Log Message:
+add pixel area, fix sigma
+    *
+------------------------------------------------------------
 User: burnett  Thu Apr 24 13:11:26 PDT 2008
 skymaps/src
 
