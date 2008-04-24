@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Thu Apr 24 13:11:26 PDT 2008
+skymaps/skymaps
+
+Modified Files:
+	Band.h 
+Log Message:
+add pixel area, fix sigma
+    *
+------------------------------------------------------------
 User: burnett  Thu Apr 24 12:25:17 PDT 2008
 skymaps/src/test
 
