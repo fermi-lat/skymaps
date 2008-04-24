@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Thu Apr 24 13:11:26 PDT 2008
+skymaps/src
+
+Modified Files:
+	Band.cxx PhotonBinner.cxx 
+Log Message:
+add pixel area, fix sigma
+    *
+------------------------------------------------------------
+User: burnett  Thu Apr 24 13:11:26 PDT 2008
 skymaps/skymaps
 
 Modified Files:
