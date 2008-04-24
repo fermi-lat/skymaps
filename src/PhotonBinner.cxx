@@ -83,7 +83,7 @@ BinnedPhoton PhotonBinner::operator() (const astro::Photon& p) const
     event_class = 0; // combine front, back
     const Band* b = addBand(
         Band(nside, event_class, elist[level], elist[level+1], 
-            s_sigma_level[level], s_gamma_level[level])
+            s_sigma_level[level]*scale_factor(level), s_gamma_level[level])
         ); 
 
     return BinnedPhoton( b, p.dir() );
