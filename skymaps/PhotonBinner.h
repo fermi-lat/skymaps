@@ -64,13 +64,17 @@ namespace skymaps {
 
         double gamma(int level);
 
+        /**@brief  access to the band object according to its index
+        */
+        const Band& band(int index)const; 
+
     private:
 
         ///! add a new band, if unique, return pointer to transient object
         const Band* addBand(const skymaps::Band& band)const;
 
         /// Maintain a list of bands: key is an int formed from the band info
-        static std::map<int, skymaps::Band> s_bands;
+        mutable std::map<int, skymaps::Band> m_bands;
 
         bool m_comb;                          //old style combine front/back events?
         std::vector<double> m_bins;           //the energy of each left bin edge

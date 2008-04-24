@@ -26,7 +26,7 @@ namespace skymaps {
     */
 
     class BinnedPhotonData : public skymaps::SkySpectrum 
-        , public std::map<const skymaps::Band*, std::map<unsigned int, unsigned int> > {
+        , public std::map<int, std::map<unsigned int, unsigned int> > {
 
     public:
         ///@brief ctor created from binner

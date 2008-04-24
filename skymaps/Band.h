@@ -11,6 +11,8 @@ $Header$
 #ifndef skymaps_Band_h
 #define skymaps_Band_h
 
+#include <vector>
+
 namespace skymaps {
 
     /*** @class Band
@@ -34,8 +36,10 @@ namespace skymaps {
         astro::SkyDir dir(unsigned int index)const;
         unsigned int index(const astro::SkyDir& dir)const;
 
+        void query_disk(const astro::SkyDir&dir, double radius, std::vector<int>& v)const;
+
         /// @brief for identity,sorting: assume nside and event class is unique
-        operator int()const{return (m_event_class ) | m_nside<<16;}
+        operator int()const{return m_event_class +10* m_nside;}
 
         int nside()const { return m_nside; }
         int event_class()const{return m_event_class; }

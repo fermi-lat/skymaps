@@ -20,3 +20,8 @@ astro::SkyDir BinnedPhoton::dir()const
 {
     return m_band->dir(m_index);
 }
+
+void BinnedPhoton::query_disk(double radius, std::vector<int>& v)const
+{
+    return m_band->query_disk(dir(), radius, v);
+}
