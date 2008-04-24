@@ -21,6 +21,12 @@ using astro::Photon;
 
 using namespace skymaps;
 
+namespace {
+    skymaps::PhotonBinner default_binner();
+}
+BinnedPhotonData::BinnedPhotonData()
+: m_binner(default_binner)
+{}
 
 BinnedPhotonData::BinnedPhotonData(const skymaps::PhotonBinner& binner)
 : m_binner(binner)
@@ -69,7 +75,7 @@ int BinnedPhotonData::extract(const BinnedPhoton& bin, double radius,
     {
 
         std::map<unsigned int, unsigned int>::const_iterator it2 = submap.find(*it);
-        if (it2 != submap.end()) // Not in PhotonMap
+        if (it2 != submap.end()) // Not in BinnedPhotonData
         {
             int count = it2->second;
             vec.push_back(std::make_pair(it2->first, count));
@@ -118,5 +124,30 @@ void BinnedPhotonData::info(std::ostream& out)const
     out << " total"
         <<std::setw(10)<<total_pixels
         <<std::setw(10)<<total_photons << std::endl;
+}
+
+void BinnedPhotonData::write(const std::string & outputFile,
+            const std::string & tablename,
+            bool clobber) const
+{
+    throw std::runtime_error("BinnedPhotonData::write -- Not implemented"); 
+}
+
+void BinnedPhotonData::writegti(const std::string & outputFile) const
+{
+    m_gti.writeExtension(outputFile);
+}
+void BinnedPhotonData::addgti(const skymaps::Gti& other)
+{
+    m_gti |= other;
+}
+
+void BinnedPhotonData::operator+=(const skymaps::BinnedPhotonData& other) {
+#if 0 //TODO rewrite this
+    for(const_iterator it=other.begin();it!=other.end();++it){
+        addPixel(it->first,it->second);
+    }
+#endif
+    addgti(other.gti());
 }
 
