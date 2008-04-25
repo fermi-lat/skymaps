@@ -5,13 +5,14 @@ $Header$
 */
 
 #include "skymaps/PhotonBinner.h"
-#include "skymaps/BinnedPhoton.h"
 #include "skymaps/Band.h"
 #include "astro/Photon.h"
 #include <algorithm>
 #include <functional>
 #include <map>
 #include <stdexcept>
+#include <iostream>
+#include <iomanip>
 using namespace skymaps;
 
 namespace {
@@ -68,7 +69,7 @@ PhotonBinner::PhotonBinner(double emin, double ratio, int bins):m_comb(false)
     setupbins();
 }
 
-BinnedPhoton PhotonBinner::operator() (const astro::Photon& p) const
+void PhotonBinner::add(const astro::Photon& p)
 {
     double energy ( p.energy() );
     int event_class (  p.eventClass() );
@@ -81,22 +82,22 @@ BinnedPhoton PhotonBinner::operator() (const astro::Photon& p) const
 
     unsigned int nside ( 1<<level );
     event_class = 0; // combine front, back
-    const Band* b = addBand(
+
+    Band* b = addBand(
         Band(nside, event_class, elist[level], elist[level+1], 
             s_sigma_level[level]*scale_factor(level), s_gamma_level[level])
         ); 
 
-    return BinnedPhoton( b, p.dir() );
+    b->add(p.dir());
 
 }
 
-const Band* PhotonBinner::addBand(const Band& band) const
+Band* PhotonBinner::addBand(const Band& band) 
 {
-    typedef std::map<int, Band>::iterator BandIter;
     int key(band);
-    std::pair<BandIter,bool> q = m_bands.insert(std::make_pair(key,band));
-    BandIter it = q.first;
-    const Band & b= it->second;
+    std::pair<iterator, bool> q = insert(std::make_pair(key,band));
+    iterator it = q.first;
+    Band & b= it->second;
     return & b;
 }
 
@@ -131,8 +132,8 @@ void PhotonBinner::setupbins() {
 
 const Band& PhotonBinner::band(int index)const
 {
-    std::map<int, Band>::const_iterator it( m_bands.find(index) );
-    if( it== m_bands.end()){
+    const_iterator it( find(index) );
+    if( it== end()){
         throw std::invalid_argument("PhotonBinner::band -- band id not found");
     }
     return it->second;
@@ -154,4 +155,28 @@ double PhotonBinner::sigma(int level)
 double PhotonBinner::gamma(int level)
 {
     return gamma_list[level];
+}
+void PhotonBinner::info(std::ostream& out)const
+{
+    int total_pixels(0), total_photons(0);
+    out << " nside type   emin    emax    sigma   pixels   photons\n";
+
+    for( const_iterator it=begin();  it!=end(); ++it)
+    {
+        const Band& band = it->second;
+        int pixels(band.size()), photons(band.photons());
+        out 
+            <<std::setw(6) << band.nside()
+            <<std::setw(4) << band.event_class()
+            <<std::setw(8) << int(band.emin()+0.5)
+            <<std::setw(8) << int(band.emax()+0.5)
+            <<std::setw(8) << int(band.sigma()*180/M_PI*3600+0.5)
+            <<std::setw(10)<< pixels
+            <<std::setw(10)<< photons 
+            <<std::endl;
+        total_photons += photons; total_pixels+=pixels;
+    }
+    out << " total"
+        <<std::setw(38)<<total_pixels
+        <<std::setw(10)<<total_photons << std::endl;
 }

@@ -10,7 +10,7 @@ $Header$
 //#include "skymaps/BinnedPhoton.h"
 
 namespace astro {class Photon;}
-namespace skymaps {class BinnedPhoton;}
+//namespace skymaps {class BinnedPhoton;}
 
 #include <string>
 #include <vector>
@@ -22,10 +22,10 @@ namespace skymaps {
     
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     /** @class PhotonBinner
-    @brief 
-
+    @brief manage binning of photons 
+    Maintain a list of bands: key is an int formed from the band info
     */
-    class PhotonBinner { 
+    class PhotonBinner : public  std::map<int, skymaps::Band> { 
     public:
          /**@brief ctor  old style of combining front/back
         */
@@ -42,7 +42,8 @@ namespace skymaps {
         */
         PhotonBinner(double emin, double ratio, int bins);
 
-        skymaps::BinnedPhoton operator()(const astro::Photon& photon)const;
+        ///@brief add a photon to collection of Bands
+        void add(const astro::Photon& photon);
 
         /**@brief setupbins  sets up bin to pixel connection with current bin set
         */
@@ -56,8 +57,7 @@ namespace skymaps {
         */
         std::vector<double> ebins() const {return m_bins;}
 
-        int bands() const {return m_bins.size();}
-
+ 
         bool comb() {return m_comb;}
 
         double sigma(int level);
@@ -68,13 +68,14 @@ namespace skymaps {
         */
         const Band& band(int index)const; 
 
+        void info(std::ostream& out)const;
+
+
     private:
 
         ///! add a new band, if unique, return pointer to transient object
-        const Band* addBand(const skymaps::Band& band)const;
+        Band* addBand(const skymaps::Band& band);
 
-        /// Maintain a list of bands: key is an int formed from the band info
-        mutable std::map<int, skymaps::Band> m_bands;
 
         bool m_comb;                          //old style combine front/back events?
         std::vector<double> m_bins;           //the energy of each left bin edge

@@ -25,8 +25,7 @@ namespace skymaps {
 
     */
 
-    class BinnedPhotonData : public skymaps::SkySpectrum 
-        , public std::map<int, std::map<unsigned int, unsigned int> > {
+    class BinnedPhotonData : public skymaps::SkySpectrum  {
 
     public:
         ///@brief default ctor: will use default binner
@@ -52,7 +51,7 @@ namespace skymaps {
         /// @return density for a given direction, in photons/area of the base pixel.
         double density (const astro::SkyDir & sd) const;
 
-
+#if 0
         /** @brief extract a subset around a given direction, corresponding to the band
         @param bin corresponds a photon with the desired band, used for center
         @param radius The maximum radius (deg). Set to >=180 for all
@@ -61,10 +60,10 @@ namespace skymaps {
         */
         int extract(const BinnedPhoton& bin, double radius,
             std::vector<std::pair<unsigned int, unsigned int> > & vec) const;
+#endif
 
         /// @brief print out a summary of the contents
         void info(std::ostream& out = std::cout)const;
-
         
         /**@brief Write  to a fits file
         @param outputFile Fully qualified fits output file name
@@ -96,11 +95,13 @@ namespace skymaps {
         const skymaps::Gti & gti()const {return m_gti;};
 #endif
 
+        const PhotonBinner& bands()const {return m_binner;}
+
         int photonCount()const{return m_photons;}
         int pixelCount()const{ return 0;} ///TODO
 
     private:
-        skymaps::PhotonBinner m_binner; ///< object that handles binning
+        skymaps::PhotonBinner m_binner; ///< object that handles binning, has all the data
         skymaps::Gti m_gti;   ///< gti information associated with these data
         int m_photons;  ///< keep track of total number of photons in the database
 

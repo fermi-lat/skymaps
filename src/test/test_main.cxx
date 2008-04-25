@@ -61,6 +61,7 @@ int main(int , char** )
     BinnedPhotonData* bpd= new BinnedPhotonData(binner);
     bpd->addPhoton(Photon(SkyDir(0,0),50, 0, 0));
     bpd->addPhoton(Photon(SkyDir(0,0),150, 0, 0));
+    bpd->addPhoton(Photon(SkyDir(3,0),150, 0, 0));
     bpd->addPhoton(Photon(SkyDir(0,0),300, 0, 0));
     bpd->addPhoton(Photon(SkyDir(0,0),600, 0, 0));
     bpd->addPhoton(Photon(SkyDir(0,0),1000, 0, 0));
@@ -79,9 +80,16 @@ int main(int , char** )
     bpd->addPhoton(Photon(SkyDir(0,0),10000, 0, 1));
     bpd->info();
     // now check that we can find somthing
-    std::vector<std::pair<unsigned int, unsigned int> >vec;
-    int n = bpd->extract( binner(Photon(SkyDir(),101, 0.,0)), 10. ,vec);
-    std::cout << "found " << vec.size() << std::endl;
+    typedef  std::vector<std::pair< int,  int> > PixelVec;
+    PixelVec vec;
+
+    const Band& b ( bpd->bands().band(640) );
+    int n = b.query_disk( SkyDir(),  5.*M_PI/180 ,vec);
+    std::cout << "found " << vec.size() << " pixels" << std::endl;
+    for( PixelVec::iterator it = vec.begin(); it !=vec.end(); ++it){
+        SkyDir r (b.dir(it->first));
+        std::cout << "\t( "<< r.ra() << ", " << r.dec() << " ): " << it->second << std::endl;
+    }
 
     }catch(const std::exception& e){
         std::cerr << "Caught exception " << typeid(e).name() 
