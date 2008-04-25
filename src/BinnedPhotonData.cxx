@@ -22,7 +22,7 @@ using astro::Photon;
 using namespace skymaps;
 
 namespace {
-    skymaps::PhotonBinner default_binner();
+    skymaps::PhotonBinner default_binner;
 }
 BinnedPhotonData::BinnedPhotonData()
 : m_binner(default_binner)
@@ -103,7 +103,7 @@ double BinnedPhotonData::integral(const astro::SkyDir& dir, double a, double b)c
 void BinnedPhotonData::info(std::ostream& out)const
 {
     int total_pixels(0), total_photons(0);
-    out << "  bandid  pixels    photons\n";
+    out << " nside type   emin    emax    sigma   pixels   photons\n";
     for( std::map<int, std::map<unsigned int, unsigned int> >::const_iterator it=begin();
         it!=end(); ++it)
     {
@@ -116,13 +116,18 @@ void BinnedPhotonData::info(std::ostream& out)const
         }
         const Band& band( m_binner.band(it->first));
         out 
-            <<std::setw(6) <<band 
-            <<std::setw(10)<<pixels
-            <<std::setw(10)<<photons << std::endl;
+            <<std::setw(6) << band.nside()
+            <<std::setw(4) << band.event_class()
+            <<std::setw(8) << int(band.emin()+0.5)
+            <<std::setw(8) << int(band.emax()+0.5)
+            <<std::setw(8) << int(band.sigma()*180/M_PI*3600+0.5)
+            <<std::setw(10)<< pixels
+            <<std::setw(10)<< photons 
+            <<std::endl;
         total_photons += photons; total_pixels+=pixels;
     }
     out << " total"
-        <<std::setw(10)<<total_pixels
+        <<std::setw(38)<<total_pixels
         <<std::setw(10)<<total_photons << std::endl;
 }
 

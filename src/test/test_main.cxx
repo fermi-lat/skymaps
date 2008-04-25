@@ -38,7 +38,7 @@ int main(int , char** )
         std::cout << "exposure check: " << t << std::endl;
 #endif
 
-#if 0  // test code for the DiffuseFunction
+#if 1  // test code for the DiffuseFunction
         std::string path( ::getenv("EXTFILESSYS"));
 //        DiffuseFunction df( path + "/galdiffuse/GP_gamma_v0r0p1.fits");
         DiffuseFunction df( path + "/galdiffuse/GP_gamma.fits");
@@ -56,23 +56,31 @@ int main(int , char** )
         }
         
 #endif
-
+        std::cout << "\ntesting BinnedPhotonData to create all standard Band objects" << std::endl;
     PhotonBinner binner;
     BinnedPhotonData* bpd= new BinnedPhotonData(binner);
-    bpd->addPhoton(Photon(SkyDir(0,0),150.0, 0, 0));
-    bpd->addPhoton(Photon(SkyDir(0,0),300.0, 0, 0));
-    bpd->addPhoton(Photon(SkyDir(0,0),600.0, 0, 0));
-    bpd->addPhoton(Photon(SkyDir(0,0),1000.0, 0, 0));
-    bpd->addPhoton(Photon(SkyDir(0,0),10000.0, 0, 0));
-    bpd->addPhoton(Photon(SkyDir(0,0),100000.0, 0, 0));
+    bpd->addPhoton(Photon(SkyDir(0,0),50, 0, 0));
+    bpd->addPhoton(Photon(SkyDir(0,0),150, 0, 0));
+    bpd->addPhoton(Photon(SkyDir(0,0),300, 0, 0));
+    bpd->addPhoton(Photon(SkyDir(0,0),600, 0, 0));
+    bpd->addPhoton(Photon(SkyDir(0,0),1000, 0, 0));
+    bpd->addPhoton(Photon(SkyDir(0,0),2000, 0, 0));
+    bpd->addPhoton(Photon(SkyDir(0,0),4000, 0, 0));
+    bpd->addPhoton(Photon(SkyDir(0,0),10000, 0, 0));
+    bpd->addPhoton(Photon(SkyDir(0,0),20000, 0, 0));
+    bpd->addPhoton(Photon(SkyDir(0,0),100000, 0, 0));
     // a few back guys
-    bpd->addPhoton(Photon(SkyDir(0,0),150.0, 0, 1));
-    bpd->addPhoton(Photon(SkyDir(0,0),300.0, 0, 1));
-    bpd->addPhoton(Photon(SkyDir(0,0),600.0, 0, 1));
+    bpd->addPhoton(Photon(SkyDir(0,0),150, 0, 1));
+    bpd->addPhoton(Photon(SkyDir(0,0),300, 0, 1));
+    bpd->addPhoton(Photon(SkyDir(0,0),1000, 0, 1));
+    bpd->addPhoton(Photon(SkyDir(0,0),100000, 0, 1));
+    bpd->addPhoton(Photon(SkyDir(0,0),2000, 0, 1));
+    bpd->addPhoton(Photon(SkyDir(0,0),3000, 0, 1));
+    bpd->addPhoton(Photon(SkyDir(0,0),10000, 0, 1));
     bpd->info();
     // now check that we can find somthing
     std::vector<std::pair<unsigned int, unsigned int> >vec;
-    int n = bpd->extract( binner(Photon(SkyDir(),100, 0.,0)), 10. ,vec);
+    int n = bpd->extract( binner(Photon(SkyDir(),101, 0.,0)), 10. ,vec);
     std::cout << "found " << vec.size() << std::endl;
 
     }catch(const std::exception& e){
