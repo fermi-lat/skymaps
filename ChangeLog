@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Fri Apr 25 06:49:01 PDT 2008
+skymaps/src/test
+
+Modified Files:
+	test_main.cxx 
+Log Message:
+give Band all pixel-related tasks, remove wimpy BinnedPhoton
+    *
+------------------------------------------------------------
+User: burnett  Fri Apr 25 06:49:01 PDT 2008
 skymaps/src
 
 Modified Files:
