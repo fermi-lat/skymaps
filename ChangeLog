@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Fri Apr 25 14:11:31 PDT 2008
+skymaps/skymaps
+
+Modified Files:
+	Band.h BinnedPhotonData.h 
+Log Message:
+more cleanup
+    *
+------------------------------------------------------------
 User: burnett  Fri Apr 25 07:02:52 PDT 2008
 skymaps/src/test
 
