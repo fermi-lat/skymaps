@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: burnett  Fri Apr 25 06:49:01 PDT 2008
+skymaps/skymaps
+
+Modified Files:
+	Band.h BinnedPhotonData.h PhotonBinner.h 
+Removed Files:
+	BinnedPhoton.h 
+Log Message:
+give Band all pixel-related tasks, remove wimpy BinnedPhoton
+    *
+------------------------------------------------------------
 User: burnett  Thu Apr 24 19:56:12 PDT 2008
 skymaps/src/test
 
