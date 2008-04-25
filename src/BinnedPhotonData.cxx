@@ -41,13 +41,17 @@ BinnedPhotonData::BinnedPhotonData(const std::string & inputFile, const std::str
         /// add a photon to the map with the given energy and direction
 void BinnedPhotonData::addPhoton(const astro::Photon& gamma)
 {
+#if 0
     BinnedPhoton b(m_binner(gamma));
 //    if( b.invalid() ) return; // check that photon was within bins
     const Band& band( *b.band());
     (*this)[band][b.index()]++;  // create and/or increment the bin
+#else
+    m_binner.add(gamma);
+#endif
     ++m_photons;
 }
-
+#if 0
 int BinnedPhotonData::extract(const BinnedPhoton& bin, double radius,
           std::vector<std::pair<unsigned int, unsigned int> > & vec) const
 {
@@ -84,6 +88,7 @@ int BinnedPhotonData::extract(const BinnedPhoton& bin, double radius,
     }
     return total;
 }
+#endif
 
 double BinnedPhotonData::density (const astro::SkyDir & sd) const
 {
@@ -102,6 +107,7 @@ double BinnedPhotonData::integral(const astro::SkyDir& dir, double a, double b)c
 
 void BinnedPhotonData::info(std::ostream& out)const
 {
+#if 0
     int total_pixels(0), total_photons(0);
     out << " nside type   emin    emax    sigma   pixels   photons\n";
     for( std::map<int, std::map<unsigned int, unsigned int> >::const_iterator it=begin();
@@ -129,6 +135,9 @@ void BinnedPhotonData::info(std::ostream& out)const
     out << " total"
         <<std::setw(38)<<total_pixels
         <<std::setw(10)<<total_photons << std::endl;
+#else
+    m_binner.info(out);
+#endif
 }
 
 void BinnedPhotonData::write(const std::string & outputFile,

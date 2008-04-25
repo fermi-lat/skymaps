@@ -5,21 +5,25 @@ $Header$
 
 */
 
-
+#include "astro/SkyFunction.h"
 #include "astro/SkyDir.h"
 
 #ifndef skymaps_Band_h
 #define skymaps_Band_h
 
 #include <vector>
+#include <map>
 
 namespace skymaps {
 
     /*** @class Band
-        @brief encapsulate concept of an energy band
+        @brief encapsulate concept of an energy band and a collection of directions for photons in that band
+
+        Implement SkyFunction to return no of entries in a bin in the given direction
+        Implemnt  a map of pixel ids and contents
 
     */
-    class Band {
+    class Band : public astro::SkyFunction, public std::map<int, int> {
     public:
         /// default
         Band(): m_nside(-1), m_event_class(0){}
@@ -41,14 +45,29 @@ namespace skymaps {
             , m_sigma(sigma)
             , m_gamma(gamma)
         {}
+
+        ///@brief implement SkyFunction interface
+        ///@param dir direction in sky
+        ///@return contents of pixel, if exists
+        double operator()(const astro::SkyDir& dir)const;
+
+        ///@brief add an element by direction
+        void add(const astro::SkyDir& dir);
+
+        ///@brief add an element, or to an existing element, by index and count
+        void add(int index, int count);
+
         /// @brief direction for a pixel id
-        astro::SkyDir dir(unsigned int index)const;
+        astro::SkyDir dir( int index)const;
 
         /// @brief the pixel index from a direction
-        unsigned int index(const astro::SkyDir& dir)const;
+        int index(const astro::SkyDir& dir)const;
 
-        /// @brief set a list of pixel id's within the radius about the direction
-        void query_disk(const astro::SkyDir&dir, double radius, std::vector<int>& v)const;
+        /// @brief set a list of pixel ids and counts within the radius about the direction
+        /// @param dir center of cone
+        /// @param radius in radians
+        int query_disk(const astro::SkyDir&dir, double radius, 
+            std::vector<std::pair<int,int> > & v)const;
 
         /// @brief the solid angle for this pixelization
         double pixelArea()const;
@@ -56,6 +75,8 @@ namespace skymaps {
         /// @brief for identity,sorting: assume nside and event class is unique
         operator int()const{return m_event_class +10* m_nside;}
 
+        ///@brief count of photons
+        int photons()const; 
         int nside()const { return m_nside; }
         int event_class()const{return m_event_class; }
         double emin()const{return m_emin;}
