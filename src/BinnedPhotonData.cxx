@@ -5,7 +5,6 @@ $Header$
 */
 
 #include "skymaps/BinnedPhotonData.h"
-#include "skymaps/BinnedPhoton.h"
 #include "astro/Photon.h"
 
 #include "tip/IFileSvc.h"
@@ -41,103 +40,29 @@ BinnedPhotonData::BinnedPhotonData(const std::string & inputFile, const std::str
         /// add a photon to the map with the given energy and direction
 void BinnedPhotonData::addPhoton(const astro::Photon& gamma)
 {
-#if 0
-    BinnedPhoton b(m_binner(gamma));
-//    if( b.invalid() ) return; // check that photon was within bins
-    const Band& band( *b.band());
-    (*this)[band][b.index()]++;  // create and/or increment the bin
-#else
+
     m_binner.add(gamma);
-#endif
     ++m_photons;
 }
-#if 0
-int BinnedPhotonData::extract(const BinnedPhoton& bin, double radius,
-          std::vector<std::pair<unsigned int, unsigned int> > & vec) const
-{
-
-    radius *= (M_PI / 180); // convert to radians
-    int total(0);
-    vec.clear();
-
-    // Get pixels for nside that are within radius
-    std::vector<int> v;
-    const Band& band (*bin.band());
-    bin.query_disk(radius, v);
-
-    // select band data to search
-    std::map<int, std::map<unsigned int, unsigned int> >::const_iterator
-        subit = find(band);
-    if( subit==end()){
-        throw std::invalid_argument("BinnedPhotonData: band not found");
-    }
-    const std::map<unsigned int, unsigned int>& submap = subit->second;
-
-
-    // Add select level pixels to return vector
-    for (std::vector<int>::const_iterator it = v.begin(); it != v.end(); ++it)
-    {
-
-        std::map<unsigned int, unsigned int>::const_iterator it2 = submap.find(*it);
-        if (it2 != submap.end()) // Not in BinnedPhotonData
-        {
-            int count = it2->second;
-            vec.push_back(std::make_pair(it2->first, count));
-            total += count;
-        }
-    }
-    return total;
-}
-#endif
 
 double BinnedPhotonData::density (const astro::SkyDir & sd) const
 {
-    return 0;
+    return 0;//TODO rewrite this
 }
 
 double BinnedPhotonData::value(const astro::SkyDir& dir, double e)const
 {
-    return 0;
+    return 0;//TODO rewrite this
 }
 
 double BinnedPhotonData::integral(const astro::SkyDir& dir, double a, double b)const
 {
-    return 0;
+    return 0;//TODO rewrite this
 }
 
 void BinnedPhotonData::info(std::ostream& out)const
 {
-#if 0
-    int total_pixels(0), total_photons(0);
-    out << " nside type   emin    emax    sigma   pixels   photons\n";
-    for( std::map<int, std::map<unsigned int, unsigned int> >::const_iterator it=begin();
-        it!=end(); ++it)
-    {
-        const std::map<unsigned int, unsigned int>& pixel_data = it->second;
-        int pixels(pixel_data.size()), photons(0);
-        for( std::map<unsigned int, unsigned int>::const_iterator it2=pixel_data.begin(); 
-            it2!=pixel_data.end();++it2)
-        {
-            photons += it2->second;
-        }
-        const Band& band( m_binner.band(it->first));
-        out 
-            <<std::setw(6) << band.nside()
-            <<std::setw(4) << band.event_class()
-            <<std::setw(8) << int(band.emin()+0.5)
-            <<std::setw(8) << int(band.emax()+0.5)
-            <<std::setw(8) << int(band.sigma()*180/M_PI*3600+0.5)
-            <<std::setw(10)<< pixels
-            <<std::setw(10)<< photons 
-            <<std::endl;
-        total_photons += photons; total_pixels+=pixels;
-    }
-    out << " total"
-        <<std::setw(38)<<total_pixels
-        <<std::setw(10)<<total_photons << std::endl;
-#else
     m_binner.info(out);
-#endif
 }
 
 void BinnedPhotonData::write(const std::string & outputFile,

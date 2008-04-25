@@ -51,17 +51,6 @@ namespace skymaps {
         /// @return density for a given direction, in photons/area of the base pixel.
         double density (const astro::SkyDir & sd) const;
 
-#if 0
-        /** @brief extract a subset around a given direction, corresponding to the band
-        @param bin corresponds a photon with the desired band, used for center
-        @param radius The maximum radius (deg). Set to >=180 for all
-        @param vec the vector to fill with (ident, count ) pairs
-         @return the total number of photons (sum of count)
-        */
-        int extract(const BinnedPhoton& bin, double radius,
-            std::vector<std::pair<unsigned int, unsigned int> > & vec) const;
-#endif
-
         /// @brief print out a summary of the contents
         void info(std::ostream& out = std::cout)const;
         

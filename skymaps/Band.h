@@ -66,9 +66,11 @@ namespace skymaps {
         /// @brief set a list of pixel ids and counts within the radius about the direction
         /// @param dir center of cone
         /// @param radius in radians
+        /// @return the number of photons 
         int query_disk(const astro::SkyDir&dir, double radius, 
             std::vector<std::pair<int,int> > & v)const;
 
+ 
         /// @brief the solid angle for this pixelization
         double pixelArea()const;
 
