@@ -1,5 +1,16 @@
 ------------------------------------------------------------
 User: burnett  Fri Apr 25 06:49:01 PDT 2008
+skymaps/src
+
+Modified Files:
+	Band.cxx BinnedPhotonData.cxx PhotonBinner.cxx 
+Removed Files:
+	BinnedPhoton.cxx 
+Log Message:
+give Band all pixel-related tasks, remove wimpy BinnedPhoton
+    *
+------------------------------------------------------------
+User: burnett  Fri Apr 25 06:49:01 PDT 2008
 skymaps/skymaps
 
 Modified Files:
