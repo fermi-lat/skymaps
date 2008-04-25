@@ -29,10 +29,10 @@ namespace skymaps {
         , public std::map<int, std::map<unsigned int, unsigned int> > {
 
     public:
-        ///@brief default cto
+        ///@brief default ctor: will use default binner
         BinnedPhotonData();
         
-        ///@brief ctor created from binner
+        ///@brief ctor created from external binner
         BinnedPhotonData(const skymaps::PhotonBinner& binner);
 
         /// Create  object from a saved fits file
@@ -62,10 +62,11 @@ namespace skymaps {
         int extract(const BinnedPhoton& bin, double radius,
             std::vector<std::pair<unsigned int, unsigned int> > & vec) const;
 
+        /// @brief print out a summary of the contents
         void info(std::ostream& out = std::cout)const;
 
         
-        /**@brief Write a PhotonMap object to a fits file
+        /**@brief Write  to a fits file
         @param outputFile Fully qualified fits output file name
         @param tablename Fits secondary extension name
         @param clobber Whether to delete an existing file first 
@@ -85,8 +86,9 @@ namespace skymaps {
         void writegti(const std::string & outputFile) const;
         /// @return a modifyable reference to gti info
         skymaps::Gti & gti() {return m_gti;};
-#ifndef SWIG
-        // don't understand why this causes problems
+
+#ifndef SWIG  // don't understand why these cause SWIG problems
+
         ///   combines photonmaps and their gti's
         void operator+=(const skymaps::BinnedPhotonData& other);
 
@@ -96,6 +98,7 @@ namespace skymaps {
 
         int photonCount()const{return m_photons;}
         int pixelCount()const{ return 0;} ///TODO
+
     private:
         skymaps::PhotonBinner m_binner; ///< object that handles binning
         skymaps::Gti m_gti;   ///< gti information associated with these data
