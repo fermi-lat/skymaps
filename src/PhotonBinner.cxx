@@ -81,7 +81,7 @@ void PhotonBinner::add(const astro::Photon& p)
     int level ( it-elist.begin()-1);
 
     unsigned int nside ( 1<<level );
-    event_class = 0; // combine front, back
+    //event_class = 0; // combine front, back
 
     Band* b = addBand(
         Band(nside, event_class, elist[level], elist[level+1], 
