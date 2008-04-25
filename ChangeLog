@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Thu Apr 24 19:56:12 PDT 2008
+skymaps/skymaps
+
+Modified Files:
+	BinnedPhotonData.h 
+Log Message:
+improve info to display energy range, sigma
+    *
+------------------------------------------------------------
 User: burnett  Thu Apr 24 13:39:38 PDT 2008
 skymaps/src
 
