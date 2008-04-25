@@ -21,7 +21,7 @@ namespace astro {class Photon;}
 namespace skymaps {
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     /** @class BinnedPhotonData
-    @brief a SkySpectrum that adapts the class map_tools::BinnedPhotonData. 
+    @brief a SkySpectrum containing the photon data used by pointlike
 
     */
 

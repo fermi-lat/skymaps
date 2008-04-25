@@ -14,14 +14,16 @@ $Header$
 #include <vector>
 #include <map>
 
+namespace healpix { class Healpix;}
+
 namespace skymaps {
 
     /*** @class Band
         @brief encapsulate concept of an energy band and a collection of directions for photons in that band
 
         Implement SkyFunction to return no of entries in a bin in the given direction
-        Implemnt  a map of pixel ids and contents
-
+        Implemnt  a map of pixel ids and contents.
+        
     */
     class Band : public astro::SkyFunction, public std::map<int, int> {
     public:
@@ -34,21 +36,13 @@ namespace skymaps {
             @param emin,emax energy range
             @param sigma The sigma parameter, a scale factor for the PSF
             @param gamma the power law for the PSF
-
         */
         Band(int nside, int event_class, double emin,double emax,
-            double sigma, double gamma)
-            : m_nside(nside)
-            , m_event_class(event_class)
-            , m_emin(emin)
-            , m_emax(emax)
-            , m_sigma(sigma)
-            , m_gamma(gamma)
-        {}
+            double sigma, double gamma);
 
         ///@brief implement SkyFunction interface
         ///@param dir direction in sky
-        ///@return contents of pixel, if exists
+        ///@return contents of pixel, if exists, otherwise zero
         double operator()(const astro::SkyDir& dir)const;
 
         ///@brief add an element by direction
@@ -57,7 +51,7 @@ namespace skymaps {
         ///@brief add an element, or to an existing element, by index and count
         void add(int index, int count);
 
-        /// @brief direction for a pixel id
+        /// @brief direction for a pixel index
         astro::SkyDir dir( int index)const;
 
         /// @brief the pixel index from a direction
@@ -69,7 +63,6 @@ namespace skymaps {
         /// @return the number of photons 
         int query_disk(const astro::SkyDir&dir, double radius, 
             std::vector<std::pair<int,int> > & v)const;
-
  
         /// @brief the solid angle for this pixelization
         double pixelArea()const;
@@ -90,6 +83,7 @@ namespace skymaps {
         int m_event_class;
         double m_emin, m_emax;
         double m_sigma, m_gamma;
+        const healpix::Healpix* m_healpix; 
     };
 
 }

@@ -11,6 +11,17 @@ using namespace skymaps;
 using healpix::Healpix;
 using astro::SkyDir;
 
+Band::Band(int nside, int event_class, double emin,double emax,
+            double sigma, double gamma)
+            : m_nside(nside)
+            , m_event_class(event_class)
+            , m_emin(emin)
+            , m_emax(emax)
+            , m_sigma(sigma)
+            , m_gamma(gamma)
+            , m_healpix(new healpix::Healpix(m_nside,Healpix::RING, SkyDir::GALACTIC))
+        {}
+
 void Band::add(const astro::SkyDir& dir)
 {
     (*this)[index(dir)]++;
@@ -25,19 +36,16 @@ double Band::operator()(const astro::SkyDir& dir)const
     return it == end() ? 0 : it->second;
 }
 
-
 astro::SkyDir Band::dir( int index)const
 {
-    Healpix hpx(m_nside, Healpix::RING, SkyDir::GALACTIC);
-    Healpix::Pixel pix(index,hpx);
+    Healpix::Pixel pix(index,*m_healpix);
 
     return pix();
 }
 
 int Band::index(const astro::SkyDir& dir)const
 {
-    Healpix hpx(m_nside, Healpix::RING, SkyDir::GALACTIC);
-    Healpix::Pixel pix(dir,hpx);
+    Healpix::Pixel pix(dir,*m_healpix);
 
     return pix.index();
 }
@@ -46,11 +54,10 @@ int Band::index(const astro::SkyDir& dir)const
 int Band::query_disk(const astro::SkyDir&sdir, double radius, 
                       std::vector<std::pair<int,int> > & vec)const
 {
-    Healpix hpx(m_nside, Healpix::RING, SkyDir::GALACTIC);
     std::vector<int> v;
-    hpx.query_disc( sdir, radius, v); 
+    m_healpix->query_disc( sdir, radius, v); 
     int total(0);
-    // Add select level pixels to return vector
+    // Add selectedpixels to return vector
     for (std::vector<int>::const_iterator it = v.begin(); it != v.end(); ++it) {
         const_iterator it2 = find(*it);
         if( it2 != end() )  {
@@ -68,8 +75,7 @@ int Band::query_disk(const astro::SkyDir&sdir, double radius,
 
 double Band::pixelArea()const
 {
-   Healpix hpx(m_nside, Healpix::RING, SkyDir::GALACTIC);
-   return hpx.pixelArea();
+   return m_healpix->pixelArea();
 }
 
 int Band::photons()const
