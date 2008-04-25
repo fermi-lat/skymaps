@@ -8,7 +8,6 @@ $Header$
 #include "skymaps/Exposure.h"
 #include "skymaps/BinnedPhotonData.h"
 #include "skymaps/PhotonBinner.h"
-#include "skymaps/BinnedPhoton.h"
 #include "astro/Photon.h"
 #include "astro/SkyDir.h"
 
