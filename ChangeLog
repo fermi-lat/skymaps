@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Sun Apr 27 16:16:46 PDT 2008
+skymaps/skymaps
+
+Modified Files:
+	Band.h BinnedPhotonData.h PhotonBinner.h 
+Log Message:
+change Band to return directions; kluge in new sigmas.; move list of Band objects to BinnedPhotonData
+    *
+------------------------------------------------------------
 User: burnett  Fri Apr 25 14:11:32 PDT 2008
 skymaps/src
 
