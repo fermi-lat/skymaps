@@ -33,7 +33,13 @@ namespace {
     double gamma_list[] ={0,0,0,0,0,
         2.25,  2.27,  2.22,  2.31,  2.30,  2.31,  2.16,  2.19,  2.07};
     double sigma_list[] ={0,0,0,0,0,
-        0.343, 0.4199,0.4249 ,0.4202 ,0.4028 ,0.4223 ,0.4438 ,0.5113 ,0.5596 };
+#if 0  // original code
+        0.343, 0.4199,0.4249 ,0.4202 ,0.4028 ,0.4223 ,0.4438 ,0.5113 ,0.5596
+#else  // from fits
+         0.343, 0.335, 0.319, 0.431,  0.449,  0.499,  0.566,  0.698,  0.818
+#endif
+};
+
 }
 
 //static list of energy to pixel level conversions
@@ -69,7 +75,7 @@ PhotonBinner::PhotonBinner(double emin, double ratio, int bins):m_comb(false)
     setupbins();
 }
 
-void PhotonBinner::add(const astro::Photon& p)
+skymaps::Band PhotonBinner::operator()(const astro::Photon& p)const
 {
     double energy ( p.energy() );
     int event_class (  p.eventClass() );
@@ -83,22 +89,10 @@ void PhotonBinner::add(const astro::Photon& p)
     unsigned int nside ( 1<<level );
     //event_class = 0; // combine front, back
 
-    Band* b = addBand(
+    return     
         Band(nside, event_class, elist[level], elist[level+1], 
-            s_sigma_level[level]*scale_factor(level), s_gamma_level[level])
-        ); 
-
-    b->add(p.dir());
-
-}
-
-Band* PhotonBinner::addBand(const Band& band) 
-{
-    int key(band);
-    std::pair<iterator, bool> q = insert(std::make_pair(key,band));
-    iterator it = q.first;
-    Band & b= it->second;
-    return & b;
+            s_sigma_level[level]*scale_factor(level), s_gamma_level[level]
+            );
 }
 
 
@@ -130,15 +124,6 @@ void PhotonBinner::setupbins() {
     }
 }
 
-const Band& PhotonBinner::band(int index)const
-{
-    const_iterator it( find(index) );
-    if( it== end()){
-        throw std::invalid_argument("PhotonBinner::band -- band id not found");
-    }
-    return it->second;
-
-}
 
 int PhotonBinner::level(int band, int event_class) const
 {
@@ -156,6 +141,7 @@ double PhotonBinner::gamma(int level)
 {
     return gamma_list[level];
 }
+#if 0
 void PhotonBinner::info(std::ostream& out)const
 {
     int total_pixels(0), total_photons(0);
@@ -180,3 +166,4 @@ void PhotonBinner::info(std::ostream& out)const
         <<std::setw(38)<<total_pixels
         <<std::setw(10)<<total_photons << std::endl;
 }
+#endif

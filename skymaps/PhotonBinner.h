@@ -16,6 +16,7 @@ namespace astro {class Photon;}
 #include <vector>
 #include <map>
 
+
 #include "skymaps/Band.h"
 
 namespace skymaps {
@@ -43,7 +44,7 @@ namespace skymaps {
         PhotonBinner(double emin, double ratio, int bins);
 
         ///@brief add a photon to collection of Bands
-        void add(const astro::Photon& photon);
+        skymaps::Band operator()(const astro::Photon& photon)const;
 
         /**@brief setupbins  sets up bin to pixel connection with current bin set
         */
@@ -66,15 +67,9 @@ namespace skymaps {
 
         /**@brief  access to the band object according to its index
         */
-        const Band& band(int index)const; 
-
-        void info(std::ostream& out)const;
 
 
     private:
-
-        ///! add a new band, if unique, return pointer to transient object
-        Band* addBand(const skymaps::Band& band);
 
 
         bool m_comb;                          //old style combine front/back events?

@@ -10,6 +10,9 @@ $Header$
 #include "tip/IFileSvc.h"
 #include "tip/Table.h"
 
+#include <algorithm>
+#include <functional>
+
 #include <cmath>
 #include <utility>
 #include <stdexcept>
@@ -39,11 +42,26 @@ BinnedPhotonData::BinnedPhotonData(const std::string & inputFile, const std::str
 
         /// add a photon to the map with the given energy and direction
 void BinnedPhotonData::addPhoton(const astro::Photon& gamma)
-{
+{   
+    // create a emmpty band with this photon's properties
+    Band newband (m_binner(gamma));
+    int key(newband);
+    
+    // is it already in our list?
+    iterator it=std::lower_bound(begin(), end(), key, std::less<int>());
 
-    m_binner.add(gamma);
+    if( key!=(*it) ){
+        // no, create new entry and copy in the Band
+        it = insert(it, newband);
+    }
+
+    // now add the entry
+    (*it).add(gamma.dir());
     ++m_photons;
+
 }
+
+
 
 double BinnedPhotonData::density (const astro::SkyDir & sd) const
 {
@@ -62,7 +80,27 @@ double BinnedPhotonData::integral(const astro::SkyDir& dir, double a, double b)c
 
 void BinnedPhotonData::info(std::ostream& out)const
 {
-    m_binner.info(out);
+    int total_pixels(0), total_photons(0);
+    out << " nside type   emin    emax    sigma   pixels   photons\n";
+
+    for( const_iterator it=begin();  it!=end(); ++it)
+    {
+        const Band& band = *it;
+        int pixels(band.size()), photons(band.photons());
+        out 
+            <<std::setw(6) << band.nside()
+            <<std::setw(4) << band.event_class()
+            <<std::setw(8) << int(band.emin()+0.5)
+            <<std::setw(8) << int(band.emax()+0.5)
+            <<std::setw(8) << int(band.sigma()*180/M_PI*3600+0.5)
+            <<std::setw(10)<< pixels
+            <<std::setw(10)<< photons 
+            <<std::endl;
+        total_photons += photons; total_pixels+=pixels;
+    }
+    out << " total"
+        <<std::setw(38)<<total_pixels
+        <<std::setw(10)<<total_photons << std::endl;
 }
 
 void BinnedPhotonData::write(const std::string & outputFile,

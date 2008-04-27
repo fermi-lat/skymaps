@@ -62,7 +62,7 @@ namespace skymaps {
         /// @param radius in radians
         /// @return the number of photons 
         int query_disk(const astro::SkyDir&dir, double radius, 
-            std::vector<std::pair<int,int> > & v)const;
+            std::vector<std::pair<astro::SkyDir,int> > & v)const;
  
         /// @brief the solid angle for this pixelization
         double pixelArea()const;

@@ -79,14 +79,16 @@ int main(int , char** )
     bpd->addPhoton(Photon(SkyDir(0,0),10000, 0, 1));
     bpd->info();
     // now check that we can find somthing
-    typedef  std::vector<std::pair< int,  int> > PixelVec;
+    typedef  std::vector<std::pair< SkyDir,  int> > PixelVec;
     PixelVec vec;
 
-    const Band& b ( bpd->bands().band(640) );
+    BinnedPhotonData::const_iterator it=bpd->begin();
+    ++it; ++it;  // to 3rd band
+    const Band& b (*it );
     int n = b.query_disk( SkyDir(),  5.*M_PI/180 ,vec);
-    std::cout << "found " << vec.size() << " pixels" << std::endl;
-    for( PixelVec::iterator it = vec.begin(); it !=vec.end(); ++it){
-        SkyDir r (b.dir(it->first));
+    std::cout << "found " << vec.size() << " pixels in band "<<int(b) << std::endl;
+    for( PixelVec::const_iterator it = vec.begin(); it !=vec.end(); ++it){
+        SkyDir r (it->first);
         std::cout << "\t( "<< r.ra() << ", " << r.dec() << " ): " << it->second << std::endl;
     }
 

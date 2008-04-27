@@ -52,7 +52,7 @@ int Band::index(const astro::SkyDir& dir)const
 
 
 int Band::query_disk(const astro::SkyDir&sdir, double radius, 
-                      std::vector<std::pair<int,int> > & vec)const
+                     std::vector<std::pair<astro::SkyDir,int> > & vec)const
 {
     std::vector<int> v;
     m_healpix->query_disc( sdir, radius, v); 
@@ -62,7 +62,7 @@ int Band::query_disk(const astro::SkyDir&sdir, double radius,
         const_iterator it2 = find(*it);
         if( it2 != end() )  {
             int count = it2->second;
-            vec.push_back( std::make_pair(it2->first, count));
+            vec.push_back( std::make_pair(dir(it2->first), count));
             total += count;
 #if 0 // option to return empty pixels within range
         }else{

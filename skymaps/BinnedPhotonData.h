@@ -11,7 +11,7 @@ $Header$
 #include "skymaps/PhotonBinner.h"
 #include "skymaps/Band.h"
 #include "skymaps/Gti.h"
-#include <map>
+#include <list>
 #include <iostream>
 
 namespace astro {class Photon;}
@@ -25,7 +25,7 @@ namespace skymaps {
 
     */
 
-    class BinnedPhotonData : public skymaps::SkySpectrum  {
+    class BinnedPhotonData : public skymaps::SkySpectrum , public std::list<Band> {
 
     public:
         ///@brief default ctor: will use default binner
