@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Sun Apr 27 16:16:46 PDT 2008
+skymaps/src
+
+Modified Files:
+	Band.cxx BinnedPhotonData.cxx PhotonBinner.cxx 
+Log Message:
+change Band to return directions; kluge in new sigmas.; move list of Band objects to BinnedPhotonData
+    *
+------------------------------------------------------------
+User: burnett  Sun Apr 27 16:16:46 PDT 2008
 skymaps/skymaps
 
 Modified Files:
