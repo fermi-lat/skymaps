@@ -133,32 +133,50 @@ void BinnedPhotonData::addPhoton(const astro::Photon& gamma, int count)
 
 double BinnedPhotonData::density (const astro::SkyDir & sd) const
 {
-    return 0;//TODO rewrite this
+    double result(0);
+    static double norm((M_PI/180)*(M_PI/180) ); // normalization factor: 1/degree
+
+    for (const_iterator it = begin(); it!=end(); ++it) {
+        const Band& band ( *it);
+        int count( band(sd) );
+        result += count / band.pixelArea();
+    }
+    return result*norm;
 }
 
 double BinnedPhotonData::value(const astro::SkyDir& dir, double e)const
 {
-    return 0;//TODO rewrite this
+    double result(0);
+
+    for( const_iterator it=begin();  it!=end(); ++it)  {
+        const Band& band = *it;
+        if( e< band.emin() || e >= band.emax() ) continue;
+        result += band(dir);
+    }
+    return result;
+
 }
 
 double BinnedPhotonData::integral(const astro::SkyDir& dir, double a, double b)const
 {
-    return 0;//TODO rewrite this
+
+    return value(dir, sqrt(a*b));
 }
 
 void BinnedPhotonData::info(std::ostream& out)const
 {
     int total_pixels(0), total_photons(0);
-    out << " nside type   emin    emax    sigma   pixels   photons\n";
+    out << "index  nside type   emin    emax   sigma    pixels   photons\n";
 
-    for( const_iterator it=begin();  it!=end(); ++it)
+    int i(0);
+    for( const_iterator it=begin();  it!=end(); ++it, ++i)
     {
         const Band& band = *it;
         int pixels(band.size()), photons(band.photons());
-        out 
-            <<std::setw(6) << band.nside()
-            <<std::setw(4) << band.event_class()
-            <<std::setw(8) << int(band.emin()+0.5)
+        out <<std::setw(4) << i
+            <<std::setw(8) << band.nside()
+            <<std::setw(5) << band.event_class()
+            <<std::setw(7) << int(band.emin()+0.5)
             <<std::setw(8) << int(band.emax()+0.5)
             <<std::setw(8) << int(band.sigma()*180/M_PI*3600+0.5)
             <<std::setw(10)<< pixels
@@ -167,7 +185,7 @@ void BinnedPhotonData::info(std::ostream& out)const
         total_photons += photons; total_pixels+=pixels;
     }
     out << " total"
-        <<std::setw(38)<<total_pixels
+        <<std::setw(44)<<total_pixels
         <<std::setw(10)<<total_photons << std::endl;
 }
 
