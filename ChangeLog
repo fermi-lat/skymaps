@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Mon Apr 28 11:58:35 PDT 2008
+skymaps/src
+
+Modified Files:
+	BinnedPhotonData.cxx 
+Log Message:
+Implement density, value, integral
+    *
+------------------------------------------------------------
+User: burnett  Mon Apr 28 11:58:35 PDT 2008
 skymaps/skymaps
 
 Modified Files:
