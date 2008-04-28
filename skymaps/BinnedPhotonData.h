@@ -34,7 +34,9 @@ namespace skymaps {
         ///@brief ctor created from external binner
         BinnedPhotonData(const skymaps::PhotonBinner& binner);
 
-        /// Create  object from a saved fits file
+        /// @brief Create  object from a saved fits file
+        ///
+        /// Currently only the old-style PHOTONMAP format is supported
         BinnedPhotonData(const std::string & inputFile, const std::string & tablename);
 
         ///@brief data value for bin with given energy 
@@ -45,10 +47,10 @@ namespace skymaps {
         /// Assume that request is for an energy bin.
         virtual double integral(const astro::SkyDir& dir, double a, double b)const;
 
-        /// add a photon to the map with the given energy and direction
-        void addPhoton(const astro::Photon& gamma);
+        ///@brief add a photon to data base according to its energy, event class, and direction
+        void addPhoton(const astro::Photon& gamma, int count=1);
 
-        /// @return density for a given direction, in photons/area of the base pixel.
+        /// @return density for a given direction, in photons/area.
         double density (const astro::SkyDir & sd) const;
 
         /// @brief print out a summary of the contents

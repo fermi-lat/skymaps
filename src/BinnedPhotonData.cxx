@@ -5,6 +5,10 @@ $Header$
 */
 
 #include "skymaps/BinnedPhotonData.h"
+
+#ifndef OLD
+#include "healpix/HealPixel.h"
+#endif
 #include "astro/Photon.h"
 
 #include "tip/IFileSvc.h"
@@ -34,14 +38,79 @@ BinnedPhotonData::BinnedPhotonData(const skymaps::PhotonBinner& binner)
 : m_binner(binner)
 {}
 
-        /// Create  object from a saved fits file
+
 BinnedPhotonData::BinnedPhotonData(const std::string & inputFile, const std::string & tablename)
+: m_binner(default_binner) // should change, or make flexible
+, m_photons(0)
 {
-// todo: read FITS file
+    if( tablename != "PHOTONMAP"){
+        /// @TODO: implement native scheme
+        throw std::invalid_argument("BinnedPhotonData: table "+tablename+" is not supported");
+    }
+    // read in and convert old-style PHOTONMAP
+    const tip::Table & table=*tip::IFileSvc::instance().readTable(inputFile, tablename);
+    const tip::Header& hdr = table.getHeader();
+    double eratio;
+    int stored_photons(0), stored_pixels(0);
+
+
+    double m_emin, m_logeratio;
+    int m_levels, m_minlevel, m_pixels;
+    using healpix::HealPixel;
+
+    // Guard against headers not being found in fits file.  Set to default on error
+
+    try	{hdr["EMIN"].get(m_emin);} catch (const std::exception& ) {m_emin = 100.;}
+    try
+    {
+        hdr["ERATIO"].get(eratio);
+        m_logeratio = log(eratio);
+    }
+    catch (const std::exception& ) {m_logeratio = log(2.35);}
+    try	{hdr["LEVELS"].get(m_levels);} catch (const std::exception& ) {m_levels = 8;}
+    try	{hdr["MINLEVEL"].get(m_minlevel);} catch (const std::exception& ) {m_minlevel = 6;}
+    try
+    {
+        hdr["PHOTONS"].get(stored_photons);
+        hdr["PIXELS"].get(stored_pixels);
+    }
+    catch (const std::exception& ) {}
+    tip::Table::ConstIterator itor = table.begin();
+    std::cout << "Creating BinnedPhotonData from file " << inputFile << ", table " << tablename << std::endl;
+
+    for(tip::Table::ConstIterator itor = table.begin(); itor != table.end(); ++itor)
+    {
+        long level, index, count;
+        (*itor)["LEVEL"].get(level);
+        (*itor)["INDEX"].get(index);
+        (*itor)["COUNT"].get(count);
+        HealPixel p(index, level,2*(level-m_minlevel));
+        // set energy for center of this bin
+        double energy( m_emin*pow(eratio, level-m_minlevel+0.5)), time(0.);
+        // and its direction
+        SkyDir sdir(p());
+        
+        // create its band, using the binner (assuming consistent!)
+        addPhoton( astro::Photon(sdir, energy, time, 0), count);
+        m_pixels ++;
+    }
+    delete &table; 
+    std::cout << "Photons available: " << stored_photons 
+        << "  Pixels available: " << stored_pixels <<std::endl;
+    std::cout << "Photons loaded: " << m_photons 
+        << "  Pixels created: " << m_pixels <<std::endl;
+    setName("BinnedPhotonData from " +inputFile); // default name is the name of the file
+    try{
+        // now load the GTI info, if there
+        gti() = Gti(inputFile);
+        std::cout << "  GTI interval: "
+            << int(gti().minValue())<<"-"<<int(gti().maxValue())<<std::endl; 
+    }catch(const std::exception&){
+        std::cerr << "BinnedPhotonData:: warning: no GTI information found" << std::endl;
+    }
 }
 
-        /// add a photon to the map with the given energy and direction
-void BinnedPhotonData::addPhoton(const astro::Photon& gamma)
+void BinnedPhotonData::addPhoton(const astro::Photon& gamma, int count)
 {   
     // create a emmpty band with this photon's properties
     Band newband (m_binner(gamma));
@@ -55,12 +124,11 @@ void BinnedPhotonData::addPhoton(const astro::Photon& gamma)
         it = insert(it, newband);
     }
 
-    // now add the entry
-    (*it).add(gamma.dir());
-    ++m_photons;
+    // now add the counts to the band's pixel
+    (*it).add(gamma.dir(), count);
 
+    m_photons+= count;
 }
-
 
 
 double BinnedPhotonData::density (const astro::SkyDir & sd) const

@@ -22,9 +22,9 @@ Band::Band(int nside, int event_class, double emin,double emax,
             , m_healpix(new healpix::Healpix(m_nside,Healpix::RING, SkyDir::GALACTIC))
         {}
 
-void Band::add(const astro::SkyDir& dir)
+void Band::add(const astro::SkyDir& dir, int count)
 {
-    (*this)[index(dir)]++;
+    (*this)[index(dir)]+=count;
 }
 void Band::add(int i, int count)
 {
