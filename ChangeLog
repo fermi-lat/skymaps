@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Mon Apr 28 11:58:36 PDT 2008
+skymaps/src/test
+
+Modified Files:
+	test_main.cxx 
+Log Message:
+Implement density, value, integral
+    *
+------------------------------------------------------------
 User: burnett  Mon Apr 28 11:58:35 PDT 2008
 skymaps/src
 
