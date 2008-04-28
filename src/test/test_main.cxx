@@ -92,6 +92,8 @@ int main(int , char** )
         std::cout << "\t( "<< r.ra() << ", " << r.dec() << " ): " << it->second << std::endl;
     }
 
+    std::cout << "density : " << bpd->density(SkyDir()) << std::endl;
+    std::cout << "value at 110 MeV: " << bpd->value(SkyDir(), 110) << std::endl;
     }catch(const std::exception& e){
         std::cerr << "Caught exception " << typeid(e).name() 
             << " \"" << e.what() << "\"" << std::endl;

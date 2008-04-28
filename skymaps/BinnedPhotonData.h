@@ -86,13 +86,14 @@ namespace skymaps {
         const skymaps::Gti & gti()const {return m_gti;};
 #endif
 
-        const PhotonBinner& bands()const {return m_binner;}
+        /// @brief access to the binner
+        const PhotonBinner& binner()const {return m_binner;}
 
         int photonCount()const{return m_photons;}
         int pixelCount()const{ return 0;} ///TODO
 
     private:
-        skymaps::PhotonBinner m_binner; ///< object that handles binning, has all the data
+        skymaps::PhotonBinner m_binner; ///< object that handles binning
         skymaps::Gti m_gti;   ///< gti information associated with these data
         int m_photons;  ///< keep track of total number of photons in the database
 
