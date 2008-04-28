@@ -46,7 +46,7 @@ namespace skymaps {
         double operator()(const astro::SkyDir& dir)const;
 
         ///@brief add an element by direction
-        void add(const astro::SkyDir& dir);
+        void add(const astro::SkyDir& dir, int count=1);
 
         ///@brief add an element, or to an existing element, by index and count
         void add(int index, int count);
