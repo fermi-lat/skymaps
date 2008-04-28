@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Mon Apr 28 09:28:38 PDT 2008
+skymaps/skymaps
+
+Modified Files:
+	Band.h BinnedPhotonData.h 
+Log Message:
+Restore ability to read old-format FITS PHOTOMAP files
+    *
+------------------------------------------------------------
 User: burnett  Sun Apr 27 16:16:46 PDT 2008
 skymaps/src/test
 
