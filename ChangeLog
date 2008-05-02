@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Fri May  2 08:06:28 PDT 2008
+skymaps/src
+
+Modified Files:
+	BinnedPhotonData.cxx PhotonBinner.cxx 
+Log Message:
+update info, test program
+    *
+------------------------------------------------------------
+User: burnett  Fri May  2 08:06:28 PDT 2008
 skymaps/skymaps
 
 Modified Files:
