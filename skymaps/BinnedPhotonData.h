@@ -36,8 +36,7 @@ namespace skymaps {
 
         /// @brief Create  object from a saved fits file
         ///
-        /// Currently only the old-style PHOTONMAP format is supported
-        BinnedPhotonData(const std::string & inputFile, const std::string & tablename);
+        BinnedPhotonData(const std::string & inputFile,  const std::string header_table = "BINNEDPHOTONS");
 
         ///@brief data value for bin with given energy 
         ///@param e energy in MeV
@@ -58,12 +57,9 @@ namespace skymaps {
         
         /**@brief Write  to a fits file
         @param outputFile Fully qualified fits output file name
-        @param tablename Fits secondary extension name
         @param clobber Whether to delete an existing file first 
         */
-        void write(const std::string & outputFile,
-            const std::string & tablename="BINNEDPHOTONS",
-            bool clobber = true) const;
+        void write(const std::string & outputFile, bool clobber = true) const;
 
         
         /**@brief add GTI info to the current gti
@@ -73,8 +69,7 @@ namespace skymaps {
         /**@brief Write a BinnedPhotonData gti info to a fits file
         @param outputFile Fully qualified fits output file name
         */
-        void writegti(const std::string & outputFile) const;
-        /// @return a modifyable reference to gti info
+        void writegti(const std::string & outputFile) const;       /// @return a modifyable reference to gti info
         skymaps::Gti & gti() {return m_gti;};
 
 #ifndef SWIG  // don't understand why these cause SWIG problems
