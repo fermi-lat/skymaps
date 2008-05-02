@@ -37,7 +37,7 @@ namespace skymaps {
 
         /// @brief Create  object from a saved fits file
         ///
-        BinnedPhotonData(const std::string & inputFile,  const std::string header_table = "BINNEDPHOTONS");
+        BinnedPhotonData(const std::string & inputFile,  const std::string header_table = "BANDS");
 
         ///@brief data value (counts) for all bins in this direction with the Band containing this energy  
         ///@param e energy in MeV

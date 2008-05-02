@@ -80,16 +80,17 @@ int main(int , char** )
     bpd->info();
     // now check that we can find somthing
     typedef  std::vector<std::pair< SkyDir,  int> > PixelVec;
-    PixelVec vec;
 
     BinnedPhotonData::const_iterator it=bpd->begin();
-    ++it; ++it;  // to 3rd band
-    const Band& b (*it );
-    int n = b.query_disk( SkyDir(),  5.*M_PI/180 ,vec);
-    std::cout << "found " << vec.size() << " pixels in band 2" << std::endl;
-    for( PixelVec::const_iterator it = vec.begin(); it !=vec.end(); ++it){
-        SkyDir r (it->first);
-        std::cout << "\t( "<< r.ra() << ", " << r.dec() << " ): " << it->second << std::endl;
+    for(int n(0) ; it!=bpd->end(); ++it,++n){
+        PixelVec vec;
+        const Band& b (*it );
+        int m = b.query_disk( SkyDir(),  5.*M_PI/180 ,vec);
+        std::cout << "found " << vec.size() << " pixels in band " << n<< std::endl;
+        for( PixelVec::const_iterator it = vec.begin(); it !=vec.end(); ++it){
+            SkyDir r (it->first);
+            std::cout << "\t( "<< r.ra() << ", " << r.dec() << " ): " << it->second << std::endl;
+        }
     }
 
     std::cout << "density : " << bpd->density(SkyDir()) << std::endl;
