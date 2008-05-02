@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Fri May  2 16:29:14 PDT 2008
+skymaps/src/test
+
+Modified Files:
+	test_main.cxx 
+Log Message:
+change HDU names to BANDS, PIXELS
+    *
+------------------------------------------------------------
+User: burnett  Fri May  2 16:29:14 PDT 2008
 skymaps/src
 
 Modified Files:
