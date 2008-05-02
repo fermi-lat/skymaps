@@ -24,16 +24,16 @@ Band::Band(int nside, int event_class, double emin,double emax,
 
 void Band::add(const astro::SkyDir& dir, int count)
 {
-    (*this)[index(dir)]+=count;
+    m_pixels[index(dir)]+=count;
 }
 void Band::add(int i, int count)
 {
-    (*this)[i]+=count;
+    m_pixels[i]+=count;
 }
 double Band::operator()(const astro::SkyDir& dir)const
 {
-    const_iterator it = find(index(dir));
-    return it == end() ? 0 : it->second;
+    PixelMap::const_iterator it = m_pixels.find(index(dir));
+    return it == m_pixels.end() ? 0 : it->second;
 }
 
 astro::SkyDir Band::dir( int index)const
@@ -59,8 +59,9 @@ int Band::query_disk(const astro::SkyDir&sdir, double radius,
     int total(0);
     // Add selectedpixels to return vector
     for (std::vector<int>::const_iterator it = v.begin(); it != v.end(); ++it) {
-        const_iterator it2 = find(*it);
-        if( it2 != end() )  {
+
+        PixelMap::const_iterator it2 = m_pixels.find(*it);
+        if( it2 != m_pixels.end() )  {
             int count = it2->second;
             vec.push_back( std::make_pair(dir(it2->first), count));
             total += count;
@@ -73,6 +74,28 @@ int Band::query_disk(const astro::SkyDir&sdir, double radius,
     return total;
 }
 
+int Band::query_disk(const astro::SkyDir&sdir, double radius, 
+                     std::vector<std::pair<int,int> > & vec)const
+{
+    std::vector<int> v;
+    m_healpix->query_disc( sdir, radius, v); 
+    int total(0);
+    // Add selectedpixels to return vector
+    for (std::vector<int>::const_iterator it = v.begin(); it != v.end(); ++it) {
+
+        PixelMap::const_iterator it2 = m_pixels.find(*it);
+        if( it2 != m_pixels.end() )  {
+            int count = it2->second;
+            vec.push_back( std::make_pair(it2->first, count));
+            total += count;
+#if 0 // option to return empty pixels within range
+        }else{
+            vec.push_back(std::make_pair(*it, 0));
+#endif
+        }
+    }
+    return total;
+}
 double Band::pixelArea()const
 {
    return m_healpix->pixelArea();
@@ -81,7 +104,7 @@ double Band::pixelArea()const
 int Band::photons()const
 {
     int count(0);
-    for( const_iterator it=begin(); it!=end(); ++it){
+    for( PixelMap::const_iterator it=m_pixels.begin(); it!=m_pixels.end(); ++it){
         count += it->second;
     }
     return count;
