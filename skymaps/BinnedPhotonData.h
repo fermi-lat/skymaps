@@ -29,7 +29,8 @@ namespace skymaps {
 
     public:
         ///@brief default ctor: will use default binner
-        BinnedPhotonData();
+        ///@param bins_per_decade if 0, use old scheme. otherwise bins per decade, up to 100 GeV
+        BinnedPhotonData(int bins_per_decade=0);
         
         ///@brief ctor created from external binner
         BinnedPhotonData(const skymaps::PhotonBinner& binner);
@@ -38,7 +39,7 @@ namespace skymaps {
         ///
         BinnedPhotonData(const std::string & inputFile,  const std::string header_table = "BINNEDPHOTONS");
 
-        ///@brief data value for bin with given energy 
+        ///@brief data value (counts) for all bins in this direction with the Band containing this energy  
         ///@param e energy in MeV
         virtual double value(const astro::SkyDir& dir, double e)const;
 
@@ -79,10 +80,10 @@ namespace skymaps {
 
         /// @return a const reference to the gti
         const skymaps::Gti & gti()const {return m_gti;};
-#endif
 
         /// @brief access to the binner
-        const PhotonBinner& binner()const {return m_binner;}
+        const skymaps::PhotonBinner& binner()const {return m_binner;}
+#endif
 
         int photonCount()const{return m_photons;}
         int pixelCount()const{ return 0;} ///TODO

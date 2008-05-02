@@ -35,8 +35,8 @@ namespace {
         detail_table("BINNEDPHOTONDATA");
 
 }
-BinnedPhotonData::BinnedPhotonData()
-: m_binner(default_binner)
+BinnedPhotonData::BinnedPhotonData(int bins_per_decade)
+: m_binner(bins_per_decade)
 {}
 
 BinnedPhotonData::BinnedPhotonData(const skymaps::PhotonBinner& binner)
@@ -255,7 +255,7 @@ double BinnedPhotonData::integral(const astro::SkyDir& dir, double a, double b)c
 void BinnedPhotonData::info(std::ostream& out)const
 {
     int total_pixels(0), total_photons(0);
-    out << "index  nside type   emin    emax   sigma    pixels   photons\n";
+    out << "index  emin    emax class  sigma   nside    pixels   photons\n";
 
     int i(0);
     for( const_iterator it=begin();  it!=end(); ++it, ++i)
@@ -263,18 +263,18 @@ void BinnedPhotonData::info(std::ostream& out)const
         const Band& band = *it;
         int pixels(band.size()), photons(band.photons());
         out <<std::setw(4) << i
-            <<std::setw(8) << band.nside()
-            <<std::setw(5) << band.event_class()
             <<std::setw(7) << int(band.emin()+0.5)
             <<std::setw(8) << int(band.emax()+0.5)
-            <<std::setw(8) << int(band.sigma()*180/M_PI*3600+0.5)
+            <<std::setw(6) << band.event_class()
+            <<std::setw(8) << int(band.sigma()*180/M_PI*3600+0.5) // convert to arcsec
+            <<std::setw(8) << band.nside()
             <<std::setw(10)<< pixels
             <<std::setw(10)<< photons 
             <<std::endl;
         total_photons += photons; total_pixels+=pixels;
     }
     out << " total"
-        <<std::setw(44)<<total_pixels
+        <<std::setw(45)<<total_pixels
         <<std::setw(10)<<total_photons << std::endl;
 }
 

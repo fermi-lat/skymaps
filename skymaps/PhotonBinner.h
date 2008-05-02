@@ -24,13 +24,12 @@ namespace skymaps {
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     /** @class PhotonBinner
     @brief manage binning of photons 
-    Maintain a list of bands: key is an int formed from the band info
     */
-    class PhotonBinner : public  std::map<int, skymaps::Band> { 
+    class PhotonBinner { 
     public:
-         /**@brief ctor  old style of combining front/back
+         /**@brief ctor (default) 
         */
-        PhotonBinner(bool combine=true);
+        PhotonBinner(double bins_per_decade=0);
 
         /** @brief ctor  takes arguments of the left edge bin energy in MeV
         */
@@ -38,41 +37,22 @@ namespace skymaps {
 
         /**@brief ctor  takes arguments for a power law binning 
         * @param emin  minimum energy in MeV
-        * @param emax  ratio between bins
+        * @param ratio  ratio between bins
         * @param bins  number of bins
         */
         PhotonBinner(double emin, double ratio, int bins);
 
-        ///@brief add a photon to collection of Bands
+        ///@brief bin a photon by returning an appropriate Band object
         skymaps::Band operator()(const astro::Photon& photon)const;
 
-        /**@brief setupbins  sets up bin to pixel connection with current bin set
-        */
-        void setupbins();
-        
-        /**@brief level  returns the healpix level for an energy bin
-        */
-        int level(int band, int event_class) const;
-        
-        /**@brief ebins  returns the energy bins for output
-        */
-        std::vector<double> ebins() const {return m_bins;}
-
- 
-        bool comb() {return m_comb;}
-
-        double sigma(int level);
-
-        double gamma(int level);
-
-        /**@brief  access to the band object according to its index
-        */
 
 
     private:
-
-
-        bool m_comb;                          //old style combine front/back events?
+        /**@brief setupbins  sets up bin to pixel connection with current bin set
+        */
+        void setupbins();
+        double m_bins_per_decade;
+        
         std::vector<double> m_bins;           //the energy of each left bin edge
         std::vector<int> m_binlevelmap;       //the mapping between energy bins and healpix levels
         static std::vector<double> s_fenergy; //the mapping between energy and healpix levels for front events
