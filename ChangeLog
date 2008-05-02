@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Fri May  2 16:29:13 PDT 2008
+skymaps/skymaps
+
+Modified Files:
+	BinnedPhotonData.h PhotonBinner.h 
+Log Message:
+change HDU names to BANDS, PIXELS
+    *
+------------------------------------------------------------
 User: burnett  Fri May  2 08:06:28 PDT 2008
 skymaps/src/test
 
