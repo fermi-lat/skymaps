@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Fri May  2 07:58:45 PDT 2008
+skymaps/src
+
+Modified Files:
+	BinnedPhotonData.cxx 
+Log Message:
+implement preliminary FITS I/O
+    *
+------------------------------------------------------------
+User: burnett  Fri May  2 07:58:45 PDT 2008
 skymaps/skymaps
 
 Modified Files:
