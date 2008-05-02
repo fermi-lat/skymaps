@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Fri May  2 07:44:04 PDT 2008
+skymaps/skymaps
+
+Modified Files:
+	Band.h 
+Log Message:
+remove map inheritance
+    *
+------------------------------------------------------------
 User: burnett  Mon Apr 28 11:58:36 PDT 2008
 skymaps/src/test
 
