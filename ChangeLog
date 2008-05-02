@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Fri May  2 07:58:45 PDT 2008
+skymaps/skymaps
+
+Modified Files:
+	Band.h BinnedPhotonData.h 
+Log Message:
+implement preliminary FITS I/O
+    *
+------------------------------------------------------------
 User: burnett  Fri May  2 07:44:04 PDT 2008
 skymaps/src
 
