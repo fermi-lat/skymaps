@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Fri May  2 07:44:04 PDT 2008
+skymaps/src
+
+Modified Files:
+	Band.cxx 
+Log Message:
+remove map inheritance
+    *
+------------------------------------------------------------
+User: burnett  Fri May  2 07:44:04 PDT 2008
 skymaps/skymaps
 
 Modified Files:
