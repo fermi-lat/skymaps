@@ -33,7 +33,7 @@ namespace skymaps {
 
         /** @brief ctor  takes arguments of the left edge bin energy in MeV
         */
-        PhotonBinner(std::vector<double>& bins);
+        PhotonBinner(const std::vector<double>& bins);
 
         /**@brief ctor  takes arguments for a power law binning 
         * @param emin  minimum energy in MeV

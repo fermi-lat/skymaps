@@ -31,8 +31,8 @@ using namespace skymaps;
 namespace {
     skymaps::PhotonBinner default_binner;
 
-    std::string header_table("BINNEDPHOTONS"),
-        detail_table("BINNEDPHOTONDATA");
+    std::string band_table("BANDS"),
+        pixel_table("PIXELS");
 
 }
 BinnedPhotonData::BinnedPhotonData(int bins_per_decade)
@@ -44,13 +44,20 @@ BinnedPhotonData::BinnedPhotonData(const skymaps::PhotonBinner& binner)
 {}
 
 
-BinnedPhotonData::BinnedPhotonData(const std::string & inputFile,  const std::string header_table)
+BinnedPhotonData::BinnedPhotonData(const std::string & inputFile,  const std::string band_table)
 : m_binner(default_binner) // should change, or make flexible
 , m_photons(0)
 {
-    const tip::Table & table = *tip::IFileSvc::instance().readTable(inputFile, header_table);
+    const tip::Table * ptable(0);
+    try{
+        ptable = tip::IFileSvc::instance().readTable(inputFile, band_table);
+    }catch(const std::exception&){
+        std::cerr << "BinnedPhotonData: table "<< band_table << " not found in file " << inputFile<< std::endl;
+        throw;
+    }
+    const tip::Table& table(*ptable);  // reference for convenience
 
-    if( header_table == "PHOTONMAP")  // Old style
+    if( band_table == "PHOTONMAP")  // Old style
     {
         const tip::Header& hdr = table.getHeader();
         double eratio;
@@ -79,7 +86,7 @@ BinnedPhotonData::BinnedPhotonData(const std::string & inputFile,  const std::st
         catch (const std::exception& ) {}
 
         tip::Table::ConstIterator itor = table.begin();
-        std::cout << "Creating BinnedPhotonData from file " << inputFile << ", table " << header_table << std::endl;
+        std::cout << "Creating BinnedPhotonData from file " << inputFile << ", table " << band_table << std::endl;
 
         for(tip::Table::ConstIterator itor = table.begin(); itor != table.end(); ++itor)
         {
@@ -97,7 +104,7 @@ BinnedPhotonData::BinnedPhotonData(const std::string & inputFile,  const std::st
             addPhoton( astro::Photon(sdir, energy, time, 0), count);
             m_pixels ++;
         }
-        delete &table; 
+        delete ptable; 
         std::cout << "Photons available: " << stored_photons 
             << "  Pixels available: " << stored_pixels <<std::endl;
         std::cout << "Photons loaded: " << m_photons 
@@ -133,7 +140,7 @@ BinnedPhotonData::BinnedPhotonData(const std::string & inputFile,  const std::st
         try {hdr["PIXELS"].get(stored_pixels);} catch (const std::exception& ) {}
         try {hdr["PHOTONS"].get(stored_photons);} catch (const std::exception& ) {}
 
-        std::cout << "Creating Bands from file " << inputFile << ", table " << header_table << std::endl;
+        std::cout << "Creating Bands from file " << inputFile << ", table " << band_table << std::endl;
         std::vector<int> counts;
 
         for(tip::Table::ConstIterator itor = table.begin(); itor != table.end(); ++itor)
@@ -152,12 +159,12 @@ BinnedPhotonData::BinnedPhotonData(const std::string & inputFile,  const std::st
             counts.push_back(count);
 
         }
-        delete &table; 
+        delete ptable; 
 
-        // Get pixel info
+        // Get pixel info from the pixel table
         m_photons = 0;
-        const tip::Table & table2 = *tip::IFileSvc::instance().readTable(inputFile, detail_table);
-        std::cout << "Creating pixels from file " << inputFile << ", table " << detail_table << std::endl;
+        const tip::Table & table2 = *tip::IFileSvc::instance().readTable(inputFile, pixel_table);
+        std::cout << "Creating pixels from file " << inputFile << ", table " << pixel_table << std::endl;
 
         const_iterator bitor = begin();
         tip::Table::ConstIterator itor = table2.begin();
@@ -295,8 +302,8 @@ void BinnedPhotonData::write(const std::string & outputFile, bool clobber) const
 
     {
     // First, add header table to the file
-    tip::IFileSvc::instance().appendTable(outputFile, header_table);
-    tip::Table & table = *tip::IFileSvc::instance().editTable( outputFile, header_table);
+    tip::IFileSvc::instance().appendTable(outputFile, band_table);
+    tip::Table & table = *tip::IFileSvc::instance().editTable( outputFile, band_table);
 
     table.appendField("NSIDE", "1J");
     table.appendField("EVENT_CLASS", "1J");
@@ -338,9 +345,9 @@ void BinnedPhotonData::write(const std::string & outputFile, bool clobber) const
     delete &table;
     }
     {
-    // Now, add detail table to file.
-    tip::IFileSvc::instance().appendTable(outputFile, detail_table);
-    tip::Table & table = *tip::IFileSvc::instance().editTable( outputFile, detail_table);
+    // Now, add pixels from the pixel table
+    tip::IFileSvc::instance().appendTable(outputFile, pixel_table);
+    tip::Table & table = *tip::IFileSvc::instance().editTable( outputFile, pixel_table);
 
     table.appendField("INDEX", "1J"); // Healpix index for pixel
     table.appendField("COUNT", "1J"); // Number of photons in this pixel

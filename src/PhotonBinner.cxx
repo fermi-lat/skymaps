@@ -78,7 +78,7 @@ PhotonBinner::PhotonBinner(double bins_per_decade)
 #endif
 }
 
-PhotonBinner::PhotonBinner(std::vector<double>& bins)
+PhotonBinner::PhotonBinner(const std::vector<double>& bins)
 {
     // surround the user list with 0 and 1e6 to catch under and overflows
     m_bins.push_back(0);
