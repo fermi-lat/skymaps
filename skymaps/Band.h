@@ -22,7 +22,7 @@ namespace skymaps {
         @brief encapsulate concept of an energy band and a collection of directions for photons in that band
 
         Implement SkyFunction to return no of entries in a bin in the given direction
-        Implemnt  a map of pixel ids and contents.
+        Implemnt a map of pixel ids and contents.
         
     */
     class Band : public astro::SkyFunction{
@@ -93,7 +93,7 @@ namespace skymaps {
         iterator begin(){return m_pixels.begin();}
         iterator end(){return m_pixels.begin();}
         const_iterator begin()const{return m_pixels.begin();}
-        const_iterator end()const{return m_pixels.begin();}
+        const_iterator end()const{return m_pixels.end();}
         size_t size()const{return m_pixels.size();}
 
     private:

@@ -94,6 +94,15 @@ int main(int , char** )
 
     std::cout << "density : " << bpd->density(SkyDir()) << std::endl;
     std::cout << "value at 110 MeV: " << bpd->value(SkyDir(), 110) << std::endl;
+
+    std::cout << "Writing a FITS file: " << std::endl;
+
+    bpd->write("binned.fits");
+
+    std::cout << "reading it back" << std::endl;
+    BinnedPhotonData back(std::string("binned.fits"));
+    back.info();
+
     }catch(const std::exception& e){
         std::cerr << "Caught exception " << typeid(e).name() 
             << " \"" << e.what() << "\"" << std::endl;
