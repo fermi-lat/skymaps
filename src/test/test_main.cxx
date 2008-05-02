@@ -56,7 +56,7 @@ int main(int , char** )
         
 #endif
         std::cout << "\ntesting BinnedPhotonData to create all standard Band objects" << std::endl;
-    PhotonBinner binner;
+    PhotonBinner binner(5.);
     BinnedPhotonData* bpd= new BinnedPhotonData(binner);
     bpd->addPhoton(Photon(SkyDir(0,0),50, 0, 0));
     bpd->addPhoton(Photon(SkyDir(0,0),150, 0, 0));
@@ -86,7 +86,7 @@ int main(int , char** )
     ++it; ++it;  // to 3rd band
     const Band& b (*it );
     int n = b.query_disk( SkyDir(),  5.*M_PI/180 ,vec);
-    std::cout << "found " << vec.size() << " pixels in band "<<int(b) << std::endl;
+    std::cout << "found " << vec.size() << " pixels in band 2" << std::endl;
     for( PixelVec::const_iterator it = vec.begin(); it !=vec.end(); ++it){
         SkyDir r (it->first);
         std::cout << "\t( "<< r.ra() << ", " << r.dec() << " ): " << it->second << std::endl;

@@ -13,6 +13,7 @@ $Header$
 #include <stdexcept>
 #include <iostream>
 #include <iomanip>
+#include <iterator>
 using namespace skymaps;
 
 namespace {
@@ -30,15 +31,15 @@ namespace {
 
     double scale_factor(int level){return 2.5*pow(2.0, base_level-level)*M_PI/180.;}
 
-    double gamma_list[] ={0,0,0,0,0,
+    double gamma_list[] ={0,0,0,0, 2.2,
         2.25,  2.27,  2.22,  2.31,  2.30,  2.31,  2.16,  2.19,  2.07};
-    double sigma_list[] ={0,0,0,0,0,
+    double sigma_list[] ={0,0,0,0,0.5,
 #if 0  // original code
         0.343, 0.4199,0.4249 ,0.4202 ,0.4028 ,0.4223 ,0.4438 ,0.5113 ,0.5596
 #else  // from fits
          0.343, 0.335, 0.319, 0.431,  0.449,  0.499,  0.566,  0.698,  0.818
 #endif
-};
+        };
 
 }
 
@@ -49,23 +50,44 @@ std::vector<double> PhotonBinner::s_gamma_level(gamma_list,gamma_list+14);
 std::vector<double> PhotonBinner::s_sigma_level(sigma_list,sigma_list+14);
 
 
-PhotonBinner::PhotonBinner(bool combine):m_comb(combine) 
+PhotonBinner::PhotonBinner(double bins_per_decade)
+: m_bins_per_decade(bins_per_decade)
 {
+#if 0
     double fact = 2.35;
     double curfact = 1;
     for(int i(0);i<8;++i) {
         m_bins.push_back(fminE*curfact);
         curfact*=fact;
     }
-    setupbins();
+#else
+    double eratio( 2.35);
+    if( bins_per_decade<=0){
+
+    }else{
+        eratio = pow(10., 1./bins_per_decade);
+        double emin(10.), emax(1e5); // energy range
+        m_bins.push_back(0);
+        for( double e(emin); e< 1.01*emax; e*=eratio){
+            m_bins.push_back(e);
+        }
+        m_bins.push_back(1e6);
+    }
+
+
+#endif
 }
 
-PhotonBinner::PhotonBinner(std::vector<double>& bins):m_bins(bins),m_comb(false)
+PhotonBinner::PhotonBinner(std::vector<double>& bins)
 {
+    // surround the user list with 0 and 1e6 to catch under and overflows
+    m_bins.push_back(0);
+    std::copy(bins.begin(), bins.end(), std::back_insert_iterator<std::vector<double> >(m_bins));
+    m_bins.push_back(1e6); 
     setupbins();
 }
 
-PhotonBinner::PhotonBinner(double emin, double ratio, int bins):m_comb(false)
+PhotonBinner::PhotonBinner(double emin, double ratio, int bins)
 {
     double curfact = 1.;
     for(int i(0);i<bins;++i) {
@@ -81,20 +103,25 @@ skymaps::Band PhotonBinner::operator()(const astro::Photon& p)const
     int event_class (  p.eventClass() );
     if( event_class<0) event_class=0; // should not happen?
 
-    const std::vector<double>& elist = event_class<=0? s_fenergy : s_benergy;
+    // setup for old-style levels, with sigma and gamma for the given energy
+    const std::vector<double>& elist ( event_class<=0? s_fenergy : s_benergy );
+
     std::vector<double>::const_iterator it=
         std::lower_bound(elist.begin(), elist.end(), energy, std::less<double>());
     int level ( it-elist.begin()-1);
-
+    double sigma( s_sigma_level[level] * scale_factor(level) )
+        ,  gamma( s_gamma_level[level] )
+        ,  elow( elist[level] )
+        ,  ehigh( elist[level+1] );
     unsigned int nside ( 1<<level );
-    //event_class = 0; // combine front, back
 
-    return     
-        Band(nside, event_class, elist[level], elist[level+1], 
-            s_sigma_level[level]*scale_factor(level), s_gamma_level[level]
-            );
+    if( m_bins_per_decade>0){
+        // no, new binning
+        it= std::lower_bound(m_bins.begin(), m_bins.end(), energy, std::less<double>());
+        elow = *(it-1); ehigh = *(it);
+    }
+    return  Band(nside, event_class, elow, ehigh, sigma, gamma);
 }
-
 
 
 void PhotonBinner::setupbins() {
@@ -125,45 +152,3 @@ void PhotonBinner::setupbins() {
 }
 
 
-int PhotonBinner::level(int band, int event_class) const
-{
-    return (band<0&&abs(event_class)<2)?-1:m_binlevelmap[2*band+event_class];
-}
-
-
-
-double PhotonBinner::sigma(int level)
-{
-    return scale_factor(level)*sigma_list[level];
-}
-
-double PhotonBinner::gamma(int level)
-{
-    return gamma_list[level];
-}
-#if 0
-void PhotonBinner::info(std::ostream& out)const
-{
-    int total_pixels(0), total_photons(0);
-    out << " nside type   emin    emax    sigma   pixels   photons\n";
-
-    for( const_iterator it=begin();  it!=end(); ++it)
-    {
-        const Band& band = it->second;
-        int pixels(band.size()), photons(band.photons());
-        out 
-            <<std::setw(6) << band.nside()
-            <<std::setw(4) << band.event_class()
-            <<std::setw(8) << int(band.emin()+0.5)
-            <<std::setw(8) << int(band.emax()+0.5)
-            <<std::setw(8) << int(band.sigma()*180/M_PI*3600+0.5)
-            <<std::setw(10)<< pixels
-            <<std::setw(10)<< photons 
-            <<std::endl;
-        total_photons += photons; total_pixels+=pixels;
-    }
-    out << " total"
-        <<std::setw(38)<<total_pixels
-        <<std::setw(10)<<total_photons << std::endl;
-}
-#endif
