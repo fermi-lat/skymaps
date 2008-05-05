@@ -5,7 +5,7 @@
 $Id$
 @verbatim
  --------- -----   --- -----------------------------------------------------------------------
- 05-may-08 v1r0    THB New data storage model, binning classes (still preliminary)
+ 05-may-08 v1r0p1  THB New data storage model, binning classes (still preliminary)
  15-apr-08 v0r7    THB Add Background class to multiply diffuse and exposure
  01-apr-08 v0r6p1  THB Hide some stuff that SWIG could not understand
  01-apr-08 v0r6    MR  Added addition operator to PhotonMap
