@@ -11,6 +11,17 @@ using namespace skymaps;
 using healpix::Healpix;
 using astro::SkyDir;
 
+Band::Band(int nside)
+            : m_nside(nside)
+            , m_event_class(0)
+            , m_emin(0)
+            , m_emax(0)
+            , m_sigma(0)
+            , m_gamma(0)
+            , m_healpix(new healpix::Healpix(m_nside,Healpix::RING, SkyDir::GALACTIC))
+        {}
+
+
 Band::Band(int nside, int event_class, double emin,double emax,
             double sigma, double gamma)
             : m_nside(nside)
@@ -109,3 +120,9 @@ int Band::photons()const
     }
     return count;
 }
+
+void Band::findNeighbors(int index, std::vector<int> &neighbors)const
+{
+    m_healpix->findNeighbors(index, neighbors);
+}
+ 

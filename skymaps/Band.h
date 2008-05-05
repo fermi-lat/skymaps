@@ -28,8 +28,8 @@ namespace skymaps {
     class Band : public astro::SkyFunction{
     public:
 
-        /// default
-        Band(): m_nside(-1), m_event_class(0){}
+        /// @brief default ctor for pixel conversons
+        Band(int nside=1);
 
         /** @brief ctor
             @param nside The HEALpix nside parameter. Total number of pixels will be 12*nside*nside
@@ -71,6 +71,11 @@ namespace skymaps {
         /// @return the number of photons 
         int query_disk(const astro::SkyDir&dir, double radius, 
             std::vector<std::pair<int,int> > & v)const;
+
+        /// @brief fill a vector indeces of 7 or 8 neighbors of given index
+        /// Note: requires nested indexing!
+        void findNeighbors(int index, std::vector<int> &neighbors)const;
+
 
         /// @brief the solid angle for this pixelization
         double pixelArea()const;
