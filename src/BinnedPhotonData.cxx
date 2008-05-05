@@ -136,12 +136,15 @@ BinnedPhotonData::BinnedPhotonData(const std::string & inputFile,  const std::st
         }
 
 
-        try {hdr["NBRBANDS"].get(stored_bands);} catch (const std::exception& ) {}
-        try {hdr["PIXELS"].get(stored_pixels);} catch (const std::exception& ) {}
-        try {hdr["PHOTONS"].get(stored_photons);} catch (const std::exception& ) {}
+        hdr["NBRBANDS"].get(stored_bands); 
+        hdr["PIXELS"].get(stored_pixels);
+        hdr["PHOTONS"].get(stored_photons);
 
-        std::cout << "Creating Bands from file " << inputFile << ", table " << band_table << std::endl;
+        std::cout << "Creating Bands, pixels from file " << inputFile << ", tables " << band_table; 
+        std::cout << ", " << pixel_table <<std::endl;
+        
         std::vector<int> counts;
+
 
         for(tip::Table::ConstIterator itor = table.begin(); itor != table.end(); ++itor)
         {
@@ -162,9 +165,9 @@ BinnedPhotonData::BinnedPhotonData(const std::string & inputFile,  const std::st
         delete ptable; 
 
         // Get pixel info from the pixel table
+        ptable = tip::IFileSvc::instance().readTable(inputFile, pixel_table);
+        const tip::Table& table2(*ptable);
         m_photons = 0;
-        const tip::Table & table2 = *tip::IFileSvc::instance().readTable(inputFile, pixel_table);
-        std::cout << "Creating pixels from file " << inputFile << ", table " << pixel_table << std::endl;
 
         const_iterator bitor = begin();
         tip::Table::ConstIterator itor = table2.begin();
@@ -185,12 +188,12 @@ BinnedPhotonData::BinnedPhotonData(const std::string & inputFile,  const std::st
         }
         delete &table2; 
 
-        std::cout << "Bands available: " << stored_bands 
-            << "  Bands loaded: " << size() <<std::endl;
-        std::cout << "Pixels available: " << stored_pixels 
-            << "  Pixels loaded: " << pixels_loaded <<std::endl;
-        std::cout << "Photons available: " << stored_photons 
-            << "  Pixels created: " << m_photons <<std::endl;
+        std::cout << "\tBands expect:   " << stored_bands 
+                  << ", found:  " << size() <<std::endl;
+        std::cout << "\tPixels expect:  " << stored_pixels 
+                  << ", found:  " << pixels_loaded <<std::endl;
+        std::cout << "\tPhotons expect: " << stored_photons 
+                  << ", found:  " << m_photons <<std::endl;
 
     }
 
@@ -262,7 +265,7 @@ double BinnedPhotonData::integral(const astro::SkyDir& dir, double a, double b)c
 void BinnedPhotonData::info(std::ostream& out)const
 {
     int total_pixels(0), total_photons(0);
-    out << "index  emin    emax class  sigma   nside    pixels   photons\n";
+    out << "index  emin    emax class   sigma   nside    pixels   photons\n";
 
     int i(0);
     for( const_iterator it=begin();  it!=end(); ++it, ++i)
