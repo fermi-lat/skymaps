@@ -169,12 +169,12 @@ BinnedPhotonData::BinnedPhotonData(const std::string & inputFile,  const std::st
         const tip::Table& table2(*ptable);
         m_photons = 0;
 
-        const_iterator bitor = begin();
+        BinnedPhotonData::iterator bitor = this->begin();
         tip::Table::ConstIterator itor = table2.begin();
         std::vector<int>::const_iterator citor = counts.begin();
 
         // now just copy
-        for(iterator bitor = begin(); bitor != end(); ++bitor, ++citor) // for each band
+        for(; bitor != this->end(); ++bitor, ++citor) // for each band
         {
             for (int i = 0; i < *citor; ++i, ++itor) // for number of pixels stored for this band
             {
@@ -319,11 +319,11 @@ void BinnedPhotonData::write(const std::string & outputFile, bool clobber) const
 
     // get iterators for the Table and the Band list
     tip::Table::Iterator itor = table.begin();
-    const_iterator bitor = begin();
+    BinnedPhotonData::const_iterator bitor = this->begin();
 
 
     // now just copy
-    for( ; bitor != end(); ++bitor, ++itor)
+    for( ; bitor != this->end(); ++bitor, ++itor)
     {
         (*itor)["NSIDE"].set(bitor->nside());
         (*itor)["EVENT_CLASS"].set(bitor->event_class());
