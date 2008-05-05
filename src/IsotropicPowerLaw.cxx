@@ -27,7 +27,7 @@ double IsotropicPowerLaw::value(const astro::SkyDir& dir, double energy)const
     return m_flux*(m_index-1)*pow(E0/energy, m_index-1)/energy;
 }
 
-double IsotropicPowerLaw::integral(const astro::SkyDir& dir, double a, double b)const
+double IsotropicPowerLaw::integral(const astro::SkyDir& /*dir*/, double a, double b)const
 {
     return F(a) - F(b);
 }
