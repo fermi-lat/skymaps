@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Mon May  5 15:55:36 PDT 2008
+skymaps/src
+
+Modified Files:
+	BinnedPhotonData.cxx IsotropicPowerLaw.cxx 
+Log Message:
+gcc fixes
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-00-00, operation: add
 Package: skymaps
