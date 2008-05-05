@@ -1,4 +1,53 @@
 ------------------------------------------------------------
+TAG
+Tag name: v1r0p1, operation: add
+Package: skymaps
+User: burnett  Mon May  5 15:56:46 2008
+Files:
+  skymaps/.cvsignore  1.1.1.1
+  skymaps/ChangeLog  1.108
+  skymaps/SConscript  1.4
+  skymaps/skymapsLib.py  1.6
+  skymaps/cmt/.cvsignore  1.1.1.1
+  skymaps/cmt/requirements  1.11
+  skymaps/doc/release.notes  1.12
+  skymaps/python/swig_setup.in  1.1.1.1
+  skymaps/skymaps/DiffuseFunction.h  1.1.1.1
+  skymaps/skymaps/Exposure.h  1.1.1.1
+  skymaps/skymaps/BinnedPhotonData.h  1.13
+  skymaps/skymaps/SkySpectrum.h  1.2
+  skymaps/skymaps/PsfFunction.h  1.1.1.1
+  skymaps/skymaps/GtiBase.h  1.1
+  skymaps/skymaps/CompositeSkySpectrum.h  1.1.1.1
+  skymaps/skymaps/Band.h  1.11
+  skymaps/skymaps/EnergyBinner.h  1.2
+  skymaps/skymaps/PhotonMap.h  1.7
+  skymaps/skymaps/Gti.h  1.1
+  skymaps/skymaps/SkyImage.h  1.1.1.1
+  skymaps/skymaps/Background.h  1.1
+  skymaps/skymaps/Convolution.h  1.1.1.1
+  skymaps/skymaps/PhotonBinner.h  1.6
+  skymaps/skymaps/IsotropicPowerLaw.h  1.1
+  skymaps/src/GtiBase.cxx  1.1
+  skymaps/src/Gti.cxx  1.1
+  skymaps/src/CompositeSkySpectrum.cxx  1.1.1.1
+  skymaps/src/mainpage.h  1.2
+  skymaps/src/Background.cxx  1.1
+  skymaps/src/PhotonBinner.cxx  1.8
+  skymaps/src/PsfFunction.cxx  1.1.1.1
+  skymaps/src/Band.cxx  1.9
+  skymaps/src/Exposure.cxx  1.1.1.1
+  skymaps/src/BinnedPhotonData.cxx  1.14
+  skymaps/src/IsotropicPowerLaw.cxx  1.2
+  skymaps/src/EnergyBinner.cxx  1.2
+  skymaps/src/Convolution.cxx  1.1.1.1
+  skymaps/src/SkySpectrum.cxx  1.3
+  skymaps/src/PhotonMap.cxx  1.8
+  skymaps/src/SkyImage.cxx  1.2
+  skymaps/src/test/test_main.cxx  1.12
+
+    *
+------------------------------------------------------------
 User: burnett  Mon May  5 15:56:18 PDT 2008
 skymaps/doc
 
