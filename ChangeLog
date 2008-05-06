@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Mon May  5 19:09:44 PDT 2008
+skymaps/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+another try to work around mysterious gcc behavior
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-00-01, operation: add
 Package: skymaps
