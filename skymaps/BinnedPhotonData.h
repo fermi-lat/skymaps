@@ -50,6 +50,10 @@ namespace skymaps {
         ///@brief add a photon to data base according to its energy, event class, and direction
         void addPhoton(const astro::Photon& gamma, int count=1);
 
+        ///@brief add another BinnedPhotonData object
+        /// The corresponding Band objects must be consistent
+        void add(const BinnedPhotonData& other);
+
         /// @return density for a given direction, in photons/area.
         double density (const astro::SkyDir & sd) const;
 

@@ -33,6 +33,17 @@ Band::Band(int nside, int event_class, double emin,double emax,
             , m_healpix(new healpix::Healpix(m_nside,Healpix::RING, SkyDir::GALACTIC))
         {}
 
+
+
+#if 0
+Band::Band(const Band& other)
+: m_nside(1)
+{
+    add(other);
+}
+#endif
+
+
 void Band::add(const astro::SkyDir& dir, int count)
 {
     m_pixels[index(dir)]+=count;
@@ -126,3 +137,25 @@ void Band::findNeighbors(int index, std::vector<int> &neighbors)const
     m_healpix->findNeighbors(index, neighbors);
 }
  
+void Band::add(const Band& other)
+{
+    if( m_nside==1){
+        // default ctor: making a copy
+        m_nside = other.nside();
+        m_healpix = new healpix::Healpix(m_nside,Healpix::RING, SkyDir::GALACTIC);
+        m_sigma = other.sigma();
+        m_gamma = other.gamma();
+        m_emin = other.emin();
+        m_emax = other.emax();
+    }else  if( other.emin() != emin()
+        || other.emax() != emax()
+        || other.nside() != nside())
+    {
+            throw std::invalid_argument("Band::add -- other band not compatible");
+    }
+    for( Band::const_iterator it= other.begin(); it!=other.end(); ++it){
+        add(it->first, it->second);
+    }
+}
+
+
