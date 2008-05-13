@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Tue May 13 08:47:07 PDT 2008
+skymaps/src
+
+Modified Files:
+	Band.cxx BinnedPhotonData.cxx 
+Log Message:
+Implement addition of Bands
+    *
+------------------------------------------------------------
+User: burnett  Tue May 13 08:47:07 PDT 2008
 skymaps/skymaps
 
 Modified Files:
