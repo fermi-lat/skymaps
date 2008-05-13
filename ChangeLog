@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Tue May 13 08:47:07 PDT 2008
+skymaps/skymaps
+
+Modified Files:
+	Band.h BinnedPhotonData.h 
+Log Message:
+Implement addition of Bands
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-00-02, operation: add
 Package: skymaps
