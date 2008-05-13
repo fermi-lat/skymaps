@@ -41,6 +41,9 @@ namespace skymaps {
         Band(int nside, int event_class, double emin,double emax,
             double sigma, double gamma);
 
+        ///! copy ctor
+        //Band(const Band& other);
+
         ///@brief implement SkyFunction interface
         ///@param dir direction in sky
         ///@return contents of pixel, if exists, otherwise zero
@@ -52,6 +55,9 @@ namespace skymaps {
         ///@brief add an element, or to an existing element, by index and count
         void add(int index, int count);
 
+        ///@brief add the contents of another Band (must have same parameters)
+        void add(const Band& other);
+
         /// @brief direction for a pixel index
         astro::SkyDir dir( int index)const;
 
@@ -61,6 +67,7 @@ namespace skymaps {
         /// @brief set a list of pixel ids and counts within the radius about the direction
         /// @param dir center of cone
         /// @param radius in radians
+        /// @param v vector of SkyDir objects to be set
         /// @return the number of photons 
         int query_disk(const astro::SkyDir&dir, double radius, 
             std::vector<std::pair<astro::SkyDir,int> > & v)const;
@@ -68,6 +75,7 @@ namespace skymaps {
         /// @brief set a list of pixel ids and counts within the radius about the direction
         /// @param dir center of cone
         /// @param radius in radians
+        /// @param v vector of pixel indices to be set
         /// @return the number of photons 
         int query_disk(const astro::SkyDir&dir, double radius, 
             std::vector<std::pair<int,int> > & v)const;
@@ -91,6 +99,9 @@ namespace skymaps {
         double emax()const{return m_emax;}
         double sigma()const{return m_sigma;}
         double gamma()const{return m_gamma;}
+
+        void setSigma(double s){m_sigma=s;}
+        void setGamma(double g){m_gamma=g;}
 
         typedef std::map<int,int> PixelMap;
         typedef PixelMap::iterator iterator;

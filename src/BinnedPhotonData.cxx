@@ -217,6 +217,7 @@ void BinnedPhotonData::addPhoton(const astro::Photon& gamma, int count)
 
     // is it already in our list?
     iterator it=std::lower_bound(begin(), end(), key, std::less<int>());
+    int newkey(*it);
 
     if( key!=(*it) ){
         // no, create new entry and copy in the Band
@@ -228,6 +229,17 @@ void BinnedPhotonData::addPhoton(const astro::Photon& gamma, int count)
 
     m_photons+= count;
 }
+void BinnedPhotonData::add(const BinnedPhotonData& other)
+{
+    iterator mit(begin());
+    for(const_iterator oit( other.begin()); oit!=other.end(); ++oit,++mit){
+        mit->add(*oit);
+    }
+    addgti(other.gti());
+    m_photons += other.m_photons;
+
+}
+
 
 
 double BinnedPhotonData::density (const astro::SkyDir & sd) const
