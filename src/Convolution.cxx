@@ -115,7 +115,6 @@ void Convolution::createConv(const skymaps::SkySpectrum& sf, const skymaps::SkyS
     if(it==end()) {
         std::cout << "*********************************************************" << std::endl;
         std::cout << "     Convolution: level " << m_level << " and energy " << energy << std::endl << std::endl;
-        skymaps::PsfFunction psf(2.25);
         std::cout << "          Allocating map and harmonic storage...";
         Map<double> sfm(m_level);
         Map<double> kerm(m_level);
@@ -148,8 +147,8 @@ void Convolution::createConv(const skymaps::SkySpectrum& sf, const skymaps::SkyS
 
 double Convolution::value(const astro::SkyDir& dir,double e) const{
     double e1(layer(e,true)), e2(layer(e,false));
-    int pixel_index = find(e1)->second.cmap().nest2ring(healpix::HealPixel(dir,m_level).index());
-    double f1((find(e1)->second.cmap())[pixel_index]),f2((find(e2)->second.cmap())[pixel_index]);
+    int pixel_index = find((int)e1)->second.cmap().nest2ring(healpix::HealPixel(dir,m_level).index());
+    double f1((find((int)e1)->second.cmap())[pixel_index]),f2((find((int)e2)->second.cmap())[pixel_index]);
     double alpha ( log(f1/f2)/log(e2/e1) );
     return f1*pow( e1/e, alpha);
 }
