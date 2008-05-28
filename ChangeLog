@@ -1,13 +1,4 @@
 ------------------------------------------------------------
-User: burnett  Wed May 28 12:30:32 PDT 2008
-skymaps/src
-
-Modified Files:
-	PhotonMap.cxx 
-Log Message:
-klugy fix to avoid changing (old version of) pointlike
-    *
-------------------------------------------------------------
 TAG
 Tag name: skymaps-01-00-03, operation: add
 Package: skymaps
