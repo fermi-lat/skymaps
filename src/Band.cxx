@@ -7,6 +7,8 @@ $Header$
 #include "skymaps/Band.h"
 
 #include "healpix/Healpix.h"
+#include <stdexcept>
+
 using namespace skymaps;
 using healpix::Healpix;
 using astro::SkyDir;
