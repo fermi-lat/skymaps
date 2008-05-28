@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: mar0  Wed May 28 10:29:49 PDT 2008
+skymaps/src
+
+Modified Files:
+	PhotonMap.cxx 
+Removed Files:
+	EnergyBinner.cxx 
+Log Message:
+PhotonMap was reverted to remove dependence on EnergyBinner, removed depricated class EnergyBinner
+    *
+------------------------------------------------------------
 User: mar0  Wed May 28 10:29:48 PDT 2008
 skymaps/skymaps
 
