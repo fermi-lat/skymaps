@@ -163,6 +163,11 @@ int PhotonMap::extract(const SkyDir& dir, double radius,
                        std::vector<std::pair<HealPixel, int> >& vec,
                        int summary_level, int select_level) const
 {
+    if( select_level>-1) {
+        // if we want only the data from a given level, pass on to this
+        // (this option used to work below, doesn't anymore for unknown reasons--but this is obsolete anyway)
+        return extract_level(dir, radius, vec, select_level);
+    }
     //unused bool allsky(radius>=180); // maybe use to simplify below, but seems fast
     radius *= (M_PI / 180); // convert to radians
     if (summary_level == -1)
