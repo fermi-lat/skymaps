@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: mar0  Wed May 28 13:35:03 PDT 2008
+skymaps/src
+
+Modified Files:
+	Convolution.cxx 
+Log Message:
+fixed unix warnings in Convolution
+    *
+------------------------------------------------------------
 User: burnett  Wed May 28 13:32:43 PDT 2008
 skymaps/doc
 
