@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Fri Jun  6 09:37:04 PDT 2008
+skymaps/src
+
+Modified Files:
+	PhotonBinner.cxx 
+Log Message:
+temporary changes to sort of support PSF for new binning
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-00-05, operation: add
 Package: skymaps
