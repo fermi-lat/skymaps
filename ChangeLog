@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: mar0  Mon Jun 16 23:37:57 PDT 2008
+skymaps/src
+
+Modified Files:
+	BinnedPhotonData.cxx 
+Log Message:
+fixed photon count issue
+    *
+------------------------------------------------------------
 User: mar0  Mon Jun 16 22:22:11 PDT 2008
 skymaps/src
 
