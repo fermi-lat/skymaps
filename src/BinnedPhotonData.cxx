@@ -37,10 +37,12 @@ namespace {
 }
 BinnedPhotonData::BinnedPhotonData(int bins_per_decade)
 : m_binner(bins_per_decade)
+, m_photons(0)
 {}
 
 BinnedPhotonData::BinnedPhotonData(const skymaps::PhotonBinner& binner)
 : m_binner(binner)
+, m_photons(0)
 {}
 
 
