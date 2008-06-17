@@ -6,6 +6,7 @@ $Header$
 
 #include "skymaps/PhotonBinner.h"
 #include "skymaps/Band.h"
+#include "skymaps/IParams.h"
 #include "astro/Photon.h"
 #include <algorithm>
 #include <functional>
@@ -34,8 +35,8 @@ namespace {
     double gamma_list[] ={0,0,0,0, 2.2,
         2.25,  2.27,  2.22,  2.31,  2.30,  2.31,  2.16,  2.19,  2.07};
     double sigma_list[] ={0,0,0,0,0.5,
-         0.343, 0.335, 0.319, 0.431,  0.449,  0.499,  0.566,  0.698,  0.818
-        };
+        0.343, 0.335, 0.319, 0.431,  0.449,  0.499,  0.566,  0.698,  0.818
+    };
     double infinite(1e6); // largest energy
     double sqr(double x){return x*x;}
 
@@ -117,17 +118,13 @@ skymaps::Band PhotonBinner::operator()(const astro::Photon& p)const
         std::vector<double>::const_iterator itold=
             std::lower_bound(elist.begin(), elist.end(), ebar, std::less<double>());
         level = itold-elist.begin()-1;
-        sigma = s_sigma_level[level] * scale_factor(level);
-        gamma = s_gamma_level[level] ;
-        nside = 1<<level;
-        nside = 3*nside/2;  // double number of pixels
 
         //  kluge, from Marshall's fits
-        if( event_class==0){
-            sigma = sqrt( sqr(1.62*pow(ebar/100, -0.8)) + sqr(0.011) )*M_PI/180;
-        }else if(event_class==1){
-            sigma = sqrt( sqr(2.34*pow(ebar/100, -0.8)) + sqr(0.024) )*M_PI/180;
-        }
+        sigma = IParams::sigma(ebar,event_class);
+        gamma = s_gamma_level[level] ;
+        nside = (2*M_PI/(3*sigma));
+        nside=nside>8192?8192:nside;
+        nside=nside<1?1:nside;
     }
     return  Band(nside, event_class, elow, ehigh, sigma, gamma);
 }
