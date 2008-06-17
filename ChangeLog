@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: mar0  Mon Jun 16 22:22:10 PDT 2008
+skymaps/skymaps
+
+Modified Files:
+	PsfFunction.h 
+Added Files:
+	IParams.h 
+Log Message:
+new class for PSF parameterization, MC generator, new pixelization
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-01-00, operation: add
 Package: skymaps
