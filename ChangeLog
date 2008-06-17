@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: mar0  Mon Jun 16 22:22:11 PDT 2008
+skymaps/src
+
+Modified Files:
+	PhotonBinner.cxx PsfFunction.cxx 
+Added Files:
+	IParams.cxx 
+Log Message:
+new class for PSF parameterization, MC generator, new pixelization
+    *
+------------------------------------------------------------
 User: mar0  Mon Jun 16 22:22:10 PDT 2008
 skymaps/skymaps
 
