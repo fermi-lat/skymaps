@@ -28,3 +28,9 @@ double PsfFunction::integralSquare(double umax)const
 {
     return m_norm*m_norm*m_gamma/(2.*m_gamma-1)*(1-pow(1+umax/m_gamma, 1-2*m_gamma));
 }
+
+double PsfFunction::mc(double rand, double umax)
+{
+    double i_umax = integral(umax);
+    return m_gamma*(-1+pow(1-rand*i_umax,1/(1-m_gamma)));
+}

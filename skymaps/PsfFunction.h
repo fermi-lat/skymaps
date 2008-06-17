@@ -45,6 +45,11 @@ class PsfFunction
         /// @return integral of the square of the function from 0 to umax
         double integralSquare(double umax)const;
 
+        /// @returns a u value generate from the distribution out to umax
+        //  @param rand  uniformly distributed random number [0,1)
+        //  @param umax  max u value to generate
+        double mc(double rand, double umax);
+
     private:
         double m_gamma;
         double m_norm;
