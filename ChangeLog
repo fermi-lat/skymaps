@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: glastrm  Thu Jun 19 16:49:19 PDT 2008
+ScienceTools-scons/skymaps
+
+Modified Files:
+	SConscript 
+Log Message:
+Added Author and Version fields
+    *
+------------------------------------------------------------
 User: mar0  Mon Jun 16 23:37:57 PDT 2008
 skymaps/src
 
