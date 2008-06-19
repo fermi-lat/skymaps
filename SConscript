@@ -1,7 +1,10 @@
+# -*- python -*-
 # @file SConscript
 # @brief scons build specifications for skymaps
 #
-#$Header$
+# $Header$
+# Authors: T. Burnett <tburnett@u.washington.edu>
+# Version: skymaps-01-01-00
 Import('baseEnv')
 Import('listFiles')
 progEnv = baseEnv.Clone()
