@@ -149,12 +149,8 @@ void Band::add(const Band& other)
         m_gamma = other.gamma();
         m_emin = other.emin();
         m_emax = other.emax();
-    }else  if( other.emin() != emin()
-        || other.emax() != emax()
-        || other.nside() != nside())
-    {
-            throw std::invalid_argument("Band::add -- other band not compatible");
     }
+
     for( Band::const_iterator it= other.begin(); it!=other.end(); ++it){
         add(it->first, it->second);
     }
