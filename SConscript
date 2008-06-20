@@ -3,7 +3,7 @@
 # @brief scons build specifications for skymaps
 #
 # $Header$
-# Authors: T. Burnett <tburnett@u.washington.edu>
+# Authors: T. Burnett <tburnett@u.washington.edu>, M.Roth <mar0@u.washington.edu>
 # Version: skymaps-01-01-00
 Import('baseEnv')
 Import('listFiles')
