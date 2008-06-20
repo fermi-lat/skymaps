@@ -5,6 +5,7 @@
 $Id$
 @verbatim
  --------- -----   --- -----------------------------------------------------------------------
+ 20-jun-08 v1r2    THB PSF parameters now set (MR)
  06-jun-08 v1r1    THB Temporary specification of PSF parameters for multiple bins
  28-may-08 v1r0p5  MR,THB  Fixed PhotonMap and removed depricated class EnergyBinner
  05-may-08 v1r0p2  THB New data storage model, binning classes (still preliminary)
