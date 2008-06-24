@@ -62,8 +62,8 @@ public:
       case 0: return self->x();
       case 1: return self->y();
       case 2: return self->z();
-      case 3: throw std::exception("StopIteration"); //must be exactly this string
-      default: throw std::exception("IndexError");
+      case 3: throw std::range_error("StopIteration"); //must be exactly this string
+      default: throw std::range_error("IndexError");
       }
    }
    size_t __len__() {      return 3;       }
@@ -75,8 +75,8 @@ public:
       case 0: return self->dir().x();
       case 1: return self->dir().y();
       case 2: return self->dir().z();
-      case 3: throw std::exception("StopIteration"); //must be exactly this string
-      default: throw std::exception("IndexError");
+      case 3: throw std::range_error("StopIteration"); //must be exactly this string
+      default: throw std::range_error("IndexError");
       }
    }
    size_t __len__() {      return 3;       }
@@ -88,8 +88,8 @@ public:
       case 0: return self->xx(); case 1: return self->xy(); case 2: return self->xz();
       case 3: return self->yx(); case 4: return self->yy(); case 5: return self->yz();
       case 6: return self->zx(); case 7: return self->zy(); case 8: return self->zz();
-      case 9: throw std::exception("StopIteration"); //must be exactly this string
-      default: throw std::exception("IndexError");
+      case 9: throw std::range_error("StopIteration"); //must be exactly this string
+      default: throw std::range_error("IndexError");
       }
    }
    size_t __len__() {return 9;}
