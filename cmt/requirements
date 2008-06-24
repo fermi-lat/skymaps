@@ -1,6 +1,6 @@
 package skymaps
 
-version v1r3p1
+version v1r3p2
 
 # $Header$
 
@@ -9,6 +9,8 @@ use healpix *
 use st_facilities *
 
 apply_pattern shared_library
+
+private
 
 use SwigModule *
 apply_pattern python_module
