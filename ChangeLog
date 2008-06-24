@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Tue Jun 24 10:44:29 PDT 2008
+skymaps/python
+
+Modified Files:
+	swig_setup.in 
+Log Message:
+enhance Background; fix swig
+    *
+------------------------------------------------------------
+User: burnett  Tue Jun 24 10:44:29 PDT 2008
 skymaps/doc
 
 Modified Files:
