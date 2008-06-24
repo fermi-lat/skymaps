@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Tue Jun 24 10:44:29 PDT 2008
+skymaps/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+enhance Background; fix swig
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-02-01, operation: add
 Package: skymaps
