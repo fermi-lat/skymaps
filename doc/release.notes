@@ -5,7 +5,7 @@
 $Id$
 @verbatim
  --------- -----   --- -----------------------------------------------------------------------
- 24-jun-08 v1r3p1  THB swig fix for linux
+ 24-jun-08 v1r3p2  THB swig fix for linux
  24-jun-08 v1r3    THB Enhance Background class
  20-jun-08 v1r2p1  THB Make build, especially python private
  20-jun-08 v1r2    THB PSF parameters now set (MR)
