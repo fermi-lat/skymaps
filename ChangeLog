@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Tue Jun 24 12:01:37 PDT 2008
+skymaps/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+fix linux
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-03-00, operation: add
 Package: skymaps
