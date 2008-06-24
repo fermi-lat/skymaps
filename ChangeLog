@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+TAG
+Tag name: v1r3p1, operation: mov
+Package: skymaps
+User: glastrm  Tue Jun 24 12:16:04 2008
+Files:
+  skymaps/SConscript  1.10
+
+    *
+------------------------------------------------------------
 User: glastrm  Tue Jun 24 12:15:58 PDT 2008
 skymaps
 
