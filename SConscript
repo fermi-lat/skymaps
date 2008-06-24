@@ -4,7 +4,7 @@
 #
 # $Header$
 # Authors: T. Burnett <tburnett@u.washington.edu>, M.Roth <mar0@u.washington.edu>
-# Version: skymaps-01-03-01
+# Version: skymaps-01-03-02
 Import('baseEnv')
 Import('listFiles')
 progEnv = baseEnv.Clone()
