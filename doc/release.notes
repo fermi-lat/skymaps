@@ -5,6 +5,7 @@
 $Id$
 @verbatim
  --------- -----   --- -----------------------------------------------------------------------
+ 24-jun-08 v1r3    THB Enhance Background class
  20-jun-08 v1r2p1  THB Make build, especially python private
  20-jun-08 v1r2    THB PSF parameters now set (MR)
  06-jun-08 v1r1    THB Temporary specification of PSF parameters for multiple bins

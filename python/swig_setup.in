@@ -8,7 +8,7 @@
 #include "astro/Photon.h"
 #include "healpix/Healpix.h"
 #include "healpix/HealPixel.h"
-#include "healpix/HealPixMap.h"
+#include "healpix/HealpixMap.h"
 
 #include "skymaps/SkyImage.h"
 
