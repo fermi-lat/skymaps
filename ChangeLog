@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Tue Jun 24 07:21:20 PDT 2008
+skymaps/doc
+
+Modified Files:
+	release.notes 
+Log Message:
+fix  python on linux
+    *
+------------------------------------------------------------
+User: burnett  Tue Jun 24 07:21:20 PDT 2008
 skymaps/cmt
 
 Modified Files:
