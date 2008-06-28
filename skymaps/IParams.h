@@ -27,6 +27,8 @@ public:
     static std::vector<double> s_fparams;
     static std::vector<double> s_bparams;
 
+    static std::vector<double> params(int event_class);
+
 private:
 
 };
