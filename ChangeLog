@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: mar0  Fri Jun 27 23:11:32 PDT 2008
+skymaps/src
+
+Modified Files:
+	IParams.cxx 
+Log Message:
+added static method to IParams to access sigma parameterization
+    *
+------------------------------------------------------------
+User: mar0  Fri Jun 27 23:11:32 PDT 2008
 skymaps/skymaps
 
 Modified Files:
