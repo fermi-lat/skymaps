@@ -53,9 +53,9 @@ Background::Background(const skymaps::SkySpectrum& diffuse,
 Background::~Background()
 {}
 
-void Background::set_event_type(int n)
+void Background::set_event_class(int n) const
 {
-    m_event_type = n;
+    m_event_type = n; // ok, since mutable
     if( n>= m_exposures.size() ){
         n=0;
     }
