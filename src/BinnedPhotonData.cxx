@@ -148,17 +148,17 @@ BinnedPhotonData::BinnedPhotonData(const std::string & inputFile,  const std::st
         std::vector<int> counts;
 
 
-        for(tip::Table::ConstIterator itor = table.begin(); itor != table.end(); ++itor)
+        for(tip::Table::ConstIterator itora = table.begin(); itora != table.end(); ++itora)
         {
             int nside, event_class, count;
             double emin, emax, sigma, gamma;
-            (*itor)["NSIDE"].get(nside);
-            (*itor)["EVENT_CLASS"].get(event_class);
-            (*itor)["EMIN"].get(emin);
-            (*itor)["EMAX"].get(emax);
-            (*itor)["SIGMA"].get(sigma);
-            (*itor)["GAMMA"].get(gamma);
-            (*itor)["COUNT"].get(count);
+            (*itora)["NSIDE"].get(nside);
+            (*itora)["EVENT_CLASS"].get(event_class);
+            (*itora)["EMIN"].get(emin);
+            (*itora)["EMAX"].get(emax);
+            (*itora)["SIGMA"].get(sigma);
+            (*itora)["GAMMA"].get(gamma);
+            (*itora)["COUNT"].get(count);
             Band b(nside, event_class, emin, emax, sigma, gamma);
             push_back(b);
             counts.push_back(count);
@@ -189,21 +189,23 @@ BinnedPhotonData::BinnedPhotonData(const std::string & inputFile,  const std::st
             }
         }
         delete &table2; 
-
+#if 0 // debug
         std::cout << "\tBands expect:   " << stored_bands 
                   << ", found:  " << size() <<std::endl;
         std::cout << "\tPixels expect:  " << stored_pixels 
                   << ", found:  " << pixels_loaded <<std::endl;
         std::cout << "\tPhotons expect: " << stored_photons 
                   << ", found:  " << m_photons <<std::endl;
-
+#endif
     }
 
     try // now load the GTI info, if there
     {
         gti() = Gti(inputFile);
         std::cout << "  GTI interval: "
-            << int(gti().minValue())<<"-"<<int(gti().maxValue())<<std::endl; 
+            << int(gti().minValue())<<"-"<<int(gti().maxValue())
+            << ", on time: " << gti().computeOntime() << " s"
+            << std::endl; 
     }
     catch(const std::exception&)
     {

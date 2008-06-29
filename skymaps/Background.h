@@ -59,7 +59,8 @@ public:
 
     ///@brief set the event type (index into the exposures arrray) to use
     /// If not valid, silently use fixed or first entry
-    void set_event_type(int n);
+    /// note that this sets the event type, which is mutable
+    void set_event_class(int n)const;
 
 
     std::string name()const;
@@ -71,7 +72,7 @@ private:
     const skymaps::SkySpectrum& m_diffuse;
     typedef std::vector<const skymaps::SkySpectrum*> SpectrumVector;
     SpectrumVector m_exposures;
-    int m_event_type;
+    mutable int m_event_type;
     double m_fixedexposure; ///< fixed exposure to use if not a map
     static int s_n; ///< simpsons rule 
     
