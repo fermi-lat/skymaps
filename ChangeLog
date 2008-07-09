@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Tue Jul  8 21:16:26 PDT 2008
+skymaps/doc
+
+Modified Files:
+	release.notes 
+Log Message:
+new python-friendly constructor for Background
+    *
+------------------------------------------------------------
+User: burnett  Tue Jul  8 21:16:26 PDT 2008
 skymaps/cmt
 
 Modified Files:
