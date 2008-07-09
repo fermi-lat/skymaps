@@ -45,6 +45,14 @@ public:
     */
     Background::Background(const skymaps::SkySpectrum& diffuse, 
                        std::vector<const skymaps::SkySpectrum*> exposure_list);
+    /** @brief ctor
+    @param diffuse  a SkySpectrum representing the diffuse background flux
+    @param front a SkySpectrum corresponding to the first event class, probably front
+    @param back  a SkySpectrum corresponding to the first event class, probably back
+    */
+    Background(const skymaps::SkySpectrum& diffuse, 
+                       const skymaps::SkySpectrum& front, 
+                       const skymaps::SkySpectrum& back);
     ~Background();
 
     ///@brief a single energy 

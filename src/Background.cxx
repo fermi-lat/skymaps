@@ -49,6 +49,16 @@ Background::Background(const skymaps::SkySpectrum& diffuse,
     std::copy(exposure_list.begin(), exposure_list.end(), 
         std::back_insert_iterator<SpectrumVector>(m_exposures) );
 }
+Background::Background(const skymaps::SkySpectrum& diffuse, 
+                       const skymaps::SkySpectrum& front, 
+                       const skymaps::SkySpectrum& back)
+: m_diffuse(diffuse)
+, m_event_type(0)
+{
+    m_exposures.push_back(&front);
+    m_exposures.push_back(&back);
+}
+
 
 Background::~Background()
 {}
