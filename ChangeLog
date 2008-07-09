@@ -2,6 +2,14 @@
 TAG
 Tag name: v1r5, operation: add
 Package: skymaps
+User: burnett  Tue Jul  8 21:17:17 2008
+Files:
+
+    *
+------------------------------------------------------------
+TAG
+Tag name: v1r5, operation: add
+Package: skymaps
 User: burnett  Tue Jul  8 21:16:51 2008
 Files:
   skymaps/.cvsignore  1.1.1.1
