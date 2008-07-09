@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Tue Jul  8 21:16:26 PDT 2008
+skymaps/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+new python-friendly constructor for Background
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-04-00, operation: add
 Package: skymaps
