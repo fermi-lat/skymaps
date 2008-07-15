@@ -1,6 +1,6 @@
 package skymaps
 
-version v1r5
+version v1r5p1
 
 # $Header$
 
@@ -8,13 +8,11 @@ use astro *
 use healpix *
 use st_facilities *
 
-apply_pattern shared_library
-
-private
 
 use SwigModule *
 apply_pattern python_module
 
+private
 
 macro source "*.cxx" WIN32 "*.cxx *.h *.py"
 
