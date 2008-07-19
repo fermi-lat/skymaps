@@ -5,6 +5,7 @@
 $Id$
 @verbatim
  --------- -----   --- -----------------------------------------------------------------------
+ 19-jul-08 v1r6    THB smoothing function for BinnedPhotonData
  14-jul-08 v1r5p1  THB SwigModule change
  29-jun-08 v1r5    THB new python-friendly constructor for Background
  29-jun-08 v1r4    MR  more PSF
