@@ -56,6 +56,11 @@ namespace skymaps {
 
         /// @return density for a given direction, in photons/area.
         double density (const astro::SkyDir & sd) const;
+        
+        /// @return density for a given direction, in photons/area.
+        /// Value at any point is averaged over neighboring pixels
+        /// Also, any pixel with < mincount photons is treated as empty.
+        double BinnedPhotonData::smoothDensity (const astro::SkyDir & sd, int mincount = 0) const;
 
         /// @brief print out a summary of the contents
         void info(std::ostream& out = std::cout)const;
