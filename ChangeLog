@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Sat Jul 19 07:42:30 PDT 2008
+skymaps/skymaps
+
+Modified Files:
+	BinnedPhotonData.h 
+Log Message:
+display averaging
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-09-06-03, operation: add
 Package: skymaps
