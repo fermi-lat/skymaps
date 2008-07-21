@@ -1,6 +1,6 @@
 package skymaps
 
-version v1r6
+version v1r6p1
 
 # $Header$
 
@@ -8,11 +8,12 @@ use astro *
 use healpix *
 use st_facilities *
 
-# disable separate SWIG interface for now
-#use SwigModule *
-#apply_pattern python_module
+# SWIG interface
+use SwigModule *
+apply_pattern python_module
 
-apply_pattern shared_library
+# instead of python_module
+#apply_pattern shared_library
 private
 
 macro source "*.cxx" WIN32 "*.cxx *.h *.py"
