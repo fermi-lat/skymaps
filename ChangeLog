@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Mon Jul 28 04:43:10 PDT 2008
+skymaps/src
+
+Modified Files:
+	SkyImage.cxx 
+Log Message:
+Implement auto bounding box for fulll-sky orthographic projection   (SIN)
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-09-07-00, operation: add
 Package: skymaps
