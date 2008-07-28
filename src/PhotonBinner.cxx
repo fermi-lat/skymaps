@@ -105,6 +105,7 @@ skymaps::Band PhotonBinner::operator()(const astro::Photon& p)const
         ,  elow( elist[level] )
         ,  ehigh( elist[level+1] );
     unsigned int nside ( 1<<level );
+    
 
     if( m_bins_per_decade>0){
         // no, new binning
@@ -119,13 +120,19 @@ skymaps::Band PhotonBinner::operator()(const astro::Photon& p)const
             std::lower_bound(elist.begin(), elist.end(), ebar, std::less<double>());
         level = itold-elist.begin()-1;
 
-        //  kluge, from Marshall's fits
+        //  from Marshall's fits
         sigma = IParams::sigma(ebar,event_class);
         gamma = s_gamma_level[level] ;
         nside = (2*M_PI/(3*sigma));
-        nside=nside>8192?8192:nside;
-        nside=nside<1?1:nside;
     }
+
+#if 0 //------- for picture: larger pixels -----------------
+    nside /= 2;   
+#endif
+
+    // limit to range [1,8192]
+    nside=nside>8192?8192:nside;
+    nside=nside<1?1:nside;
     return  Band(nside, event_class, elow, ehigh, sigma, gamma);
 }
 
