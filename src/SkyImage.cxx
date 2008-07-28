@@ -45,9 +45,10 @@ SkyImage::SkyImage(const astro::SkyDir& center,
 {
 
     if( fov>90) {
-        std::string types[]={"" ,"CAR","AIT","ZEA"};
-        int xsize[] =       {360, 360,  325,  230}; 
-        int ysize[] =       {180, 180,  162,  230}; 
+        m_naxis1=0;
+        std::string types[]={"" ,"CAR","AIT","ZEA", "SIN"};
+        int xsize[] =       {360, 360,  325,  230,  115}; 
+        int ysize[] =       {180, 180,  162,  230,  115}; 
         for( unsigned int i = 0; i< sizeof(types)/sizeof(std::string); ++i){
             if( ptype == types[i]) {
                 m_naxis1 = static_cast<int>(xsize[i]/pixel_size);
