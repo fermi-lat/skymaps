@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: mar0  Wed Aug  6 12:42:24 PDT 2008
+skymaps/skymaps
+
+Modified Files:
+	IParams.h 
+Log Message:
+Added Psf parameter modifiers and linked to binner
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-06-02, operation: add
 Package: skymaps
