@@ -24,12 +24,17 @@ public:
     static double sigma(double energy, int event_class);
     static double gamma(double energy, int event_class);
 
-    static std::vector<double> s_fparams;
-    static std::vector<double> s_bparams;
+    static void set_fp(std::vector<double> params){s_fparams=params;}
+    static void set_bp(std::vector<double> params){s_bparams=params;}
+
 
     static std::vector<double> params(int event_class);
 
 private:
+
+    static std::vector<double> s_elist;
+    static std::vector<double> s_fparams;
+    static std::vector<double> s_bparams;
 
 };
 
