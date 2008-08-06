@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: mar0  Wed Aug  6 12:42:24 PDT 2008
+skymaps/src
+
+Modified Files:
+	BinnedPhotonData.cxx IParams.cxx PhotonBinner.cxx 
+Log Message:
+Added Psf parameter modifiers and linked to binner
+    *
+------------------------------------------------------------
+User: mar0  Wed Aug  6 12:42:24 PDT 2008
 skymaps/skymaps
 
 Modified Files:
