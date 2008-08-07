@@ -98,6 +98,7 @@ int Band::query_disk(const astro::SkyDir&sdir, double radius,
     return total;
 }
 
+
 int Band::query_disk(const astro::SkyDir&sdir, double radius, 
                      std::vector<std::pair<int,int> > & vec)const
 {
@@ -155,5 +156,14 @@ void Band::add(const Band& other)
         add(it->first, it->second);
     }
 }
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+WeightedSkyDirList::WeightedSkyDirList(const Band& band, const astro::SkyDir& sdir, double radius)
+{
+    std::vector<std::pair<astro::SkyDir,int> > vec;
+    band.query_disk(sdir, radius, vec);
+    for( std::vector<std::pair<astro::SkyDir,int> >::const_iterator it=vec.begin(); it!=vec.end(); ++it){
+        push_back(WeightedSkyDir(it->first, it->second));
+    }
+}
 

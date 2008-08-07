@@ -24,8 +24,8 @@ public:
     static double sigma(double energy, int event_class);
     static double gamma(double energy, int event_class);
 
-    static void set_fp(std::vector<double> params){s_fparams=params;}
-    static void set_bp(std::vector<double> params){s_bparams=params;}
+    static void set_fp(std::vector<double> params);//{s_fparams=params;}
+    static void set_bp(std::vector<double> params);//{s_bparams=params;}
 
 
     static std::vector<double> params(int event_class);

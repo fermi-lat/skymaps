@@ -18,6 +18,7 @@ namespace healpix { class Healpix;}
 
 namespace skymaps {
 
+ 
     /*** @class Band
         @brief encapsulate concept of an energy band and a collection of directions for photons in that band
 
@@ -80,6 +81,7 @@ namespace skymaps {
         int query_disk(const astro::SkyDir&dir, double radius, 
             std::vector<std::pair<int,int> > & v)const;
 
+
         /// @brief fill a vector indeces of 7 or 8 neighbors of given index
         /// Note: requires nested indexing!
         void findNeighbors(int index, std::vector<int> &neighbors)const;
@@ -120,6 +122,32 @@ namespace skymaps {
         double m_sigma, m_gamma;
         const healpix::Healpix* m_healpix; 
     };
+
+   /** @class WeightedSkyDir
+         @brief a weighted SkyDir, used to describe pixels
+    */
+    class WeightedSkyDir : public astro::SkyDir {
+    public:
+        WeightedSkyDir(const astro::SkyDir& sdir=astro::SkyDir(), double weight=1): SkyDir(sdir), m_weight(weight){}
+        double weight()const{return m_weight;}
+    private:
+        double m_weight;
+    };
+
+
+    /** @class WeightedSkyDirList
+        @brief a vector of WeightedSKyDir objects
+
+        */
+    class WeightedSkyDirList : public std::vector<WeightedSkyDir> {
+    public:
+        /** @brief ctor creates an object from a band
+        */
+        WeightedSkyDirList( const Band& band, const astro::SkyDir& sdir, double radius);
+
+    private:
+    };
+
 
 }
 
