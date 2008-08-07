@@ -5,6 +5,7 @@
 $Id$
 @verbatim
  --------- -----   --- -----------------------------------------------------------------------
+ 08-aug-08 v1r7    THB Marshall's updates; better python access
  28-jul-08 v1r6p2  THB implement auto bounding for SIN
  21-jul-08 v1r6p1  THB Turn SwigModule back on
  19-jul-08 v1r6    THB smoothing function for BinnedPhotonData
