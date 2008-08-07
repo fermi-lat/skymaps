@@ -29,9 +29,12 @@ namespace {
     double b_p[] = {0.043, -1.575, 6.476, 2.602};
 }
 
+
 std::vector<double> IParams::s_elist(elist,elist+12);
 std::vector<double> IParams::s_fparams(f_p,f_p+4);
 std::vector<double> IParams::s_bparams(b_p,b_p+4);
+void IParams::set_fp(std::vector<double> params){s_fparams=params;}
+void IParams::set_bp(std::vector<double> params){s_bparams=params;}
 
 IParams::IParams(std::string& name)
 {
