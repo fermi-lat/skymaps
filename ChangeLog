@@ -1,5 +1,16 @@
 ------------------------------------------------------------
 User: burnett  Sat Aug 16 05:24:24 PDT 2008
+skymaps/src
+
+Modified Files:
+	SkyImage.cxx 
+Added Files:
+	ExposureCube.cxx 
+Log Message:
+new class to accumulate exposure; add simple copy functionality to SkyImage.
+    *
+------------------------------------------------------------
+User: burnett  Sat Aug 16 05:24:24 PDT 2008
 skymaps/skymaps
 
 Modified Files:
