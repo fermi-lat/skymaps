@@ -19,6 +19,7 @@
 #include "skymaps/Exposure.h"
 #include "skymaps/Convolution.h"
 #include "skymaps/PsfFunction.h"
+#include "skymaps/ExposureCube.h"
 
 #include "CLHEP/Vector/Rotation.h"
 #include "CLHEP/Vector/EulerAngles.h"
@@ -118,6 +119,8 @@ public:
 %include ../skymaps/Exposure.h
 %include ../skymaps/Convolution.h
 %include ../skymaps/PsfFunction.h
+%include ../skymaps/ExposureCube.h
+
 
 
 

@@ -15,6 +15,7 @@ $Header$
 #include <cmath>
 #include <stdexcept>
 #include <sstream>
+#include <stdexcept>
 #include <errno.h> // to test result of std::remove()
 
 namespace {
@@ -121,10 +122,13 @@ SkyImage::SkyImage(const std::string& fits_file, const std::string& extension, b
     m_image = tip::IFileSvc::instance().editImageFlt(fits_file, extension);
     tip::Header& header = m_image->getHeader();
 
-    // standard ordering for ra, dec, cos(theta).
+    int naxis;
+    header["NAXIS"].get(naxis);
     header["NAXIS1"].get(m_naxis1);
     header["NAXIS2"].get(m_naxis2);
-    header["NAXIS3"].get(m_naxis3);
+    if( naxis>2 ){
+       header["NAXIS3"].get(m_naxis3);
+    }else{ m_naxis3=1;}
     m_pixelCount = m_naxis1*m_naxis2*m_naxis3;
 
 #if 0 // this seems not to interpret CAR properly
@@ -220,6 +224,10 @@ SkyImage::~SkyImage()
     delete m_image; 
     delete m_wcs;
 }
+void SkyImage::save()
+{
+    dynamic_cast<tip::TypedImage<float>*>(m_image)->set(m_imageData);
+}
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 double SkyImage::pixelValue(const astro::SkyDir& pos,unsigned  int layer)const
 {
@@ -310,5 +318,16 @@ unsigned int SkyImage::pixel_index(const astro::SkyDir& pos, int layer) const
     }
     return k;
 }
-
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+void SkyImage::reimage( const astro::SkyDir& center,
+                        const std::string& outputFile, 
+                   double pixel_size, double fov 
+                   ,const std::string& ptype
+                   ,bool galactic)
+{
+     SkyImage image(center,outputFile, pixel_size, fov, m_naxis3, ptype, galactic);
+     for(int layer(0); layer!= m_naxis3; ++layer){
+         image.fill(*this, layer);
+     }
+}
 
