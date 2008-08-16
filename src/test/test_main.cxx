@@ -36,7 +36,7 @@ int main(int , char** )
     int rc(0);
     try{
 
-#if 1
+#if 0
         {
         // try to sample a different image
         SkyImage in("G:\\kamae\\high_resolution_av.fits");
