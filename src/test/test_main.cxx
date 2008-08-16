@@ -8,6 +8,13 @@ $Header$
 #include "skymaps/Exposure.h"
 #include "skymaps/BinnedPhotonData.h"
 #include "skymaps/PhotonBinner.h"
+
+#include "skymaps/ExposureCube.h"
+#include "healpix/HealpixArrayIO.h"
+#include "tip/IFileSvc.h"
+#include "tip/Table.h"
+
+
 #include "astro/Photon.h"
 #include "astro/SkyDir.h"
 
@@ -28,6 +35,29 @@ int main(int , char** )
 
     int rc(0);
     try{
+
+#if 1
+        {
+        // try to sample a different image
+        SkyImage in("G:\\kamae\\high_resolution_av.fits");
+        in.reimage(SkyDir(180,0,SkyDir::GALACTIC), "D:\\common\\temp\\anticenter05a.fits", 0.05, 20, "CAR", true);
+        }
+
+#endif
+
+#if 0
+        // test code for ExposureCube -- make an exposure cube
+        bool zenith(false);
+        ExposureCube ex;  // default parameters
+        std::string infile("F:\\glast\\data\\first_light\\dubois\\FT2_236511638-239811535_merged.fits");
+        std::string outfile("D:\\common\\first_light\\earth\\sky_cube.fits");
+        std::string outtable("Exposure");
+        tip::Table * scData = tip::IFileSvc::instance().editTable(infile, "SC_DATA");
+        if(zenith) ex.useZenith();
+        std::cout << "\nCreating "<< (zenith?"zenith":"sky") <<"frame exposure cube:\nat:\t" << outfile <<"\nfrom:\t" << infile << std::endl;
+        ex.load(scData);
+        healpix::HealpixArrayIO::instance().write(ex.data(), outfile, outtable);
+#endif
 
 #if 0 // test code for Exposure--need a cube for built-in test
 

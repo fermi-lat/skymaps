@@ -76,6 +76,8 @@ public:
 
      const float & operator[](const astro::SkyDir&  dir)const;
 
+    void save();
+
     ~SkyImage();
 
     //! set default layer, return previous 
@@ -138,6 +140,24 @@ public:
 
     const std::vector<float>& image()const{return m_imageData;}
 
+    /** @brief create new FITS file with different projection, or portion
+        @param center coords of image center
+        @param outputFile FITS file to write the image to. 
+        @param pixel_size [0.5] degree size of indivitual pixel
+        @param fov [20] (degrees) size of field of view
+        @param ptype ["ZEA"] projection type.
+        @param galactic [false] use galactic or equatorial coords
+        
+        If multiple layers, will do all.
+    */
+    void reimage( const astro::SkyDir& center,
+                   const std::string& outputFile, 
+                   double pixel_size=0.5, double fov=20 
+                   ,const std::string& ptype="ZEA"
+                   ,bool galactic=false);
+
+
+
     /// @brief change the value to use for invalid
     static double setNaN(double nan);
 
@@ -171,6 +191,6 @@ private:
 
     bool m_interpolate; ///< flag to determine if interpolate
 };
-} //namesace map_tools
+} //namesace skymaps
 
 #endif
