@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Sat Aug 16 05:24:24 PDT 2008
+skymaps/src/test
+
+Modified Files:
+	test_main.cxx 
+Log Message:
+new class to accumulate exposure; add simple copy functionality to SkyImage.
+    *
+------------------------------------------------------------
+User: burnett  Sat Aug 16 05:24:24 PDT 2008
 skymaps/src
 
 Modified Files:
