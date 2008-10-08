@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Wed Oct  8 10:37:21 PDT 2008
+skymaps/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+add  PySkyFunction, rename ExposureCube to LivetimeCube
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-09-06-00, operation: del
 Package: skymaps
