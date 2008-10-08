@@ -1,5 +1,18 @@
 ------------------------------------------------------------
 User: burnett  Wed Oct  8 10:37:21 PDT 2008
+skymaps/skymaps
+
+Modified Files:
+	SkyImage.h 
+Added Files:
+	LivetimeCube.h PySkyFunction.h 
+Removed Files:
+	ExposureCube.h 
+Log Message:
+add  PySkyFunction, rename ExposureCube to LivetimeCube
+    *
+------------------------------------------------------------
+User: burnett  Wed Oct  8 10:37:21 PDT 2008
 skymaps/python
 
 Modified Files:
