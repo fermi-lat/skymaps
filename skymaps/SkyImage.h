@@ -50,6 +50,7 @@ public:
         @param layers [1] number of layers to allocate
         @param ptype ["ZEA"] projection type.
         @param galactic [false] use galactic or equatorial coords
+        @param earth [false] looking at Earth: reverse x axis
 
         Note that if the outputFile is empty, which is useful to get the the transformation, most methods are not valid
         until setupImage() is called with a filename.
@@ -58,7 +59,8 @@ public:
                    const std::string& outputFile, 
                    double pixel_size=0.5, double fov=20, int layers=1
                    ,const std::string& ptype="ZEA"
-                   ,bool galactic=false);
+                   ,bool galactic=false
+                   ,bool earth=false);
     
     /**
         @brief add a count to the map, using current SkyDir projection

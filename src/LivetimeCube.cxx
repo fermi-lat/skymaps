@@ -1,12 +1,17 @@
-/** @file ExposureCube.cxx
-    @brief Implementation of class ExposureCube
+/** @file LivetimeCube.cxx
+    @brief Implementation of class LivetimeCube
 
    $Header$
    copied from: /nfs/slac/g/glast/ground/cvs/map_tools/src/Exposure.cxx,v 1.33 2008/01/16 21:33:59 burnett Exp $
 */
-#include "skymaps/ExposureCube.h"
+#include "skymaps/LivetimeCube.h"
+#include "skymaps/SkyImage.h"
+
 #include "healpix/HealpixArrayIO.h"
+
+#include "tip/IFileSvc.h"
 #include "tip/Table.h"
+
 #include "astro/EarthCoordinate.h"
 
 #include <memory>
@@ -20,9 +25,59 @@ using astro::SkyDir;
 using CLHEP::Hep3Vector;
 
 
-ExposureCube::ExposureCube(const std::string& inputfile, const std::string& tablename)
-: SkyExposureCube(SkyBinner(2))
+namespace {
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/** @class IrfAeff
+@brief function class implements effective area, as adapter to irfInterface::IAeff
+*/
+class IrfAeff { 
+public:
+    /**
+    @param aeff an object from the CALDB stuff. If zero, implement linear 
+    @param energy energy to evaluate
+    @param cutoff limit for cos(theta)
+    */
+    IrfAeff( double energy, double cutoff=0.25)
+        : m_energy(energy), m_cutoff(cutoff)
+    {}
+
+    double operator()(double costh) const
+    {
+       return costh<m_cutoff? 0 : (costh-m_cutoff)/(1.-m_cutoff);
+    }
+    double m_energy;
+    double m_cutoff;
+};
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/** @class RequestExposure 
+@brief function class requests a point from the exposure
+*/
+template< class F>
+class RequestExposure : public astro::SkyFunction
+{
+public:
+    RequestExposure(const LivetimeCube& exp, const F& aeff, double norm=1.0)
+        : m_exp(exp)
+        , m_aeff(aeff)
+        , m_norm(norm)
+    {}
+    double operator()(const astro::SkyDir& s)const{
+        return m_norm*m_exp(s, m_aeff);
+    }
+private:
+    const LivetimeCube& m_exp;
+    const F& m_aeff;
+    double m_norm;
+};
+
+
+}
+
+LivetimeCube::LivetimeCube(const std::string& inputfile, const std::string& tablename)
+: SkyLivetimeCube(SkyBinner(2))
 , m_zenith_frame(false)
+, m_lost(0) // should be set from file?
 {
    setData( HealpixArrayIO::instance().read(inputfile, tablename));
 }
@@ -38,8 +93,8 @@ inline int side_from_degrees(double pixelsize){
     return n; 
 } 
 
-ExposureCube::ExposureCube(double pixelsize, double cosbinsize, double zcut)
-: SkyExposureCube(
+LivetimeCube::LivetimeCube(double pixelsize, double cosbinsize, double zcut)
+: SkyLivetimeCube(
     SkyBinner(Healpix(
       side_from_degrees(pixelsize),  // nside
       Healpix::NESTED, 
@@ -60,7 +115,7 @@ ExposureCube::ExposureCube(double pixelsize, double cosbinsize, double zcut)
     create_cache();
 }
 
-void ExposureCube::create_cache()
+void LivetimeCube::create_cache()
 {
     size_t datasize(data().size());
     m_dir_cache.reserve(datasize);
@@ -74,7 +129,7 @@ void ExposureCube::create_cache()
 /** @class Filler
     @brief private helper class used in for_each to fill a CosineBinner object
 */
-class ExposureCube::Filler {
+class LivetimeCube::Filler {
 public:
     /** @brief ctor
         @param deltat time to add
@@ -112,14 +167,14 @@ private:
     double m_deltat, m_zcut, m_total, m_lost;
 };
 
-void ExposureCube::fill(const astro::SkyDir& dirz, double deltat)
+void LivetimeCube::fill(const astro::SkyDir& dirz, double deltat)
 {
     Filler sum = for_each(m_dir_cache.begin(), m_dir_cache.end(), Filler(deltat, dirz));
     addtotal(deltat);
 }
 
 
-void ExposureCube::fill(const astro::SkyDir& dirz, const astro::SkyDir& zenith, double deltat)
+void LivetimeCube::fill(const astro::SkyDir& dirz, const astro::SkyDir& zenith, double deltat)
 {
     Filler sum = for_each(m_dir_cache.begin(), m_dir_cache.end(), Filler(deltat, dirz, zenith, m_zcut));
     double total(sum.total());
@@ -128,13 +183,13 @@ void ExposureCube::fill(const astro::SkyDir& dirz, const astro::SkyDir& zenith, 
 }
 
 
-void ExposureCube::write(const std::string& outputfile, const std::string& tablename)const
+void LivetimeCube::write(const std::string& outputfile, const std::string& tablename)const
 {
     healpix::HealpixArrayIO::instance().write(data(), outputfile, tablename);
 }
 
-void ExposureCube::load(const tip::Table * scData, 
-                    const GTIvector& gti, 
+void LivetimeCube::load(const tip::Table * scData, 
+                    const Gti& gti, 
                     bool verbose) {
    
    tip::Table::ConstIterator it = scData->begin();
@@ -149,7 +204,7 @@ void ExposureCube::load(const tip::Table * scData,
 }
 
 
-bool ExposureCube::processEntry(const tip::ConstTableRecord & row, const GTIvector& gti)
+bool LivetimeCube::processEntry(const tip::ConstTableRecord & row, const skymaps::Gti& gti)
 {
 #if 0 // enable when use SAA?
     double latGeo, lonGeo;
@@ -168,10 +223,10 @@ bool ExposureCube::processEntry(const tip::ConstTableRecord & row, const GTIvect
 
     double fraction(1); 
     bool  done(false);
-    if( !gti.empty() ) {
+    if( gti.getNumIntervals()>0 ) {
         fraction = 0;
 
-        GTIvector::const_iterator it  = gti.begin();
+        Gti::ConstIterator it  = gti.begin();
         for ( ; it != gti.end(); ++it) {
             double first = it->first,
                 second=it->second;
@@ -194,7 +249,7 @@ bool ExposureCube::processEntry(const tip::ConstTableRecord & row, const GTIvect
             }
  
         }
-        done = fraction==0 && start > gti.back().second; 
+        done = fraction==0 && start > gti.minValue(); 
     }
     if( fraction>0. ) {
 
@@ -232,5 +287,25 @@ bool ExposureCube::processEntry(const tip::ConstTableRecord & row, const GTIvect
     }
     return done; 
 
+}
+double LivetimeCube::value(const astro::SkyDir& dir, double costh)
+{
+    if( costh==0) costh=1e-9; // avoid error
+
+    return bins(dir)[costh];
+}
+
+void LivetimeCube::load(std::string scfile, const skymaps::Gti & gti, std::string tablename)
+{
+     tip::Table * scData = tip::IFileSvc::instance().editTable(scfile, tablename);
+     this->load(scData, gti); // should allow a GTI?
+     delete scData; // closes the file, I hope
+}
+
+
+
+SkyImage* LivetimeCube::createMap(std::string filename)
+{
+    return (SkyImage*) 0; // not ready
 }
 

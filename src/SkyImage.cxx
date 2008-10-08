@@ -37,7 +37,7 @@ SkyImage::SkyImage(const astro::SkyDir& center,
                    const std::string& outputFile, 
                    double pixel_size, double fov, int layers, 
                    const std::string& ptype,
-                   bool galactic)
+                   bool galactic, bool earth)
 : m_naxis3(layers)  
 , m_image(0)
 , m_save(false)
@@ -47,9 +47,9 @@ SkyImage::SkyImage(const astro::SkyDir& center,
 
     if( fov>90) {
         m_naxis1=0;
-        std::string types[]={"" ,"CAR","AIT","ZEA", "SIN"};
-        int xsize[] =       {360, 360,  325,  230,  115}; 
-        int ysize[] =       {180, 180,  162,  230,  115}; 
+        std::string types[]={"" ,"CAR","AIT","ZEA", "SIN", "CEA"};
+        int xsize[] =       {360, 360,  325,  230,  115,    360}; 
+        int ysize[] =       {180, 180,  162,  230,  115,    115}; 
         for( unsigned int i = 0; i< sizeof(types)/sizeof(std::string); ++i){
             if( ptype == types[i]) {
                 m_naxis1 = static_cast<int>(xsize[i]/pixel_size);
@@ -68,7 +68,7 @@ SkyImage::SkyImage(const astro::SkyDir& center,
     }
 
     double crval[2] = { galactic?center.l():center.ra(),galactic? center.b(): center.dec()};
-    double cdelt[2] = { -pixel_size, pixel_size };
+    double cdelt[2] = { earth? pixel_size: -pixel_size, pixel_size };
     double crpix[2] = { (m_naxis1+1)/2.0, (m_naxis2+1)/2.0};
 
     m_wcs = new astro::SkyProj(ptype, crpix, crval, cdelt, 0., galactic);

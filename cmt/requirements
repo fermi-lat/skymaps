@@ -16,6 +16,8 @@ apply_pattern python_module
 #apply_pattern shared_library
 private
 
+use embed_python * 
+
 macro source "*.cxx" WIN32 "*.cxx *.h *.py"
 
 library skymaps \
