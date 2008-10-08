@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Wed Oct  8 10:37:21 PDT 2008
+skymaps/python
+
+Modified Files:
+	swig_setup.in 
+Log Message:
+add  PySkyFunction, rename ExposureCube to LivetimeCube
+    *
+------------------------------------------------------------
+User: burnett  Wed Oct  8 10:37:21 PDT 2008
 skymaps/cmt
 
 Modified Files:
