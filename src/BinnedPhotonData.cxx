@@ -29,18 +29,18 @@ using astro::Photon;
 using namespace skymaps;
 
 namespace {
-    skymaps::PhotonBinner default_binner;
 
     std::string band_table("BANDS"),
         pixel_table("PIXELS");
 
 }
 BinnedPhotonData::BinnedPhotonData(int bins_per_decade)
-: m_binner(bins_per_decade)
+: default_binner(bins_per_decade)
+, m_binner(default_binner)
 , m_photons(0)
 {}
 
-BinnedPhotonData::BinnedPhotonData(const skymaps::PhotonBinner& binner)
+BinnedPhotonData::BinnedPhotonData(skymaps::PhotonBinner& binner)
 : m_binner(binner)
 , m_photons(0)
 {}
