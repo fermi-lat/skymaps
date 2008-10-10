@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Fri Oct 10 12:41:13 PDT 2008
+skymaps/python
+
+Modified Files:
+	swig_setup.in 
+Log Message:
+New LivetimeCube class
+    *
+------------------------------------------------------------
+User: burnett  Fri Oct 10 12:41:13 PDT 2008
 skymaps/doc
 
 Modified Files:
