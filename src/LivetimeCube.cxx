@@ -7,6 +7,8 @@
 #include "skymaps/LivetimeCube.h"
 #include "skymaps/SkyImage.h"
 
+
+
 #include "healpix/HealpixArrayIO.h"
 
 #include "tip/IFileSvc.h"
@@ -49,6 +51,7 @@ public:
     double m_energy;
     double m_cutoff;
 };
+#if 0
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 /** @class RequestExposure 
 @brief function class requests a point from the exposure
@@ -70,7 +73,7 @@ private:
     const F& m_aeff;
     double m_norm;
 };
-
+#endif
 
 }
 
@@ -101,6 +104,7 @@ LivetimeCube::LivetimeCube(double pixelsize, double cosbinsize, double zcut)
       astro::SkyDir::EQUATORIAL) )
   )
 , m_zcut(zcut), m_lost(0)
+, m_zenith_frame(false)
 {
     unsigned int cosbins = static_cast<unsigned int>(1./cosbinsize);
     if( cosbins != CosineBinner::nbins() ) {
@@ -197,23 +201,15 @@ void LivetimeCube::load(const tip::Table * scData,
    long nrows = scData->getNumRecords();
 
    for (long irow = 0; it != scData->end(); ++it, ++irow) {
-      if (verbose && (irow % (nrows/20)) == 0 ) std::cerr << ".";
+      if( verbose && (nrows>=20) && (irow % (nrows/20)) == 0 ) std::cerr << ".";
       if( processEntry( row, gti) )break;
    }
-   if (verbose) std::cerr << "!" << std::endl;
+   if (verbose) std::cerr << "!\t"<< total() << std::endl;
 }
 
 
 bool LivetimeCube::processEntry(const tip::ConstTableRecord & row, const skymaps::Gti& gti)
 {
-#if 0 // enable when use SAA?
-    double latGeo, lonGeo;
-    row["lat_Geo"].get(latGeo);
-    row["lon_Geo"].get(lonGeo);
-    astro::EarthCoordinate earthCoord(latGeo, lonGeo);
-    if( earthCoord.insideSAA() ) return false;
-#endif
-
     double  start, stop, livetime; 
     row["livetime"].get(livetime);
     row["start"].get(start);
@@ -303,9 +299,29 @@ void LivetimeCube::load(std::string scfile, const skymaps::Gti & gti, std::strin
 }
 
 
-
-SkyImage* LivetimeCube::createMap(std::string filename)
+void LivetimeCube::createMap(skymaps::SkyImage & image)
 {
-    return (SkyImage*) 0; // not ready
+#if 0
+    std::vector<double> energy;
+    image.getEnergies(energy);
+    for ( std::vector<double>::size_type layer = 0; layer != energy.size(); ++layer){
+        //double norm = aeff!=0? aeff->value(energy[layer],0,0): 1.0; // for normalization
+        std::clog << "Generating layer " << layer
+            << " at energy " << energy[layer] << " MeV " 
+            //<< " Aeff(0): " << norm << " cm^2"
+            << std::endl;
+
+        RequestExposure<IrfAeff> req(*this, IrfAeff( energy[layer]), 1.); 
+        image.fill(req, layer);
+    }
+    //::writeEnergies(m_pars["outfile"], energy);
+#endif
+}
+double LivetimeCube::operator()(const astro::SkyDir& sdir)const
+{
+
+    // default pretty simple
+    return SkyLivetimeCube::operator()(sdir, IrfAeff(1000.) );
+
 }
 

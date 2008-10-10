@@ -88,6 +88,7 @@ public:
     //! set, or return a reference to, the energies
     void getEnergies(std::vector<double> & energy) const { energy = m_energy; }
     const std::vector<double> & energies()const{return m_energy;}
+    void setEnergies(const std::vector<double>& energies);
 
     /**
     @brief loop over all internal bins, request the intensity from a functor derived

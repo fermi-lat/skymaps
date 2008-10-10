@@ -9,8 +9,11 @@
 #ifndef MAP_TOOLS_LivetimeCube_H
 #define MAP_TOOLS_LivetimeCube_H
 
-#include "skymaps/Gti.h"
 #include "astro/SkyDir.h"
+#include "astro/SkyFunction.h"
+
+#include "skymaps/Gti.h"
+
 #include "healpix/HealpixArray.h"
 #include "healpix/CosineBinner.h"
 namespace tip { class Table; class ConstTableRecord;}
@@ -71,7 +74,7 @@ It is a pixelated using Healpix binning, and the CosineBinner class
 
 */
 
-class LivetimeCube : public SkyLivetimeCube {
+    class LivetimeCube : public SkyLivetimeCube, public astro::SkyFunction {
 public:
     //! create object with specified binning
     //! @param pixelsize (deg) Approximate pixel size, in degrees
@@ -97,12 +100,15 @@ public:
     //typedef std::vector<std::pair<double, double> > GTIvector;
 
     //! load a set of history intervals from a FITS S/C file (FT2)
-    void load(std::string scfile, const skymaps::Gti & gti= Gti(), std::string tablename="SC_DATA");
+    void load(std::string scfile, const skymaps::Gti & gti= skymaps::Gti(), std::string tablename="SC_DATA");
 
     //! load a set of history intervals from a table, qualified by a set of "good-time" intervals 
     void load(const tip::Table * scData, 
-        const skymaps::Gti & gti= Gti(), 
+        const skymaps::Gti & gti= skymaps::Gti(), 
                     bool verbose=true);
+
+    //! implement the SkyFunction interface
+    double operator()(const astro::SkyDir& sdir)const; 
 
     double lost()const{return m_lost;}
 
@@ -110,12 +116,15 @@ public:
 
     double value(const astro::SkyDir& dir, double costh);
 
-    //! create a map
-    SkyImage* createMap(std::string filename);
+    //! create a map in a given sky image
+    void createMap(skymaps::SkyImage & image);
+
+    /// access time
+    double total()const{return SkyLivetimeCube::total();} // make accessible to SWIG
 
 
 private:
-    bool processEntry(const tip::ConstTableRecord & row, const Gti& gti);
+    bool processEntry(const tip::ConstTableRecord & row, const skymaps::Gti& gti);
 
     /** @brief set up the cache of vectors associated with cosine histograms
 

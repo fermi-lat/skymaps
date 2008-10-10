@@ -330,4 +330,14 @@ void SkyImage::reimage( const astro::SkyDir& center,
          image.fill(*this, layer);
      }
 }
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+void SkyImage::setEnergies(const std::vector<double>& energies)
+{
+    if (energies.size()!=m_naxis3) {
+        throw std::invalid_argument("SkyImage::setEnergies: wrong size for energy array, must be same as layers");
+    }
+    m_energy.resize(energies.size());
+    std::copy(energies.begin(), energies.end(), m_energy.begin());
+}
 
