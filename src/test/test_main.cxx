@@ -9,7 +9,7 @@ $Header$
 #include "skymaps/BinnedPhotonData.h"
 #include "skymaps/PhotonBinner.h"
 
-#include "skymaps/ExposureCube.h"
+#include "skymaps/LivetimeCube.h"
 #include "healpix/HealpixArrayIO.h"
 #include "tip/IFileSvc.h"
 #include "tip/Table.h"
@@ -46,9 +46,9 @@ int main(int , char** )
 #endif
 
 #if 0
-        // test code for ExposureCube -- make an exposure cube
+        // test code for LivetimeCube -- make an exposure cube
         bool zenith(false);
-        ExposureCube ex;  // default parameters
+        LivetimeCube ex;  // default parameters
         std::string infile("F:\\glast\\data\\first_light\\dubois\\FT2_236511638-239811535_merged.fits");
         std::string outfile("D:\\common\\first_light\\earth\\sky_cube.fits");
         std::string outtable("Exposure");

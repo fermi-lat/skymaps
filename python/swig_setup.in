@@ -21,6 +21,7 @@
 #include "skymaps/PsfFunction.h"
 #include "skymaps/LivetimeCube.h"
 #include "skymaps/PySkyFunction.h"
+#include "skymaps/Gti.h"
 
 #include "CLHEP/Vector/Rotation.h"
 #include "CLHEP/Vector/EulerAngles.h"
@@ -113,6 +114,7 @@ public:
 //%include $(HEALPIXROOT)/healpix/HealPixel.h
 
     
+%feature("kwargs");  // does this apply to all these?
 %include ../skymaps/DiffuseFunction.h
 %include ../skymaps/CompositeSkySpectrum.h
 %include ../skymaps/PhotonMap.h
