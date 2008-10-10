@@ -33,7 +33,7 @@ namespace skymaps {
         BinnedPhotonData(int bins_per_decade=0);
         
         ///@brief ctor created from external binner
-        BinnedPhotonData(const skymaps::PhotonBinner& binner);
+        BinnedPhotonData(skymaps::PhotonBinner& binner);
 
         /// @brief Create  object from a saved fits file
         ///
@@ -98,7 +98,8 @@ namespace skymaps {
         int pixelCount()const{ return 0;} ///TODO
 
     private:
-        skymaps::PhotonBinner m_binner; ///< object that handles binning
+        skymaps::PhotonBinner default_binner; ///< object that handles default binning
+        skymaps::PhotonBinner& m_binner; ///< object that handles binning
         skymaps::Gti m_gti;   ///< gti information associated with these data
         int m_photons;  ///< keep track of total number of photons in the database
 

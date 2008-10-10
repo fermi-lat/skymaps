@@ -41,11 +41,10 @@ namespace skymaps {
         * @param bins  number of bins
         */
         PhotonBinner(double emin, double ratio, int bins);
-
+        virtual ~PhotonBinner(){};
         ///@brief bin a photon by returning an appropriate Band object
-        skymaps::Band operator()(const astro::Photon& photon)const;
-
-
+        virtual skymaps::Band operator()(const astro::Photon& photon)const;
+           
 
     private:
         /**@brief setupbins  sets up bin to pixel connection with current bin set
