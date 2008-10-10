@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Fri Oct 10 12:41:14 PDT 2008
+skymaps/src/test
+
+Modified Files:
+	test_main.cxx 
+Log Message:
+New LivetimeCube class
+    *
+------------------------------------------------------------
+User: burnett  Fri Oct 10 12:41:14 PDT 2008
 skymaps/src
 
 Modified Files:
