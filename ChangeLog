@@ -1,4 +1,16 @@
 ------------------------------------------------------------
+User: markusa  Thu Oct  9 18:38:46 PDT 2008
+skymaps/skymaps
+
+Modified Files:
+	BinnedPhotonData.h PhotonBinner.h 
+Log Message:
+changed PhotonBinner () to virtual
+BinnedPhotonData now stores reference to PhotonBinner
+
+
+    *
+------------------------------------------------------------
 User: burnett  Wed Oct  8 10:37:21 PDT 2008
 skymaps/src
 
