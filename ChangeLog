@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Sun Oct 12 12:05:59 PDT 2008
+skymaps/python
+
+Modified Files:
+	swig_setup.in 
+Log Message:
+toward a complete exposure treatment
+    *
+------------------------------------------------------------
+User: burnett  Sun Oct 12 12:05:59 PDT 2008
 skymaps/doc
 
 Modified Files:
