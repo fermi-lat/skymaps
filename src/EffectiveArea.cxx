@@ -321,28 +321,33 @@ void EffectiveArea::FitsTable::getVectorData(const tip::Table * table,
 std::string EffectiveArea::s_CALDB;
 void EffectiveArea::set_CALDB(std::string CALDB){ s_CALDB=CALDB;}
 
-EffectiveArea::EffectiveArea(std::string irf_name)
+EffectiveArea::EffectiveArea(std::string irfname, std::string filename)
 : m_simple(false)
 , m_aeffTable(0)
 {
-    if( irf_name=="simple"){
+    if( irfname=="simple"){
+        // using simple test irf.
         m_simple= true;
         return;
     }
-    if( s_CALDB.empty()){
-        const char* c(::getenv("CALDB") );
-        if( c==0){
-            throw std::invalid_argument("EffectiveArea:: CALDB is not set");
+    if( filename.empty() ){
+        // no overriding filename
+        
+        if( s_CALDB.empty()){
+            const char* c(::getenv("CALDB") );
+            if( c==0){
+                throw std::invalid_argument("EffectiveArea:: CALDB is not set");
+            }
+            s_CALDB = std::string(c);
         }
-        s_CALDB = std::string(c);
+        filename = std::string(s_CALDB+"/bcf/ea/aeff_"+irfname+".fits");
     }
-    std::string infile(s_CALDB+"/bcf/ea/aeff_"+irf_name+".fits");
     static std::string table_name("EFFECTIVE AREA");
     try{
         //const tip::Table * table = tip::IFileSvc::instance().readTable(infile, table_name, "");
-        m_aeffTable = new FitsTable(infile, table_name, "EFFAREA" );
+        m_aeffTable = new FitsTable(filename, table_name, "EFFAREA" );
     }catch(const std::exception& e){
-        std::cerr << "EffectiveArea: could not open " << infile<< "["<<table_name <<"]" << std::endl;
+        std::cerr << "EffectiveArea: could not open " << filename<< "["<<table_name <<"]" << std::endl;
         throw;
     }
 

@@ -117,6 +117,18 @@ public:
 
     
 %include ../skymaps/BinnedPhotonData.h
+%extend skymaps::BinnedPhotonData{
+// provide access to the Band objects as an array
+   skymaps::Band * __getitem__(size_t i){ 
+      if( i == (*self).size() ) throw std::range_error("StopIteration");
+      if( i<0 || i > self->size() ) throw std::range_error("IndexError");
+      skymaps::BinnedPhotonData::iterator it= self->begin();
+      for(int j(0); j!=i; ++j, ++it);
+      return &(*it); // note address of
+   }
+   size_t __len__() {      return self->size();       }
+}
+
 %include ../skymaps/DiffuseFunction.h
 %include ../skymaps/CompositeSkySpectrum.h
 %include ../skymaps/PhotonMap.h
@@ -126,7 +138,6 @@ public:
 %include ../skymaps/PsfFunction.h
 
 %include ../skymaps/PySkyFunction.h
-%include ../skymaps/EffectiveArea.h
 %include ../skymaps/Background.h
 %include ../skymaps/Gti.h
 %extend skymaps::Gti{
@@ -137,6 +148,7 @@ public:
 %feature("kwargs");  // using keywords for these
 %include ../skymaps/LivetimeCube.h
 %include ../skymaps/Exposure.h
+%include ../skymaps/EffectiveArea.h
 
 
 

@@ -30,21 +30,23 @@ namespace skymaps {
 
     public:
         ///@brief ctor
-        ///@param irf_name name of irf, e.g. P6_v1_diff. Special value "simple" returns linear function
+        ///@param irfname name of irf, e.g. P6_v1_diff_front. Special value "simple" returns linear functionl Otherwise
+        ///      the name is env('CALDB')/bcf/ea/aeff_<irfname>.fits 
+        ///@param filename name of explicit file, if irfname not specified
         ///
-        EffectiveArea(std::string irf_name);
+        EffectiveArea(std::string irfname="", std::string filename="");
         ~EffectiveArea();
 
         ///@brief return a value 
 
         ///@param e energy in MeV
         ///@param costh cosine of theta
-        double value(double e, double costh)const;
+        double value(double energy=1000, double costh=1.0)const;
 
         ///@brief return a value 
         ///@param e energy in MeV
         ///@param costh cosine of theta
-        double operator()(double e, double costh)const{return value(e,costh);}
+        double operator()(double energy=1000, double costh=1.0)const{return value(energy,costh);}
 
         static void set_CALDB(std::string CALDB);
     private:
