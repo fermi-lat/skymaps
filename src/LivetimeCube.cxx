@@ -10,7 +10,10 @@
 
 
 #include "healpix/HealpixArrayIO.h"
+#include "facilities/commonUtilities.h"
+#include "facilities/Util.h"
 
+#include "fitsio.h"
 #include "tip/IFileSvc.h"
 #include "tip/Table.h"
 
@@ -29,61 +32,9 @@ using CLHEP::Hep3Vector;
 
 namespace {
 
+
+}  // anonymous namespace
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/** @class IrfAeff
-@brief function class implements effective area, as adapter to irfInterface::IAeff
-*/
-class IrfAeff { 
-public:
-    /**
-    @param aeff an object from the CALDB stuff. If zero, implement linear 
-    @param energy energy to evaluate
-    @param cutoff limit for cos(theta)
-    */
-    IrfAeff( double energy, double cutoff=0.25)
-        : m_energy(energy), m_cutoff(cutoff)
-    {}
-
-    double operator()(double costh) const
-    {
-       return costh<m_cutoff? 0 : (costh-m_cutoff)/(1.-m_cutoff);
-    }
-    double m_energy;
-    double m_cutoff;
-};
-#if 0
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/** @class RequestExposure 
-@brief function class requests a point from the exposure
-*/
-template< class F>
-class RequestExposure : public astro::SkyFunction
-{
-public:
-    RequestExposure(const LivetimeCube& exp, const F& aeff, double norm=1.0)
-        : m_exp(exp)
-        , m_aeff(aeff)
-        , m_norm(norm)
-    {}
-    double operator()(const astro::SkyDir& s)const{
-        return m_norm*m_exp(s, m_aeff);
-    }
-private:
-    const LivetimeCube& m_exp;
-    const F& m_aeff;
-    double m_norm;
-};
-#endif
-
-}
-
-LivetimeCube::LivetimeCube(const std::string& inputfile, const std::string& tablename)
-: SkyLivetimeCube(SkyBinner(2))
-, m_zenith_frame(false)
-, m_lost(0) // should be set from file?
-{
-   setData( HealpixArrayIO::instance().read(inputfile, tablename));
-}
 
 /// return the closest power of 2 for the side parameter
 /// 41252 square degrees for the sphere
@@ -96,7 +47,14 @@ inline int side_from_degrees(double pixelsize){
     return n; 
 } 
 
-LivetimeCube::LivetimeCube(double pixelsize, double cosbinsize, double zcut)
+LivetimeCube::LivetimeCube
+         (const std::string& inputfile
+         ,const astro::SkyDir& dir
+         ,double cone_angle
+         ,double zcut
+         ,double pixelsize
+         ,double cosbinsize
+         )
 : SkyLivetimeCube(
     SkyBinner(Healpix(
       side_from_degrees(pixelsize),  // nside
@@ -105,9 +63,17 @@ LivetimeCube::LivetimeCube(double pixelsize, double cosbinsize, double zcut)
   )
 , m_zcut(zcut), m_lost(0)
 , m_zenith_frame(false)
+, m_cone_angle(cone_angle)
+, m_dir(dir)
 {
+    if( !inputfile.empty() ) {
+        static std::string tablename("EXPOSURE");
+        setData( HealpixArrayIO::instance().read(inputfile, tablename));
+        return;
+    }
     unsigned int cosbins = static_cast<unsigned int>(1./cosbinsize);
     if( cosbins != CosineBinner::nbins() ) {
+        // only if changed from default
         SkyBinner::iterator is = data().begin();
         for( ; is != data().end(); ++is){ // loop over all pixels
             CosineBinner & pixeldata= *is; // get the contents of this pixel
@@ -116,18 +82,28 @@ LivetimeCube::LivetimeCube(double pixelsize, double cosbinsize, double zcut)
         }
         CosineBinner::setBinning(0, cosbins);
     }
+
     create_cache();
 }
 
 void LivetimeCube::create_cache()
 {
+    double cut( cos(m_cone_angle*M_PI/180) );
+    if( m_cone_angle==0 ){ cut=0.9995; }
     size_t datasize(data().size());
     m_dir_cache.reserve(datasize);
 
+    Simple3Vector reference(m_dir()); //
     SkyBinner::iterator is = data().begin();
     for( ; is != data().end(); ++is){ // loop over all pixels
         Simple3Vector pixdir(data().dir(is)());
-        m_dir_cache.push_back(std::make_pair(&*is, pixdir));
+        double ct(reference.dot(pixdir));
+        if( ct> cut){
+            m_dir_cache.push_back(std::make_pair(&*is, pixdir));
+        }
+    }
+    if(  m_dir_cache.size() < data().size() ){
+        std::cout << "LivetimeCube: Filling " << m_dir_cache.size() << "/" <<data().size() <<" pixels" <<std::endl;
     }
 }
 /** @class Filler
@@ -178,7 +154,7 @@ void LivetimeCube::fill(const astro::SkyDir& dirz, double deltat)
 }
 
 
-void LivetimeCube::fill(const astro::SkyDir& dirz, const astro::SkyDir& zenith, double deltat)
+void LivetimeCube::fill_zenith(const astro::SkyDir& dirz, const astro::SkyDir& zenith, double deltat)
 {
     Filler sum = for_each(m_dir_cache.begin(), m_dir_cache.end(), Filler(deltat, dirz, zenith, m_zcut));
     double total(sum.total());
@@ -187,12 +163,8 @@ void LivetimeCube::fill(const astro::SkyDir& dirz, const astro::SkyDir& zenith, 
 }
 
 
-void LivetimeCube::write(const std::string& outputfile, const std::string& tablename)const
-{
-    healpix::HealpixArrayIO::instance().write(data(), outputfile, tablename);
-}
 
-void LivetimeCube::load(const tip::Table * scData, 
+void LivetimeCube::load_table(const tip::Table * scData, 
                     const Gti& gti, 
                     bool verbose) {
    
@@ -205,6 +177,7 @@ void LivetimeCube::load(const tip::Table * scData,
       if( processEntry( row, gti) )break;
    }
    if (verbose) std::cerr << "!\t"<< total() << std::endl;
+   m_gti |= gti;
 }
 
 
@@ -278,7 +251,7 @@ bool LivetimeCube::processEntry(const tip::ConstTableRecord & row, const skymaps
 
         }else{
         
-            fill(scz, zenith, deltat* fraction);
+            fill_zenith(scz, zenith, deltat* fraction);
         }
     }
     return done; 
@@ -294,34 +267,94 @@ double LivetimeCube::value(const astro::SkyDir& dir, double costh)
 void LivetimeCube::load(std::string scfile, const skymaps::Gti & gti, std::string tablename)
 {
      tip::Table * scData = tip::IFileSvc::instance().editTable(scfile, tablename);
-     this->load(scData, gti); // should allow a GTI?
+     this->load_table(scData, gti); // should allow a GTI?
      delete scData; // closes the file, I hope
 }
-
-
-void LivetimeCube::createMap(skymaps::SkyImage & image)
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//                  create FITS file
+void LivetimeCube::write(const std::string& outputfile, const std::string& tablename)const
 {
-#if 0
-    std::vector<double> energy;
-    image.getEnergies(energy);
-    for ( std::vector<double>::size_type layer = 0; layer != energy.size(); ++layer){
-        //double norm = aeff!=0? aeff->value(energy[layer],0,0): 1.0; // for normalization
-        std::clog << "Generating layer " << layer
-            << " at energy " << energy[layer] << " MeV " 
-            //<< " Aeff(0): " << norm << " cm^2"
-            << std::endl;
+    std::string dataPath = 
+        facilities::commonUtilities::getDataPath("Skymaps");
+    std::string templateFile = 
+        facilities::commonUtilities::joinPath(dataPath, "LivetimeCubeTemplate");
+    tip::IFileSvc & fileSvc(tip::IFileSvc::instance());
+    fileSvc.createFile(outputfile, templateFile);
+    writeFilename(outputfile);
 
-        RequestExposure<IrfAeff> req(*this, IrfAeff( energy[layer]), 1.); 
-        image.fill(req, layer);
-    }
-    //::writeEnergies(m_pars["outfile"], energy);
+    healpix::HealpixArrayIO::instance().write(data(), outputfile, tablename);
+#if 0 // doesn't work?
+    writeCosbins(outputfile);
 #endif
+
+    m_gti.writeExtension(outputfile);
+
 }
-double LivetimeCube::operator()(const astro::SkyDir& sdir)const
-{
 
-    // default pretty simple
-    return SkyLivetimeCube::operator()(sdir, IrfAeff(1000.) );
+//===================================================================
+// copied from LivetimeCube.cxx
+void LivetimeCube::setCosbinsFieldFormat(const std::string & outfile) const {
+   int status(0);
 
+   fitsfile * fptr(0);
+   std::string extfilename(outfile + "[EXPOSURE]");
+   fits_open_file(&fptr, extfilename.c_str(), READWRITE, &status);
+   fitsReportError(status, "LivetimeCube::setCosbinsFieldFormat");
+   
+   int colnum(1); // by assumption
+   fits_modify_vector_len(fptr, colnum, data().at(0).size(), &status);
+   fitsReportError(status, "LivetimeCube::setCosbinsFieldFormat");
+
+   fits_close_file(fptr, &status);
+   fitsReportError(status, "LivetimeCube::setCosbinsFieldFormat");
+}
+
+void LivetimeCube::
+computeCosbins(std::vector<double> & mubounds) const {
+   bool sqrtbins(healpix::CosineBinner::thetaBinning() == "SQRT(1-COSTHETA)");
+   double cosmin(healpix::CosineBinner::cosmin());
+   size_t nbins(healpix::CosineBinner::nbins());
+   mubounds.clear();
+   for (int i(nbins); i >= 0; i--) {
+      double factor(static_cast<double>(i)/nbins);
+      if (sqrtbins) {
+         factor *= factor;
+      }
+      mubounds.push_back(1. - factor*(1. - cosmin));
+   }
+}
+void LivetimeCube::writeCosbins(const std::string & outfile) const {
+   tip::IFileSvc & fileSvc(tip::IFileSvc::instance());
+   tip::Table * table = fileSvc.editTable(outfile, "CTHETABOUNDS");
+   table->setNumRecords(healpix::CosineBinner::nbins());
+
+   tip::Table::Iterator it(table->begin());
+   tip::TableRecord & row(*it);
+   
+   std::vector<double> mubounds;
+   computeCosbins(mubounds);
+
+   for (size_t i(0); i < mubounds.size() -1; i++, ++it) {
+      row["CTHETA_MIN"].set(mubounds.at(i));
+      row["CTHETA_MAX"].set(mubounds.at(i+1));
+   }
+   delete table;
+}
+
+void LivetimeCube::
+fitsReportError(int status, const std::string & routine) const {
+   if (status == 0) {
+      return;
+   }
+   fits_report_error(stderr, status);
+   std::ostringstream message;
+   message << routine << ": CFITSIO error " << status;
+   throw std::runtime_error(message.str());
+}
+void LivetimeCube::writeFilename(const std::string & outfile) const {
+   tip::IFileSvc & fileSvc(tip::IFileSvc::instance());
+   tip::Image * phdu(fileSvc.editImage(outfile, ""));
+   phdu->getHeader()["FILENAME"].set(facilities::Util::basename(outfile));
+   delete phdu;
 }
 
