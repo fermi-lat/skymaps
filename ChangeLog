@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Sun Oct 12 16:02:00 PDT 2008
+skymaps/src
+
+Modified Files:
+	EffectiveArea.cxx 
+Log Message:
+allow specification of fits file directly.
+    *
+------------------------------------------------------------
+User: burnett  Sun Oct 12 16:02:00 PDT 2008
 skymaps/skymaps
 
 Modified Files:
