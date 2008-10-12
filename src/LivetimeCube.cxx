@@ -21,6 +21,7 @@
 
 #include <memory>
 #include <algorithm>
+#include <stdexcept>
 
 using namespace skymaps;
 using healpix::HealpixArrayIO;
