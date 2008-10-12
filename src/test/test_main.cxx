@@ -1,4 +1,4 @@
-/** @file likelihood_main.cxx
+/** @file test_main.cxx
 
 $Header$
 
@@ -10,6 +10,8 @@ $Header$
 #include "skymaps/PhotonBinner.h"
 
 #include "skymaps/LivetimeCube.h"
+#include "skymaps/EffectiveArea.h"
+
 #include "healpix/HealpixArrayIO.h"
 #include "tip/IFileSvc.h"
 #include "tip/Table.h"
@@ -36,6 +38,46 @@ int main(int , char** )
     int rc(0);
     try{
 
+#if 1
+        {
+        LivetimeCube lc("", astro::SkyDir(0,0), 0);
+        lc.fill(SkyDir(0,0), 1.);
+        std::cout << "filled with: " << lc.total() << std::endl;
+        lc.write("test_livetimecube.fits");
+        }
+#endif
+#if 0  // exercise EffectiveArea, LivetimeCube, Exposure
+        {
+        EffectiveArea::set_CALDB("f:\\glast\\packages\\ScienceTools-v9r7p1\\irfs\\caldb\\v0r7p1\\CALDB\\data\\glast\\lat");
+    
+        EffectiveArea front("P6_v1_diff_front")
+            , back("P6_v1_diff_back");
+        std::cout << "Loaded effective area!" << std::endl;
+        std::cout << "normal effective area at 1 GeV:" 
+            << front(1000, 1.0) << ", " << back(1000, 1.0) <<  std::endl;
+        
+        LivetimeCube ltcube("D:\\common\\pointfind\\data\\livetime_cube.fits");
+        Exposure front_exp(ltcube, front);
+        std::cout << "Exposure created ok" << std::endl;
+        std::cout << "front exposure at 1 GeV, ra,dec=0,0: " 
+            << front_exp(SkyDir(), 1000) << std::endl;
+        }
+#endif
+
+#if 0
+        // test code for LivetimeCube -- make an exposure cube
+        bool zenith(false);
+        std::string infile("F:\\glast\\data\\first_light\\dubois\\FT2_236511638-239811535_merged.fits");
+        std::string outfile("test_sky_cube.fits");
+        tip::Table * scData = tip::IFileSvc::instance().editTable(infile, "SC_DATA");
+        std::cout << "\nCreating "<< (zenith?"zenith":"sky") <<"frame exposure cube:\nat:\t" << outfile <<"\nfrom:\t" << infile << std::endl;
+        LivetimeCube ex;  // default parameters
+        if(zenith) ex.useZenith();
+        ex.load_table(scData);
+        std::string outtable("Exposure");
+        ex.write(outfile);
+#endif
+
 #if 0
         {
         // try to sample a different image
@@ -45,21 +87,7 @@ int main(int , char** )
 
 #endif
 
-#if 0
-        // test code for LivetimeCube -- make an exposure cube
-        bool zenith(false);
-        LivetimeCube ex;  // default parameters
-        std::string infile("F:\\glast\\data\\first_light\\dubois\\FT2_236511638-239811535_merged.fits");
-        std::string outfile("D:\\common\\first_light\\earth\\sky_cube.fits");
-        std::string outtable("Exposure");
-        tip::Table * scData = tip::IFileSvc::instance().editTable(infile, "SC_DATA");
-        if(zenith) ex.useZenith();
-        std::cout << "\nCreating "<< (zenith?"zenith":"sky") <<"frame exposure cube:\nat:\t" << outfile <<"\nfrom:\t" << infile << std::endl;
-        ex.load(scData);
-        healpix::HealpixArrayIO::instance().write(ex.data(), outfile, outtable);
-#endif
-
-#if 0 // test code for Exposure--need a cube for built-in test
+#if 0 // test code for (old) Exposure--need a cube for built-in test
 
         std::string testexp("d:\\users\\kerrm\\Comparison\\expCube.fits");
         Exposure exp(testexp);

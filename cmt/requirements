@@ -1,6 +1,6 @@
 package skymaps
 
-version v1r8p2
+version v1r9
 
 # $Header$
 
@@ -22,7 +22,8 @@ macro source "*.cxx" WIN32 "*.cxx *.h *.py"
 
 library skymaps \
  -s=../skymaps $(source) \
- -s=../src $(source) 
+ -s=../src $(source) \
+ -s=../python $(source)
 
 application test_skymaps -s=test $(source)
 

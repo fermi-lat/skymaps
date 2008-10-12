@@ -25,7 +25,7 @@ namespace tip { class Table; class ConstTableRecord;}
 @brief template for differential LivetimeCube
 
 @param S Pixelization class, must implement dir(), is a list of C objects
-@param C angualar binner class, must implement operator()(const F&)
+@param C angular binner class, must implement operator()(const F&)const
 @param F a function of one parameter
 */
 
@@ -38,7 +38,7 @@ public:
     virtual ~BasicLivetime(){}
 
     virtual void fill(const astro::SkyDir& dirz, double deltat)=0;
-    virtual void fill(const astro::SkyDir& dirz, const astro::SkyDir& dirzenith, double deltat)=0;
+    virtual void fill_zenith(const astro::SkyDir& dirz, const astro::SkyDir& dirzenith, double deltat)=0;
 
     template<class F>
         double operator()(const astro::SkyDir& dir, const F& fun)const
@@ -53,7 +53,7 @@ public:
 
     void setData(const S& data){m_sky=data;}
 
-    const C& bins(const astro::SkyDir& dir){ return m_sky[dir]; }
+    const C& bins(const astro::SkyDir& dir)const{ return m_sky[dir]; }
 private:
     S m_sky;
     double m_total;
@@ -74,41 +74,39 @@ It is a pixelated using Healpix binning, and the CosineBinner class
 
 */
 
-    class LivetimeCube : public SkyLivetimeCube, public astro::SkyFunction {
+    class LivetimeCube : public SkyLivetimeCube{
 public:
-    //! create object with specified binning
-    //! @param pixelsize (deg) Approximate pixel size, in degrees
+    //! @brief ctor create object with specified binning
+    //! @param inputfile [""] if set, load from file, ignore rest 
+    //! @param dir direction to select (ignore if cone_angle is 180)
+    //! @param cone_angle [180] half angle of cone (180 degrees default: all sky) 
+    //! @param zcut [-1]  zenith angle cut angle
+    //! @param pixelsize (deg) [1] Approximate pixel size, in degrees
     //! @param cosbinsize bin size in the cos(theta) binner
-    LivetimeCube(double pixelsize=1., double cosbinsize=1./healpix::CosineBinner::nbins(), double zcut=-1.0);
-
-    //! create object from the data file (FITS for now)
-    LivetimeCube(const std::string& inputfile, const std::string& tablename="Exposure");
-
+    //! Note that all parameters have defaults to allow keyword args in Python interface
+    
+    LivetimeCube(
+          const std::string& inputfile=""
+         ,const astro::SkyDir& dir=astro::SkyDir()
+         ,double cone_angle=180
+         ,double zcut=-1.0
+         ,double pixelsize=1. 
+         ,double cosbinsize=1./healpix::CosineBinner::nbins() 
+          );
+  
     //! add a time interval at the given position
     virtual void fill(const astro::SkyDir& dirz, double deltat);
 
-    /** @brief this was added by Julie, to allow horizon cut, possible if FOV includes horizon
-        @param dirz direction of z-axis of instrument
-        @param dirzenith direction of local zenith
-        @param deltat time interval
-    */
-    virtual void fill(const astro::SkyDir& dirz, const astro::SkyDir& dirzenith, double deltat);
-
-    //! write out to a file.
-    void write(const std::string& outputfile, const std::string& tablename="Exposure")const;
-
-    //typedef std::vector<std::pair<double, double> > GTIvector;
+     //! write out to a file.
+    void write(const std::string& outputfile, const std::string& tablename="EXPOSURE")const;
 
     //! load a set of history intervals from a FITS S/C file (FT2)
     void load(std::string scfile, const skymaps::Gti & gti= skymaps::Gti(), std::string tablename="SC_DATA");
 
     //! load a set of history intervals from a table, qualified by a set of "good-time" intervals 
-    void load(const tip::Table * scData, 
+    void load_table(const tip::Table * scData, 
         const skymaps::Gti & gti= skymaps::Gti(), 
                     bool verbose=true);
-
-    //! implement the SkyFunction interface
-    double operator()(const astro::SkyDir& sdir)const; 
 
     double lost()const{return m_lost;}
 
@@ -116,20 +114,33 @@ public:
 
     double value(const astro::SkyDir& dir, double costh);
 
-    //! create a map in a given sky image
-    void createMap(skymaps::SkyImage & image);
-
     /// access time
     double total()const{return SkyLivetimeCube::total();} // make accessible to SWIG
 
+    const skymaps::Gti& gti()const{return m_gti;}
 
 private:
     bool processEntry(const tip::ConstTableRecord & row, const skymaps::Gti& gti);
+
+   /** @brief  allow horizon cut, possible if FOV includes horizon
+        @param dirz direction of z-axis of instrument
+        @param dirzenith direction of local zenith
+        @param deltat time interval
+    */
+    virtual void fill_zenith(const astro::SkyDir& dirz, const astro::SkyDir& dirzenith, double deltat);
+
 
     /** @brief set up the cache of vectors associated with cosine histograms
 
     */
     void create_cache();
+
+    // for setting an output FITS LivetimeCube (copied from Likelihood::LikeExposure
+    void computeCosbins(std::vector<double> & mubounds) const;
+    void writeCosbins(const std::string & outfile) const;
+    void fitsReportError(int status, const std::string & routine) const;
+    void setCosbinsFieldFormat(const std::string & outfile) const;
+    void writeFilename(const std::string & outfile) const;
 
     /** @class Simple3Vector 
     @brief replacement for Hep3Vector for speed of dot product
@@ -149,6 +160,10 @@ private:
     double m_lost; ///< keep track of lost
 
     bool m_zenith_frame; ///< set true to make livetime map in Earth, or zenith frame.
+    double m_cone_angle; ///< half-angle of cone used
+    astro::SkyDir m_dir; ///< direction to sample. (ignore if 180 deg)
+
+    skymaps::Gti m_gti; ///< over-all Gti
 };
 
 
