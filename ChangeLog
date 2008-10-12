@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Sun Oct 12 16:02:00 PDT 2008
+skymaps/python
+
+Modified Files:
+	swig_setup.in 
+Log Message:
+allow specification of fits file directly.
+    *
+------------------------------------------------------------
 User: burnett  Sun Oct 12 15:40:38 PDT 2008
 skymaps/python
 
