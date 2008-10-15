@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Tue Oct 14 20:03:39 PDT 2008
+skymaps/src
+
+Modified Files:
+	LivetimeCube.cxx 
+Log Message:
+fix bug in gti processing
+    *
+------------------------------------------------------------
+User: burnett  Tue Oct 14 20:03:39 PDT 2008
 skymaps/skymaps
 
 Modified Files:
