@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Tue Oct 14 20:03:39 PDT 2008
+skymaps/skymaps
+
+Modified Files:
+	LivetimeCube.h 
+Log Message:
+fix bug in gti processing
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-09-01, operation: add
 Package: skymaps
