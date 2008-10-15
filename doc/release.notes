@@ -5,7 +5,7 @@
 $Id$
 @verbatim
  --------- -----   --- -----------------------------------------------------------------------
- 12-oct-08 v1r9p1  THB New EffectiveArea; changed Exposure class; LivetimeCube has cone cut now, collects gti
+ 14-oct-08 v1r9p2  THB New EffectiveArea; changed Exposure class; LivetimeCube has cone cut now, collects gti
  10-oct-08 v1r8p2  THB Markus mods for binning
  16-aug-08 v1r8    THB class to generate exposure cube; new image copy function
  08-aug-08 v1r7    THB Marshall's updates; better python access
