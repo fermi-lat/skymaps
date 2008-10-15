@@ -22,6 +22,7 @@
 #include <memory>
 #include <algorithm>
 #include <stdexcept>
+#include <cmath>
 
 using namespace skymaps;
 using healpix::HealpixArrayIO;
@@ -55,6 +56,7 @@ LivetimeCube::LivetimeCube
          ,double zcut
          ,double pixelsize
          ,double cosbinsize
+         ,double quiet
          )
 : SkyLivetimeCube(
     SkyBinner(Healpix(
@@ -66,6 +68,7 @@ LivetimeCube::LivetimeCube
 , m_zenith_frame(false)
 , m_cone_angle(cone_angle)
 , m_dir(dir)
+, m_quiet(quiet)
 {
     if( !inputfile.empty() ) {
         static std::string tablename("EXPOSURE");
@@ -103,7 +106,7 @@ void LivetimeCube::create_cache()
             m_dir_cache.push_back(std::make_pair(&*is, pixdir));
         }
     }
-    if(  m_dir_cache.size() < data().size() ){
+    if(  m_dir_cache.size() < data().size() && !m_quiet){
         std::cout << "LivetimeCube: Filling " << m_dir_cache.size() << "/" <<data().size() <<" pixels" <<std::endl;
     }
 }
@@ -175,7 +178,7 @@ void LivetimeCube::load_table(const tip::Table * scData,
 
    for (long irow = 0; it != scData->end(); ++it, ++irow) {
       if( verbose && (nrows>=20) && (irow % (nrows/20)) == 0 ) std::cerr << ".";
-      if( processEntry( row, gti) )break;
+      processEntry( row, gti) ;
    }
    if (verbose) std::cerr << "!\t"<< total() << std::endl;
    m_gti |= gti;
@@ -189,37 +192,12 @@ bool LivetimeCube::processEntry(const tip::ConstTableRecord & row, const skymaps
     row["start"].get(start);
     row["stop"].get(stop);
     double deltat = livetime > 0 ? livetime : stop-start;
-
-
     double fraction(1); 
     bool  done(false);
     if( gti.getNumIntervals()>0 ) {
         fraction = 0;
-
         Gti::ConstIterator it  = gti.begin();
-        for ( ; it != gti.end(); ++it) {
-            double first = it->first,
-                second=it->second;
-
-            if( start < first ) {
-                if( stop < first) continue; // history interval before gti
-                if( stop <= second){
-                    fraction = (stop-first)/(stop-start); // overlap start of gti
-                    break;
-                }
-                fraction = (second-first)/(stop-start); // gti subset of history
-                break;
-            }else {
-                if( start > second) continue; // interval after gti 
-                if( stop <= second ) {
-                    fraction = 1.0; break;  // fully contained
-                }
-                fraction = (second-start)/(stop-start);  // overlap end of gti
-                break;
-            }
- 
-        }
-        done = fraction==0 && start > gti.minValue(); 
+        fraction = gti.getFraction(start,stop, it);
     }
     if( fraction>0. ) {
 
@@ -256,7 +234,6 @@ bool LivetimeCube::processEntry(const tip::ConstTableRecord & row, const skymaps
         }
     }
     return done; 
-
 }
 double LivetimeCube::value(const astro::SkyDir& dir, double costh)
 {
@@ -268,7 +245,7 @@ double LivetimeCube::value(const astro::SkyDir& dir, double costh)
 void LivetimeCube::load(std::string scfile, const skymaps::Gti & gti, std::string tablename)
 {
      tip::Table * scData = tip::IFileSvc::instance().editTable(scfile, tablename);
-     this->load_table(scData, gti); // should allow a GTI?
+     this->load_table(scData, gti, !m_quiet); // should allow a GTI?
      delete scData; // closes the file, I hope
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

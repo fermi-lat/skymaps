@@ -92,6 +92,7 @@ public:
          ,double zcut=-1.0
          ,double pixelsize=1. 
          ,double cosbinsize=1./healpix::CosineBinner::nbins() 
+         ,double quiet=false
           );
   
     //! add a time interval at the given position
@@ -164,6 +165,7 @@ private:
     astro::SkyDir m_dir; ///< direction to sample. (ignore if 180 deg)
 
     skymaps::Gti m_gti; ///< over-all Gti
+    bool m_quiet;       ///< suppress output if set
 };
 
 
