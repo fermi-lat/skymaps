@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: mar0  Fri Oct 17 10:54:45 PDT 2008
+skymaps/doc
+
+Modified Files:
+	release.notes 
+Log Message:
+added skyfunction functionality to convolution class
+    *
+------------------------------------------------------------
+User: mar0  Fri Oct 17 10:54:45 PDT 2008
 skymaps/cmt
 
 Modified Files:
