@@ -9,6 +9,7 @@ $Header$
 #include "healpix/AlmOp.h"
 #include "healpix/HealPixel.h"
 #include "skymaps/PsfFunction.h"
+#include "skymaps/IParams.h"
 #include "src/base/alm_filter_tools.h"
 #include <map>
 
@@ -63,16 +64,15 @@ Convolution::Convolution(const skymaps::SkySpectrum &sf, double energy, int leve
 
 void Convolution::createConv(const skymaps::SkySpectrum& sf, double energy) {
     iterator it = this->find((int)energy);
-    if(energy<minE&&it==end()) {
+    if(it==end()) {
         std::cout << "*********************************************************" << std::endl;
         std::cout << "     Convolution: level " << m_level << " and energy " << energy << std::endl << std::endl;
         skymaps::PsfFunction psf(2.25);
         std::cout << "          Allocating map and harmonic storage...";
         Map<double> sfm(m_level);
         Map<double> psfm(m_level);
-        double p0 = 0.058;
-        double p1 = 0.000377;
-        double sigmasq = 0.404*((p0*p0*pow(energy/100,-1.6))+p1*p1)*M_PI/180;
+        double sigmasq = IParams::sigma(energy,0)*IParams::sigma(energy,0)+IParams::sigma(energy,1)*IParams::sigma(energy,1);
+        sigmasq *= (M_PI*M_PI)/(180*180);
         //point spread function parameter for energy band
         //Nyquist frequency for spherical harmonics is half the number of discrete latitudes
         AlmOp<xcomplex<double> > sfh(2*sfm.map()->Nside(),2*sfm.map()->Nside());
@@ -86,7 +86,7 @@ void Convolution::createConv(const skymaps::SkySpectrum& sf, double energy) {
             double theta;
             bool shift;
             sfm.map()->get_ring_info2(i,startpix,ringpix,theta,shift);
-            double u = 0.5*(theta*theta)/(sigmasq);
+            double u = 0.5*(4*tan(theta/2)*tan(theta/2))/(sigmasq);
             u = psf(u);
             for(int j=0;j<ringpix;++j) {
                 ShowPercent(j+startpix,sfm.map()->Npix(),j+startpix);
@@ -146,11 +146,16 @@ void Convolution::createConv(const skymaps::SkySpectrum& sf, const skymaps::SkyS
 }
 
 double Convolution::value(const astro::SkyDir& dir,double e) const{
-    double e1(layer(e,true)), e2(layer(e,false));
-    int pixel_index = find((int)e1)->second.cmap().nest2ring(healpix::HealPixel(dir,m_level).index());
-    double f1((find((int)e1)->second.cmap())[pixel_index]),f2((find((int)e2)->second.cmap())[pixel_index]);
-    double alpha ( log(f1/f2)/log(e2/e1) );
-    return f1*pow( e1/e, alpha);
+    if((this)->size()<2) return value(dir);
+    int e1(layer(e,true));//, e2(layer(e,false));
+    int pixel_index = find(e1)->second.cmap()->nest2ring(healpix::HealPixel(dir,m_level).index());
+    /*double f1((*find(e1)->second.cmap())[pixel_index]),f2((*find(e2)->second.cmap())[pixel_index]);
+    if(f1<=0&&f2<=0) return 0;
+    f1<=0?f1=1e-40:0;
+    f2<=0?f2=1e-40:0;
+    double alpha ( log(f1/f2)/log((double)(e2)/e1) );
+    return f1*pow(e/e1,alpha);*/
+    return (*find(e1)->second.cmap())[pixel_index];
 }
 
 double Convolution::integral(const astro::SkyDir& dir, double a, double b) const{
@@ -160,14 +165,31 @@ double Convolution::integral(const astro::SkyDir& dir, double a, double b) const
 }
 
 int Convolution::layer(double e, bool front) const{
-    const_iterator it = front?begin():end();
-    const_iterator stop = front?begin():end();
-    double laste = it->first;
+    const_iterator it = begin();
+    const_iterator stop = end();
+    int laste = it->first;
     for(; it!=stop; ++it){
-        if( front?(it->first > e):(it->first <e) ) break;
-        laste = it->first;
+        if( it->first>e ) break;
     }
-    return (int)laste;
+    if(it==stop) {
+        --it;
+        --it;
+    }
+    return front?it->first:(++it)->first;
+}
+
+double Convolution::value(const astro::SkyDir &dir) const {
+    
+    const_iterator it=begin();
+    int pix_index=it->second.cmap()->nest2ring(healpix::HealPixel(dir,m_level).index());
+    double sum((*it->second.cmap())[pix_index]);
+    ++it;
+    while(it!=end())
+    {
+        sum+=(*it->second.cmap())[pix_index];
+        ++it;
+    }
+    return sum;
 }
 
 std::string Convolution::name()const
