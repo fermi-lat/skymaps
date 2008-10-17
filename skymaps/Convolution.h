@@ -40,6 +40,7 @@ namespace skymaps {
 
         int layer(double e, bool front) const;
 
+        virtual double value(const astro::SkyDir& dir)const;
         ///@brief interpolate table 
         ///@param e energy in MeV
         virtual double value(const astro::SkyDir& dir, double e)const;
