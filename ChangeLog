@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: mar0  Fri Oct 17 10:54:45 PDT 2008
+skymaps/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+added skyfunction functionality to convolution class
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-09-02, operation: add
 Package: skymaps
