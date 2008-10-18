@@ -56,7 +56,7 @@ public:
         @param energies vector of the bin edges.
         @return result vector of the values
     */
-    std::vector<double> integral(const astro::SkyDir& dir, 
+    std::vector<double> integrals(const astro::SkyDir& dir, 
         const std::vector<double>&energies)const;
 
     /// @return number of layers
