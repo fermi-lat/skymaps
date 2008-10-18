@@ -56,10 +56,12 @@ public:
     ~Background();
 
     ///@brief a single energy 
+    ///@param dir direction
     ///@param e energy in MeV
     virtual double value(const astro::SkyDir& dir, double e)const;
 
     ///@brief integral for the energy limits, in the given direction
+    ///@param dir direction
     ///@param a lower limit
     ///@param b upper limit
     /// The integral is evaluated with extended Simpson's rule, in the log space.

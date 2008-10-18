@@ -100,7 +100,7 @@ double DiffuseFunction::integral(const astro::SkyDir& dir, double a, double b)co
     return fa* a * (pow(b/a, q)-1)/q;
 }
 
-std::vector<double> DiffuseFunction::integral(const astro::SkyDir& dir, const std::vector<double>&energies)const
+std::vector<double> DiffuseFunction::integrals(const astro::SkyDir& dir, const std::vector<double>&energies)const
 {
     std::vector<double> result;
     static double infinity (300000);

@@ -24,6 +24,8 @@
 #include "skymaps/Gti.h"
 #include "skymaps/EffectiveArea.h"
 #include "skymaps/Background.h"
+#include "skymaps/IsotropicPowerLaw.h"
+#include "skymaps/PhotonBinner.h"
 
 #include "CLHEP/Vector/Rotation.h"
 #include "CLHEP/Vector/EulerAngles.h"
@@ -129,7 +131,6 @@ public:
    size_t __len__() {      return self->size();       }
 }
 
-%include ../skymaps/DiffuseFunction.h
 %include ../skymaps/CompositeSkySpectrum.h
 %include ../skymaps/PhotonMap.h
 %include ../skymaps/SkyImage.h
@@ -139,6 +140,9 @@ public:
 
 %include ../skymaps/PySkyFunction.h
 %include ../skymaps/Background.h
+%include ../skymaps/Band.h
+%include ../skymaps/PhotonBinner.h
+
 %include ../skymaps/Gti.h
 %extend skymaps::Gti{
    double computeOntime(){return (*self).GtiBase::computeOntime(); } 
@@ -146,9 +150,12 @@ public:
 }
 
 %feature("kwargs");  // using keywords for these
+%include ../skymaps/DiffuseFunction.h
 %include ../skymaps/LivetimeCube.h
 %include ../skymaps/Exposure.h
 %include ../skymaps/EffectiveArea.h
+%include ../skymaps/IsotropicPowerLaw.h
+
 
 
 
