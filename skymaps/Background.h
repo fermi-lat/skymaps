@@ -72,6 +72,8 @@ public:
     /// note that this sets the event type, which is mutable
     void set_event_class(int n)const;
 
+    ///@brief number of exposure objects
+    int exposures()const{ return m_exposures.size();}
 
     std::string name()const;
 

@@ -10,6 +10,7 @@ $Header$
 #include <cmath> 
 #include <iterator>
 #include <sstream>
+#include <stdexcept>
 
 namespace{  // anonymous namespace for helper classes
 
@@ -67,7 +68,7 @@ void Background::set_event_class(int n) const
 {
     m_event_type = n; // ok, since mutable
     if( n>= m_exposures.size() ){
-        n=0;
+        throw std::invalid_argument("Background:: attempt to set class beyond those available");
     }
 }
 
