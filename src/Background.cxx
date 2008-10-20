@@ -66,10 +66,15 @@ Background::~Background()
 
 void Background::set_event_class(int n) const
 {
-    m_event_type = n; // ok, since mutable
     if( n>= m_exposures.size() ){
+#if 0 // need a way to declare that is OK
         throw std::invalid_argument("Background:: attempt to set class beyond those available");
+#else
+        n=0;
+#endif
     }
+    m_event_type = n; // ok, since mutable
+
 }
 
 
