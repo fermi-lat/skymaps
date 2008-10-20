@@ -26,6 +26,7 @@
 #include "skymaps/Background.h"
 #include "skymaps/IsotropicPowerLaw.h"
 #include "skymaps/PhotonBinner.h"
+#include "skymaps/IParams.h"
 
 #include "CLHEP/Vector/Rotation.h"
 #include "CLHEP/Vector/EulerAngles.h"
@@ -155,6 +156,8 @@ public:
 %include ../skymaps/Exposure.h
 %include ../skymaps/EffectiveArea.h
 %include ../skymaps/IsotropicPowerLaw.h
+%include ../skymaps/IParams.h
+
 
 
 
