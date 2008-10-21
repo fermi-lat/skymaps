@@ -33,6 +33,10 @@ public:
     ///@brief return differential value 
     ///@param energy energy in MeV
     virtual double value(const astro::SkyDir& dir, double energy)const;
+
+    ///@brief use a band to select interval. A subclass can use it to select subclass
+    /// base class implemention integrates over band
+    virtual double band_value(const astro::SkyDir& dir, const skymaps::Band& band)const;
    
     ///@brief integral for the energy limits, in the given direction
     virtual double integral(const astro::SkyDir& dir, double a, double b)const;

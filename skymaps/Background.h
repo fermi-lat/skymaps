@@ -60,6 +60,9 @@ public:
     ///@param e energy in MeV
     virtual double value(const astro::SkyDir& dir, double e)const;
 
+    ///@brief implement integral over an energy band, selecting the event class
+    virtual double band_value(const astro::SkyDir& dir, const skymaps::Band& band)const;
+
     ///@brief integral for the energy limits, in the given direction
     ///@param dir direction
     ///@param a lower limit
