@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Mon Oct 20 19:47:00 PDT 2008
+skymaps/src
+
+Modified Files:
+	Background.cxx CompositeSkySpectrum.cxx SkySpectrum.cxx 
+Log Message:
+implement using Band object to define energy range, perhaps event class for SkySpectrum function
+    *
+------------------------------------------------------------
+User: burnett  Mon Oct 20 19:47:00 PDT 2008
 skymaps/skymaps
 
 Modified Files:
