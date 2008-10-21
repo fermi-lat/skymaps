@@ -5,6 +5,7 @@
 $Id$
 @verbatim
  --------- -----   --- -----------------------------------------------------------------------
+ 21-oct-08 v1r11   THB New CompositeSkymap class
  20-oct-08 v1r10p1 THB Using Band object to define energy range
  20-oct-08 v1r10   THB add IParams to SWIG; Background enforce list of Exposure objects
  17-oct-08 v1r9p3  MR  New functionality and efficiency improvements to Convolution

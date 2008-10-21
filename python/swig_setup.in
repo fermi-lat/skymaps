@@ -15,6 +15,7 @@
 #include "skymaps/BinnedPhotonData.h"
 #include "skymaps/DiffuseFunction.h"
 #include "skymaps/CompositeSkySpectrum.h"
+#include "skymaps/CompositeSkyFunction.h"
 #include "skymaps/PhotonMap.h"
 #include "skymaps/Exposure.h"
 #include "skymaps/Convolution.h"
@@ -157,6 +158,8 @@ public:
 %include ../skymaps/EffectiveArea.h
 %include ../skymaps/IsotropicPowerLaw.h
 %include ../skymaps/IParams.h
+%include ../skymaps/CompositeSkySpectrum.h
+
 
 
 
