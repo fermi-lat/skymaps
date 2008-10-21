@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Tue Oct 21 13:18:02 PDT 2008
+skymaps/src
+
+Added Files:
+	CompositeSkyFunction.cxx 
+Log Message:
+tagging after adding CompositeSkyFunction
+    *
+------------------------------------------------------------
+User: burnett  Tue Oct 21 13:18:02 PDT 2008
 skymaps/skymaps
 
 Added Files:
