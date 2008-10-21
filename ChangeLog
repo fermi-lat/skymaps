@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Tue Oct 21 13:18:02 PDT 2008
+skymaps/python
+
+Modified Files:
+	swig_setup.in 
+Log Message:
+tagging after adding CompositeSkyFunction
+    *
+------------------------------------------------------------
+User: burnett  Tue Oct 21 13:18:02 PDT 2008
 skymaps/doc
 
 Modified Files:
