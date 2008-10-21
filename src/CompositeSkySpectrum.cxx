@@ -32,6 +32,18 @@ double CompositeSkySpectrum::value(const astro::SkyDir& dir, double energy) cons
     return ret;
 }
 
+double CompositeSkySpectrum::band_value(const astro::SkyDir& dir, const skymaps::Band& band)const
+{
+    double ret(0);
+    std::vector< std::pair<double, const skymaps::SkySpectrum*> >::const_iterator it = begin();
+
+    for( ; it!=end(); ++it){
+        ret+= it->first * (it->second)->band_value(dir, band);
+    }
+    return ret;
+
+}
+
 
 
 ///@brief integral for the energy limits, in the given direction

@@ -6,6 +6,8 @@ $Header$
 */
 
 #include "skymaps/SkySpectrum.h"
+#include "skymaps/Band.h"
+
 #include "astro/SkyDir.h"
 #include "healpix//Healpix.h"
 #include "healpix//HealPixel.h"
@@ -33,6 +35,11 @@ void SkySpectrum::setEnergyRange(double emin, double emax)const
     // allow for high level? 
     // assert( emin>0 && emax/emin<3); // otherwise integral not (now) valid
     m_use_range=true;
+}
+double SkySpectrum::band_value(const astro::SkyDir& dir, const skymaps::Band& band)const
+{
+    // base class simple implementation
+    return operator()(dir, band.emin(), band.emax() );
 }
 
 double SkySpectrum::operator()(const astro::SkyDir& dir)const

@@ -5,6 +5,7 @@ $Header$
 */
 
 #include "skymaps/Background.h"
+#include "skymaps/Band.h"
 
 #include <stdexcept>
 #include <cmath> 
@@ -88,6 +89,13 @@ double Background::value(const astro::SkyDir& dir, double e)const
     }
     return val;
 }
+
+double Background::band_value(const astro::SkyDir& dir, const skymaps::Band& band)const
+{
+    set_event_class(band.event_class());
+    return integral(dir, band.emin(), band.emax());
+}
+
 
 ///@brief integral for the energy limits, in the given direction
 double Background::integral(const astro::SkyDir& dir, double a, double b)const
