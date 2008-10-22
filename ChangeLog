@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: wallacee  Wed Oct 22 00:02:35 PDT 2008
+ScienceTools-scons/skymaps
+
+Modified Files:
+	SConscript skymapsLib.py 
+Log Message:
+Modified SConscripts to invoke SWIG.  Added #includes to a few files to make
+gcc 4.3 happy.
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-11-00, operation: add
 Package: skymaps
