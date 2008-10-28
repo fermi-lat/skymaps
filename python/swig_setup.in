@@ -28,6 +28,7 @@
 #include "skymaps/IsotropicPowerLaw.h"
 #include "skymaps/PhotonBinner.h"
 #include "skymaps/IParams.h"
+#include "skymaps/HealpixDiffuseFunc.h"
 
 #include "CLHEP/Vector/Rotation.h"
 #include "CLHEP/Vector/EulerAngles.h"
@@ -159,6 +160,8 @@ public:
 %include ../skymaps/IsotropicPowerLaw.h
 %include ../skymaps/IParams.h
 %include ../skymaps/CompositeSkySpectrum.h
+%include ../skymaps/HealpixDiffuseFunc.h
+
 
 
 
