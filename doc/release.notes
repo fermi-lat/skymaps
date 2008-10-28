@@ -5,6 +5,7 @@
 $Id$
 @verbatim
  --------- -----   --- -----------------------------------------------------------------------
+ 28-oct-08 v1r12   THB New HealpixDiffuseFunc class
  21-oct-08 v1r11   THB New CompositeSkymap class
  20-oct-08 v1r10p1 THB Using Band object to define energy range
  20-oct-08 v1r10   THB add IParams to SWIG; Background enforce list of Exposure objects
