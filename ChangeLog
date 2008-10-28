@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Tue Oct 28 14:15:21 PDT 2008
+skymaps/skymaps
+
+Added Files:
+	HealpixDiffuseFunc.h 
+Log Message:
+adding Markus's class
+    *
+------------------------------------------------------------
+User: burnett  Tue Oct 28 14:15:21 PDT 2008
 skymaps/python
 
 Modified Files:
