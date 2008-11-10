@@ -134,7 +134,8 @@ public:
    size_t __len__() {      return self->size();       }
 }
 
-%include ../skymaps/CompositeSkySpectrum.h
+
+
 %include ../skymaps/PhotonMap.h
 %include ../skymaps/SkyImage.h
 
@@ -144,6 +145,21 @@ public:
 %include ../skymaps/PySkyFunction.h
 %include ../skymaps/Background.h
 %include ../skymaps/Band.h
+
+
+%extend skymaps::WeightedSkyDirList{
+// provide access to the WeightedSKyDir objects as an array
+   skymaps::WeightedSkyDir * __getitem__(size_t i){ 
+      if( i == (*self).size() ) throw std::range_error("StopIteration");
+      if( i<0 || i > self->size() ) throw std::range_error("IndexError");
+      return &(*self)[i];
+      //skymaps::WeightedSkyDirList::iterator it= self->begin();
+      //for(int j(0); j!=i; ++j, ++it);
+      //return &(*it); // note address of
+   }
+   size_t __len__() {      return self->size();       }
+}
+
 %include ../skymaps/PhotonBinner.h
 
 %include ../skymaps/Gti.h
@@ -151,6 +167,8 @@ public:
    double computeOntime(){return (*self).GtiBase::computeOntime(); } 
    void insertInterval(double tstart, double tstop){ (*self).GtiBase::insertInterval(tstart, tstop); }
 }
+
+%include ../skymaps/HealpixDiffuseFunc.h
 
 %feature("kwargs");  // using keywords for these
 %include ../skymaps/DiffuseFunction.h
@@ -160,10 +178,22 @@ public:
 %include ../skymaps/IsotropicPowerLaw.h
 %include ../skymaps/IParams.h
 %include ../skymaps/CompositeSkySpectrum.h
-%include ../skymaps/HealpixDiffuseFunc.h
 
+%extend skymaps::CompositeSkySpectrum{
 
+    double average(const astro::SkyDir& dir, double angle, double tolerance)
+    {
+        return self->average( dir, angle, tolerance);
+    }
+}
+%include ../skymaps/CompositeSkyFunction.h
+%extend skymaps::CompositeSkyFunction{
 
+    double average(const astro::SkyDir& dir, double angle, double tolerance)
+    {
+        return self->average( dir, angle, tolerance);
+    }
+}
 
 
 
