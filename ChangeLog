@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: mar0  Mon Nov 10 14:04:40 PST 2008
+skymaps/skymaps
+
+Modified Files:
+	IParams.h 
+Log Message:
+added CALDB fits support through python to IParams
+    *
+------------------------------------------------------------
 User: burnett  Sun Nov  9 16:43:46 PST 2008
 skymaps/python
 
