@@ -1,4 +1,8 @@
+"""
 #### defaults for setting up psf parameters #####
+Author: M. Roth
+$Header$
+"""
 import pyfits as pf
 import numpy as N
 import pylab as p
