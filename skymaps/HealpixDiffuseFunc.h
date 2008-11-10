@@ -65,7 +65,7 @@ public:
     /// @return number of layers
     size_t layers()const { return m_energies.size();}
     
-    
+#ifndef SWIG   
 
     class FitsIO {
        public:
@@ -82,7 +82,7 @@ public:
           healpix::HealpixArray<std::vector<double> > * m_skymap;
 	  std::vector<double> m_energies;
     };
-    
+#endif  
 
 private:
 
