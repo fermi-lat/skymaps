@@ -139,13 +139,17 @@ namespace skymaps {
         @brief a vector of WeightedSKyDir objects
 
         */
-    class WeightedSkyDirList : public std::vector<WeightedSkyDir> {
+    class WeightedSkyDirList : public astro::SkyFunction, public std::vector<WeightedSkyDir> {
     public:
         /** @brief ctor creates an object from a band
         */
         WeightedSkyDirList( const Band& band, const astro::SkyDir& sdir, double radius);
 
+        /// @brief implement SkyFunction: return weight, or zero
+        double operator()(const astro::SkyDir& sdir)const;
+
     private:
+        const skymaps::Band& m_band; ///< the band used to make
     };
 
 

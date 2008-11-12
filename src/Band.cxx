@@ -159,11 +159,24 @@ void Band::add(const Band& other)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 WeightedSkyDirList::WeightedSkyDirList(const Band& band, const astro::SkyDir& sdir, double radius)
+: m_band(band)
 {
     std::vector<std::pair<astro::SkyDir,int> > vec;
     band.query_disk(sdir, radius, vec);
     for( std::vector<std::pair<astro::SkyDir,int> >::const_iterator it=vec.begin(); it!=vec.end(); ++it){
         push_back(WeightedSkyDir(it->first, it->second));
     }
+}
+
+double WeightedSkyDirList::operator()(const astro::SkyDir& sdir)const
+{
+    int index(m_band.index(sdir)); // look up
+    const_iterator it = this->begin();
+    for(; it!=this->end(); it++){
+        // this is much slower than saving the pixel indices at the start.
+        if( m_band.index(*it) == index) return (*it).weight(); 
+    }
+    return 0;
+
 }
 

@@ -83,7 +83,7 @@ std::vector<double> IParams::params(int event_class)
 void IParams::init() {
     s_init=true;
     int argc=0;
-    char** argv;
+    char** argv=((char**)0); // avoid warning message
     std::string python_path("../python");
     try {
     embed_python::Module setup(python_path , "psf_defaults",  argc, argv);
