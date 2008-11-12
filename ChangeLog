@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: mar0  Wed Nov 12 13:41:27 PST 2008
+skymaps/src
+
+Modified Files:
+	IParams.cxx 
+Log Message:
+disabled automatic python implementation in IParams
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-13-00, operation: add
 Package: skymaps
