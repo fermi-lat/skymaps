@@ -49,7 +49,7 @@ IParams::IParams(std::string& name)
 
 double IParams::sigma(double energy, int event_class){
     //check to see if initialized, if not do it
-    if(!s_init)  init();
+    //if(!s_init)  init();
     double deg = 0;
     if(event_class) {
         //from parameterization of PSF function
@@ -62,7 +62,7 @@ double IParams::sigma(double energy, int event_class){
 
 double IParams::gamma(double energy, int event_class) {
     //check to see if initialized, if not do it
-    if(!s_init)  init();
+    //if(!s_init)  init();
 
     const std::vector<double>& elisti (s_elist);
 
