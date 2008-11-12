@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Wed Nov 12 10:40:09 PST 2008
+skymaps/src
+
+Modified Files:
+	Band.cxx IParams.cxx 
+Log Message:
+slight update for WeightedSkyDirList
+    *
+------------------------------------------------------------
+User: burnett  Wed Nov 12 10:40:09 PST 2008
 skymaps/skymaps
 
 Modified Files:
