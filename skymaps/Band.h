@@ -40,7 +40,7 @@ namespace skymaps {
             @param gamma the power law for the PSF
         */
         Band(int nside, int event_class, double emin,double emax,
-            double sigma, double gamma);
+            double sigma, double gamma, double sigma2=-1, double gamma2=-1, double frac2=0);
 
         ///! copy ctor
         //Band(const Band& other);
@@ -101,9 +101,15 @@ namespace skymaps {
         double emax()const{return m_emax;}
         double sigma()const{return m_sigma;}
         double gamma()const{return m_gamma;}
-
+        double sigma2()const{return m_sigma2;}
+        double gamma2()const{return m_gamma2;}
+        double frac2() const { return m_frac2;}
+  
         void setSigma(double s){m_sigma=s;}
         void setGamma(double g){m_gamma=g;}
+        void setSigma2(double s){m_sigma2=s;}
+        void setGamma2(double g){m_gamma2=g;}
+        void setFrac2(double f){m_frac2=f;}
 
         typedef std::map<int,int> PixelMap;
         typedef PixelMap::iterator iterator;
@@ -120,6 +126,7 @@ namespace skymaps {
         int m_event_class;
         double m_emin, m_emax;
         double m_sigma, m_gamma;
+        double m_sigma2, m_gamma2, m_frac2;
         const healpix::Healpix* m_healpix; 
     };
 

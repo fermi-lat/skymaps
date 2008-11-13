@@ -20,18 +20,24 @@ Band::Band(int nside)
             , m_emax(0)
             , m_sigma(0)
             , m_gamma(0)
+	      , m_gamma2(-1)
+	      , m_sigma2(-1)
+	      , m_frac2(0)
             , m_healpix(new healpix::Healpix(m_nside,Healpix::RING, SkyDir::GALACTIC))
         {}
 
 
 Band::Band(int nside, int event_class, double emin,double emax,
-            double sigma, double gamma)
+            double sigma, double gamma, double sigma2, double gamma2, double frac2)
             : m_nside(nside)
             , m_event_class(event_class)
             , m_emin(emin)
             , m_emax(emax)
             , m_sigma(sigma)
             , m_gamma(gamma)
+	      , m_gamma2(gamma2)
+	      , m_sigma2(sigma2)
+	      , m_frac2(frac2)
             , m_healpix(new healpix::Healpix(m_nside,Healpix::RING, SkyDir::GALACTIC))
         {}
 
@@ -150,6 +156,9 @@ void Band::add(const Band& other)
         m_gamma = other.gamma();
         m_emin = other.emin();
         m_emax = other.emax();
+	m_sigma2 = other.sigma2();
+	m_gamma2 = other.gamma2();
+	m_frac2  = other.frac2();
     }
 
     for( Band::const_iterator it= other.begin(); it!=other.end(); ++it){
