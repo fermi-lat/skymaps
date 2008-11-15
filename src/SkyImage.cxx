@@ -43,6 +43,7 @@ SkyImage::SkyImage(const astro::SkyDir& center,
 , m_save(false)
 , m_layer(0)
 , m_interpolate(false)
+, m_outfile(0)
 {
 
     if( fov>90) {
@@ -117,6 +118,7 @@ SkyImage::SkyImage(const std::string& fits_file, const std::string& extension, b
 , m_layer(0)
 , m_wcs(0)
 , m_interpolate(interpolate)
+, m_outfile(&fits_file)
 {
     // note expect the image to be float
     m_image = tip::IFileSvc::instance().editImageFlt(fits_file, extension);
@@ -220,6 +222,7 @@ SkyImage::~SkyImage()
 {
     if( m_save) {
         dynamic_cast<tip::TypedImage<float>*>(m_image)->set(m_imageData);
+        if( m_energies.size()>0) writeEnergies();
     }
     delete m_image; 
     delete m_wcs;
@@ -339,5 +342,25 @@ void SkyImage::setEnergies(const std::vector<double>& energies)
     }
     m_energy.resize(energies.size());
     std::copy(energies.begin(), energies.end(), m_energy.begin());
+}
+
+void SkyImage::writeEnergies(){
+    if( m_outfile==0) {
+        throw std::invalid_argument("SkyImage::writeEnergies: no file");
+    }
+    const std::string& outfile(*m_outfile);
+
+   tip::IFileSvc & fileSvc(tip::IFileSvc::instance());
+   tip::Table * table = fileSvc.editTable(outfile, "ENERGIES");
+
+   table->setNumRecords(m_energy.size());
+
+   tip::Table::Iterator it(table->begin());
+   tip::TableRecord & row(*it);
+   
+   for (size_t i(0); i < m_energy.size(); i++, ++it) {
+      row["ENERGY"].set(m_energy.at(i));
+   }
+   delete table;
 }
 
