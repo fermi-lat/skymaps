@@ -171,6 +171,9 @@ private:
     /// @brief internal routine to check layer, or perhaps extend
     void checkLayer(unsigned int layer)const;
 
+    ///@brief internal routine to write energies
+    void writeEnergies();
+
     //! sizes of the respective axes.
     int   m_naxis1, m_naxis2, m_naxis3;
 
@@ -193,6 +196,7 @@ private:
     astro::SkyProj* m_wcs; 
 
     bool m_interpolate; ///< flag to determine if interpolate
+    const std::string* m_outfile;
 };
 } //namesace skymaps
 
