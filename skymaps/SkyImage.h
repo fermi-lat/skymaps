@@ -90,6 +90,9 @@ public:
     const std::vector<double> & energies()const{return m_energy;}
     void setEnergies(const std::vector<double>& energies);
 
+       ///@brief routine to write energies
+    void writeEnergies();
+
     /**
     @brief loop over all internal bins, request the intensity from a functor derived
     from SkyFunction
@@ -171,9 +174,7 @@ private:
     /// @brief internal routine to check layer, or perhaps extend
     void checkLayer(unsigned int layer)const;
 
-    ///@brief internal routine to write energies
-    void writeEnergies();
-
+ 
     //! sizes of the respective axes.
     int   m_naxis1, m_naxis2, m_naxis3;
 
@@ -196,7 +197,7 @@ private:
     astro::SkyProj* m_wcs; 
 
     bool m_interpolate; ///< flag to determine if interpolate
-    const std::string* m_outfile;
+    std::string m_outfile;
 };
 } //namesace skymaps
 
