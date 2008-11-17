@@ -10,6 +10,8 @@ $Header$
 #include "tip/IFileSvc.h"
 #include "tip/Image.h"
 #include "tip/Table.h"
+#include "st_facilities/Util.h"
+
 
 #include <cctype>
 #include <cmath>
@@ -17,10 +19,21 @@ $Header$
 #include <sstream>
 #include <stdexcept>
 #include <errno.h> // to test result of std::remove()
+#include "fitsio.h"
+
 
 namespace {
     static unsigned long lnan[2]={0xffffffff, 0x7fffffff};
     static double& dnan = *( double* )lnan;
+
+       void fitsReportError(int status) {
+      fits_report_error(stderr, status);
+      if (status != 0) {
+          throw std::string("skymaps::SkyImage " +
+                           std::string("cfitsio error."));
+      }
+   }
+
 }
 using namespace skymaps;
 
@@ -43,7 +56,7 @@ SkyImage::SkyImage(const astro::SkyDir& center,
 , m_save(false)
 , m_layer(0)
 , m_interpolate(false)
-, m_outfile(0)
+, m_outfile(outputFile)
 {
 
     if( fov>90) {
@@ -118,7 +131,6 @@ SkyImage::SkyImage(const std::string& fits_file, const std::string& extension, b
 , m_layer(0)
 , m_wcs(0)
 , m_interpolate(interpolate)
-, m_outfile(&fits_file)
 {
     // note expect the image to be float
     m_image = tip::IFileSvc::instance().editImageFlt(fits_file, extension);
@@ -222,7 +234,7 @@ SkyImage::~SkyImage()
 {
     if( m_save) {
         dynamic_cast<tip::TypedImage<float>*>(m_image)->set(m_imageData);
-        if( m_energies.size()>0) writeEnergies();
+        if( m_energy.size()>0) writeEnergies();
     }
     delete m_image; 
     delete m_wcs;
@@ -345,13 +357,42 @@ void SkyImage::setEnergies(const std::vector<double>& energies)
 }
 
 void SkyImage::writeEnergies(){
-    if( m_outfile==0) {
+    if( m_outfile.empty() ){
         throw std::invalid_argument("SkyImage::writeEnergies: no file");
     }
-    const std::string& outfile(*m_outfile);
+    std::string tablename("ENERGIES");
+    const std::string& filename(m_outfile);
+
+    // Check if the extension exists already. If not, add it.
+    try{
+        std::auto_ptr<const tip::Table> 
+            gtiTable(tip::IFileSvc::instance().readTable(filename, tablename));
+    } catch (tip::TipException & eObj) {
+        if (!st_facilities::Util::expectedException(eObj, "Could not open FITS extension"))
+        { throw;
+        }
+        int status(0);
+        fitsfile * fptr;
+        fits_open_file(&fptr, filename.c_str(), READWRITE, &status);
+        ::fitsReportError(status);
+        char *ttype[] = {"ENERGY"};
+        char *tform[] = {"D"};
+        char *tunit[] = {"MeV"};
+        int cols(1);
+
+        fits_create_tbl(fptr, BINARY_TBL, 0, cols, ttype, tform, tunit,
+            (char*)tablename.c_str(), &status);
+        ::fitsReportError(status);
+
+        fits_close_file(fptr, &status);
+        ::fitsReportError(status);
+    }
+   std::auto_ptr<tip::Table> 
+      gtiTable(tip::IFileSvc::instance().editTable(filename, tablename));
+
 
    tip::IFileSvc & fileSvc(tip::IFileSvc::instance());
-   tip::Table * table = fileSvc.editTable(outfile, "ENERGIES");
+   tip::Table * table = fileSvc.editTable(filename,tablename);
 
    table->setNumRecords(m_energy.size());
 
