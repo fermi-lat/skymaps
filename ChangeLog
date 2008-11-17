@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Sun Nov 16 16:46:19 PST 2008
+skymaps/skymaps
+
+Modified Files:
+	SkyImage.h 
+Log Message:
+fix generation of a table for energies, if set.
+    *
+------------------------------------------------------------
 User: burnett  Sat Nov 15 15:35:44 PST 2008
 skymaps/src
 
