@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: glastrm  Wed Nov 19 11:44:31 PST 2008
+ScienceTools-scons/skymaps/python
+
+Added Files:
+	swig_setup.i 
+Log Message:
+Added swig_setup.i for SCons to use
+    *
+------------------------------------------------------------
 User: burnett  Sun Nov 16 16:46:19 PST 2008
 skymaps/src
 
