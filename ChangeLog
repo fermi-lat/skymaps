@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Wed Nov 19 21:14:15 PST 2008
+skymaps/python
+
+Modified Files:
+	swig_setup.in 
+Log Message:
+add intersection
+    *
+------------------------------------------------------------
 User: glastrm  Wed Nov 19 11:44:31 PST 2008
 ScienceTools-scons/skymaps/python
 
