@@ -166,6 +166,10 @@ public:
 %extend skymaps::Gti{
    double computeOntime(){return (*self).GtiBase::computeOntime(); } 
    void insertInterval(double tstart, double tstop){ (*self).GtiBase::insertInterval(tstart, tstop); }
+   void intersection(const skymaps::Gti& other){
+     self->operator&=(other);
+     }
+   
 }
 
 %include skymaps/HealpixDiffuseFunc.h
