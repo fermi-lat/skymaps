@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 TAG
+Tag name: skymaps-01-13-00, operation: add
+Package: skymaps
+User: glastrm  Tue Nov 25 12:20:29 2008
+Files:
+  skymaps/python/swig_setup.i  1.1
+
+    *
+------------------------------------------------------------
+TAG
 Tag name: v1r13, operation: add
 Package: skymaps
 User: glastrm  Tue Nov 25 12:20:19 2008
