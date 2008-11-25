@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: glastrm  Tue Nov 25 12:26:58 PST 2008
+skymaps/python
+
+Modified Files:
+	swig_setup.i 
+Log Message:
+update to latest changes in swig_setup.in
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-13-00, operation: add
 Package: skymaps
