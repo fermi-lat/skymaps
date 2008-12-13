@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: burnett  Sat Dec 13 15:15:48 PST 2008
+skymaps/python
+
+Modified Files:
+	image.py swig_setup.in 
+Added Files:
+	.cvsignore 
+Log Message:
+Set up Aitoff grid.
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-09-09-00, operation: add
 Package: skymaps
