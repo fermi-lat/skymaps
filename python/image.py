@@ -51,6 +51,43 @@ class AIT(object):
         # we want access to the projection object, to allow interactive display via pix2sph function
         self.proj = self.skyimage.projector()
         self.x = self.y = 100 # initial def
+
+    def grid(self, fig=None, labels=True, symbol="0.5"):
+	"""Draws gridlines and labels for map."""
+        from pylab import figure
+        from numpy import hstack
+        def ait(l, b):
+            " convert lon, lat to car "
+            return self.proj.sph2pix(l, b)
+
+        self.figure = figure(1, figsize = (10, 5), facecolor = 'w') if fig is None else fig
+        self.axes = self.figure.add_subplot(111)
+
+        from numpy import arange
+        from pylab import plot, text, connect, show
+        import matplotlib
+        matplotlib.interactive(False)
+        self.axes.set_autoscale_on(False)
+        self.axes.set_xlim(0, 360/self.pixelsize)
+        self.axes.set_ylim(0, 180/self.pixelsize)
+        self.axes.set_axis_off()
+        self.axes.set_aspect('equal')
+        self.extent= (ait(180,0)[0],ait(180.001,0)[0], ait(0,-90)[1], ait(0,90)[1])
+        bs = arange(-90, 91, 5)
+        for l in hstack((arange(0, 360, 45),[180.01])):
+            plot([ait(l,b)[0] for b in bs], [ait(l,b)[1] for b in bs], '--', color='gray')
+            if labels:
+                x,y = ait(l, 45) # Need to find right syntax for annotation position.
+                text(x,y, '%3.0f'%l ,size='smaller')#, weight = 'bold')
+
+        ls = hstack((arange(180, 0, -5), arange(355, 180,-5), [180.01]))
+        for b in arange(-60, 61, 30):
+            plot([ait(l,b)[0] for l in ls], [ait(l,b)[1] for l in ls], '--', color='gray')
+            if labels:
+                x,y = ait(-160, b)                                               
+                text(x,y, '%+3.0f'%b, size='smaller')#, weight = 'bold')
+        matplotlib.interactive(True)
+        show()
                   
     def imshow(self,  title=None, scale='linear',  **kwargs):
         'run imshow'
