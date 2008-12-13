@@ -92,6 +92,21 @@ public:
    size_t __len__() {      return 3;       }
 }
 
+%inline{
+// Create a double * object, needed for SkyProj ctor
+// modifed from http://www.swig.org/Doc1.1/HTML/Typemaps.html#n7
+double * double2(double x, double y) {
+	double *f = (double *) malloc(2*sizeof(double));
+	f[0] = x;
+	f[1] = y;
+	return f;
+}
+// Destroy a double* object (is it called?)
+void delete_double2(double *d) {
+	free(d);
+}
+}
+
 %extend CLHEP::HepRotation{
    double __getitem__(size_t i){
    switch(i){
