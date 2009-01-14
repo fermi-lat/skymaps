@@ -4,6 +4,8 @@
 $Header$
 */
 
+#include "healpix/Healpix.h"
+#include "healpix/HealPixel.h"
 #include "skymaps/PySkyFunction.h"
 #include "embed_python/Module.h"
 #ifdef _DEBUG
@@ -117,7 +119,7 @@ double PySkyFunction::level_ave(const astro::SkyDir& dir, double angle, int leve
 
     int nside(1 << level);
     std::vector<int> v;
-    Healpix hpx(nside, healpix::Healpix::NESTED, astro::SkyDir::GALACTIC);
+    healpix::Healpix hpx(nside, healpix::Healpix::NESTED, astro::SkyDir::GALACTIC);
     hpx.query_disc(dir, angle, v); 
     double av(0);
 

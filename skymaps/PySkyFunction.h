@@ -57,6 +57,9 @@ namespace skymaps {
         ///@return value from the python function
         double operator()(const astro::SkyDir& dir)const;
 
+        double average(const astro::SkyDir& dir, double angle, double tolerance)const;
+        double level_ave(const astro::SkyDir& dir, double angle, int level) const;
+
 
     private:
         embed_python::Module* m_module;
