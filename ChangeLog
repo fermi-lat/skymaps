@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: kerrm  Wed Jan 14 14:04:58 PST 2009
+skymaps/src
+
+Modified Files:
+	PySkyFunction.cxx 
+Log Message:
+Added PySkyFunction::average implementation copied from SkySpectrum.
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-09-09-00, operation: add
 Package: skymaps
