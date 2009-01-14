@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Wed Jan 14 14:21:02 PST 2009
+skymaps/src
+
+Modified Files:
+	PySkyFunction.cxx 
+Log Message:
+make it compile
+    *
+------------------------------------------------------------
+User: burnett  Wed Jan 14 14:21:02 PST 2009
 skymaps/skymaps
 
 Modified Files:
