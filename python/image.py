@@ -4,8 +4,73 @@ $Header$
 
 """
 
+import pylab
+from numpy import arange, hstack
+from skymaps import SkyImage, SkyDir, double2, SkyProj
 
-#---------------------------------------------------------------------------
+class AIT_grid():
+
+    def __init__(self, labels=True, color='gray', pixelsize=0.5, textsize=8):
+	"""Draws gridlines and labels for map.
+        
+        """
+
+        self.pixelsize = pixelsize
+
+        xsize,ysize = 325,162
+        crpix = double2(xsize/pixelsize/2., ysize/pixelsize/2.)
+        crval = double2(0,0)
+        cdelt = double2(-pixelsize, pixelsize)
+        self.proj = SkyProj('AIT', crpix, crval, cdelt, 0, True)
+        self.axes = pylab.axes() #creates figure and axes if not set
+
+        pylab.matplotlib.interactive(False)
+        self.axes.set_autoscale_on(False)
+        self.axes.set_xlim(0, 360/self.pixelsize)
+        self.axes.set_ylim(0, 180/self.pixelsize)
+        self.axes.set_axis_off()
+        self.axes.set_aspect('equal')
+        self.extent= (self.ait(180,0)[0],self.ait(180.001,0)[0], self.ait(0,-90)[1], self.ait(0,90)[1])
+        label_offset = 5/self.pixelsize
+        bs = arange(-90, 91, 5)
+        for l in hstack((arange(0, 360, 45),[180.01])):
+            lstyle = '-' if int(l)==180 else '--' 
+            pylab.plot([self.ait(l,b)[0] for b in bs], [self.ait(l,b)[1] for b in bs], lstyle, color=color)
+            if labels:
+                x,y = self.ait(l, 45) 
+                pylab.text(x,y, '%3.0f'%l ,size=textsize, ha='center')
+
+        ls = hstack((arange(180, 0, -5), arange(355, 180,-5), [180.01]))
+        for b in arange(-60, 61, 30):
+            pylab.plot([self.ait(l,b)[0] for l in ls], [self.ait(l,b)[1] for l in ls], '--', color=color)
+            if labels:
+                x,y = self.ait(180.1, b)                                               
+                pylab.text(x+label_offset,y+b/60*label_offset, '%+3.0f'%b, size=textsize, ha='center',va='center')#, weight = 'bold')
+        if labels:
+            for b in [90,-90]:
+                x,y = self.ait(0,b)
+                pylab.text(x,y+b/90*label_offset,'%+3.0f'%b, size=textsize, ha='center',va='center') 
+        pylab.matplotlib.interactive(True)
+        pylab.show()
+
+    def ait(self, l, b):
+        " convert lon, lat to car "
+        return self.proj.sph2pix(l, b)
+
+    def plot(self, sources, symbol='+', text=None, fontsize=8, **kwargs):
+        """ plot symbols at points
+        text: optional text strings (same lenght as soruces)
+        """
+        X=[]
+        Y=[]
+        for i,s in enumerate(sources):
+            x,y = self.ait(s.l(),s.b())
+            X.append(x)
+            Y.append(y)
+            if text is not None:
+                pylab.text(x,y,text[i],fontsize=fontsize)
+        pylab.plot(X,Y, symbol,  **kwargs)
+
 class AIT(object):
     """ Manage a full-sky image of a SkyProjection or SkyFunction, wrapping SkyImage
      """
@@ -22,9 +87,7 @@ class AIT(object):
         earth [False]  looking down at Earth
 
         """
-        from skymaps import SkyImage, SkyDir
         from numpy import array, isnan, ma
-        from pylab import normalize
         
         self.skyfun = skyfun
         self.galactic = galactic
@@ -52,58 +115,78 @@ class AIT(object):
         self.proj = self.skyimage.projector()
         self.x = self.y = 100 # initial def
 
-    def grid(self, fig=None, labels=True, symbol="0.5"):
+    def grid(self, fig=None, labels=True, color='gray'):
 	"""Draws gridlines and labels for map."""
-        from pylab import figure
-        from numpy import hstack
+        from numpy import hstack, arange
         def ait(l, b):
             " convert lon, lat to car "
             return self.proj.sph2pix(l, b)
 
-        self.figure = figure(1, figsize = (10, 5), facecolor = 'w') if fig is None else fig
-        self.axes = self.figure.add_subplot(111)
+        self.axes = pylab.axes() #creates figure and axes if not set
 
-        from numpy import arange
-        from pylab import plot, text, connect, show
-        import matplotlib
-        matplotlib.interactive(False)
+        pylab.matplotlib.interactive(False)
         self.axes.set_autoscale_on(False)
         self.axes.set_xlim(0, 360/self.pixelsize)
         self.axes.set_ylim(0, 180/self.pixelsize)
         self.axes.set_axis_off()
         self.axes.set_aspect('equal')
         self.extent= (ait(180,0)[0],ait(180.001,0)[0], ait(0,-90)[1], ait(0,90)[1])
+        label_offset = 10/self.pixelsize
         bs = arange(-90, 91, 5)
         for l in hstack((arange(0, 360, 45),[180.01])):
-            plot([ait(l,b)[0] for b in bs], [ait(l,b)[1] for b in bs], '--', color='gray')
+            lstyle = '-' if int(l)==180 else '--' 
+            pylab.plot([ait(l,b)[0] for b in bs], [ait(l,b)[1] for b in bs], lstyle, color=color)
             if labels:
                 x,y = ait(l, 45) # Need to find right syntax for annotation position.
-                text(x,y, '%3.0f'%l ,size='smaller')#, weight = 'bold')
+                pylab.text(x,y, '%3.0f'%l ,size='smaller')#, weight = 'bold')
 
         ls = hstack((arange(180, 0, -5), arange(355, 180,-5), [180.01]))
         for b in arange(-60, 61, 30):
-            plot([ait(l,b)[0] for l in ls], [ait(l,b)[1] for l in ls], '--', color='gray')
+            pylab.plot([ait(l,b)[0] for l in ls], [ait(l,b)[1] for l in ls], '--', color=color)
             if labels:
-                x,y = ait(-160, b)                                               
-                text(x,y, '%+3.0f'%b, size='smaller')#, weight = 'bold')
-        matplotlib.interactive(True)
-        show()
+                x,y = ait(181, b)                                               
+                pylab.text(x+label_offset,y, '%+3.0f'%b, size='smaller')#, weight = 'bold')
+        pylab.matplotlib.interactive(True)
+        pylab.show()
+
+    def plot(self, sources, symbol='+',  **kwargs):
+        " plot symbols at points"
+        
+        X=[]
+        Y=[]
+        for s in sources:
+            x,y = self.proj.sph2pix(s.l(),s.b())
+            X.append(x)
+            Y.append(y)
+        pylab.plot(X,Y, symbol,  **kwargs)
+
+    def on_move(self, event):
+        """Reports mouse's position in galactic coordinates."""
+        from numpy import fabs
+        if event.xdata == None or event.ydata == None:
+            pass 
+        else:
+            try:
+                coords = self.proj.pix2sph(event.xdata, event.ydata)
+                self.poslabel.set_text("long=%1.2f\n  lat=%1.2f" %(coords[0],coords[1]))
+            except:
+                self.poslabel.set_text("")
+	self.figure.canvas.draw()
                   
     def imshow(self,  title=None, scale='linear',  **kwargs):
         'run imshow'
         from numpy import ma
-        import pylab
         # change defaults
         if 'origin'        not in kwargs: kwargs['origin']='lower'
         if 'interpolation' not in kwargs: kwargs['interpolation']='nearest'
         if 'extent'        not in kwargs: kwargs['extent']=self.extent
         
+        pylab.axes().set_axis_off()
         if   scale=='linear':  pylab.imshow(self.masked_image,   **kwargs)
         elif scale=='log':     pylab.imshow(ma.log10(self.masked_image), **kwargs)
         else: raise Exception('bad scale: %s'%scale)
                                         
         pylab.colorbar(orientation='horizontal', shrink=1.0 if self.size==180 else 0.6)
-        #pylab.axes().set_axis_off()
         if self.galactic:
             pylab.xlabel('glon'); pylab.ylabel('glat')
         else:

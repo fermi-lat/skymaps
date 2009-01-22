@@ -32,7 +32,9 @@ public:
     @param fits_file create from a FITS exposure cube
     @param tablename [Exposure]
     */
-    Exposure(const skymaps::LivetimeCube& ltcube, const skymaps::EffectiveArea & aeff);
+    Exposure(const skymaps::LivetimeCube& ltcube, 
+        const skymaps::EffectiveArea & aeff);
+
     virtual ~Exposure();
 
     ///@brief a single energy 
