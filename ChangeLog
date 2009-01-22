@@ -1,5 +1,16 @@
 ------------------------------------------------------------
 User: burnett  Wed Jan 21 20:14:08 PST 2009
+skymaps/skymaps
+
+Modified Files:
+	Exposure.h 
+Added Files:
+	SpectralFunction.h 
+Log Message:
+new stuff
+    *
+------------------------------------------------------------
+User: burnett  Wed Jan 21 20:14:08 PST 2009
 skymaps/python
 
 Modified Files:
