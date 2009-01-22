@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: vernaleo  Thu Jan 22 07:09:54 PST 2009
+skymaps/src
+
+Modified Files:
+	BinnedPhotonData.cxx 
+Log Message:
+Fixed 64bit bug when trying to write fits files caused by the difference in size of int and long
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-14-01, operation: add
 Package: skymaps
