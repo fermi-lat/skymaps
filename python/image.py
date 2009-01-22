@@ -34,7 +34,7 @@ class AIT_grid():
         label_offset = 5/self.pixelsize
         bs = arange(-90, 91, 5)
         for l in hstack((arange(0, 360, 45),[180.01])):
-            lstyle = '-' if int(l)==180 else '--' 
+            lstyle = '-' if int(l)==180 or int(l)==0 else '--' 
             pylab.plot([self.ait(l,b)[0] for b in bs], [self.ait(l,b)[1] for b in bs], lstyle, color=color)
             if labels:
                 x,y = self.ait(l, 45) 
@@ -42,7 +42,8 @@ class AIT_grid():
 
         ls = hstack((arange(180, 0, -5), arange(355, 180,-5), [180.01]))
         for b in arange(-60, 61, 30):
-            pylab.plot([self.ait(l,b)[0] for l in ls], [self.ait(l,b)[1] for l in ls], '--', color=color)
+            lstyle = '-' if int(b)==0 else '--'
+            pylab.plot([self.ait(l,b)[0] for l in ls], [self.ait(l,b)[1] for l in ls], lstyle, color=color)
             if labels:
                 x,y = self.ait(180.1, b)                                               
                 pylab.text(x+label_offset,y+b/60*label_offset, '%+3.0f'%b, size=textsize, ha='center',va='center')#, weight = 'bold')
