@@ -33,6 +33,7 @@ DiffuseFunction::DiffuseFunction(std::string diffuse_cube_file, double energy, b
             m_energies.push_back(e);
 
         }
+        delete table;
     }catch(const std::exception& ){
         throw std::invalid_argument("DiffuseFunction: the diffuse cube is not valid");
     }
