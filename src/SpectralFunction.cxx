@@ -84,21 +84,21 @@ double SpectralFunction::value(double e)const
 double SpectralFunction::expected(const astro::SkyDir& dir,const skymaps::Band& band)const
 {
     double a(band.emin()), b(band.emax()); // range of integration
-    const Exposure& exposure(* exposure(band.event_class()) ); // exposure object to use
+    const Exposure& expose  =* exposure(band.event_class()) ; // exposure object to use
 
     double step( log(b/a)/s_n ), // step in log scale
            ratio( exp(step) ), // ratio of energies
            c(2.),              // initial simpsons
            e(a);              //  inital energy
 
-    double result( a* exposure(dir,a)*value(a) ); // value at low end
+    double result( a* expose(dir,a)*value(a) ); // value at low end
     for( int i = 1; i< s_n; ++i ){
         e *= ratio; // next energy
         c = 6-c;   // toggle Simpsons coefficient
-        result += c * e* exposure(dir,e)*value(  e); 
+        result += c * e* expose(dir,e)*value(  e); 
     }
     
-    result += b*exposure(dir,b)*value(b);// value at high end.
+    result += b*expose(dir,b)*value(b);// value at high end.
     return result*step/3.;
 }
 
