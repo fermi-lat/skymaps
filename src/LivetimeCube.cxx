@@ -188,10 +188,11 @@ void LivetimeCube::load_table(const tip::Table * scData,
 bool LivetimeCube::processEntry(const tip::ConstTableRecord & row, const skymaps::Gti& gti)
 {
     double  start, stop, livetime; 
-    row["livetime"].get(livetime);
+    row["livetime"].get(livetime);  // assume this takes care of any entries during SAA
+    if(livetime==0 ) return false;
     row["start"].get(start);
     row["stop"].get(stop);
-    double deltat = livetime > 0 ? livetime : stop-start;
+    double deltat = livetime; 
     double fraction(1); 
     bool  done(false);
     if( gti.getNumIntervals()>0 ) {
