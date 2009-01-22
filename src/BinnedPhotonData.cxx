@@ -402,7 +402,7 @@ void BinnedPhotonData::write(const std::string & outputFile, bool clobber) const
 
     // set the headers (TODO: do the comments, too)
     tip::Header& hdr = table.getHeader();
-    hdr["NAXIS1"].set(3 * sizeof(long) + 4 * sizeof(double));
+    hdr["NAXIS1"].set(3 * sizeof(int) + 4 * sizeof(double));
     hdr["NBRBANDS"].set(size()); 
     hdr["PIXELS"].set(total_pixels);
     hdr["PHOTONS"].set(total_photons);
@@ -435,7 +435,7 @@ void BinnedPhotonData::write(const std::string & outputFile, bool clobber) const
 
     // set the headers (TODO: do the comments, too)
     tip::Header& hdr = table.getHeader();
-    hdr["NAXIS1"].set(2 * sizeof(long));
+    hdr["NAXIS1"].set(2 * sizeof(int));
     hdr["NBRBANDS"].set(size()); 
 
     // close it?
