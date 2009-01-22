@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Wed Jan 21 20:12:13 PST 2009
+skymaps/src
+
+Modified Files:
+	LivetimeCube.cxx 
+Log Message:
+fix to be compatible with MC history file
+    *
+------------------------------------------------------------
 User: burnett  Wed Jan 14 14:21:02 PST 2009
 skymaps/src
 
