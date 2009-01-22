@@ -5,6 +5,7 @@
 $Id$
 @verbatim
  --------- -----   --- -----------------------------------------------------------------------
+ 22-jan-09 v1r14p2 JCV Fixed 64bit bug in BinnedPhotonData.
  21-jan-09 v1r14p1 THB new SpectralFunction class, fixes for LivetimeCube, DiffuseFunction 
  12-nov-08 v1r13   THB,MR PSF inplementation using CALDB
  28-oct-08 v1r12   THB New HealpixDiffuseFunc class
