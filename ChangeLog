@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Wed Jan 21 20:13:10 PST 2009
+skymaps/src
+
+Modified Files:
+	DiffuseFunction.cxx 
+Log Message:
+fix memory leak
+    *
+------------------------------------------------------------
 User: burnett  Wed Jan 21 20:12:13 PST 2009
 skymaps/src
 
