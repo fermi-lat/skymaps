@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Thu Jan 22 10:26:50 PST 2009
+skymaps/src
+
+Modified Files:
+	SpectralFunction.cxx 
+Log Message:
+slight mod to fix gcc 3.4 error
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-14-02, operation: add
 Package: skymaps
