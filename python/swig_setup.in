@@ -29,6 +29,7 @@
 #include "skymaps/PhotonBinner.h"
 #include "skymaps/IParams.h"
 #include "skymaps/HealpixDiffuseFunc.h"
+#include "skymaps/PsfSkyFunction.h"
 
 #include "CLHEP/Vector/Rotation.h"
 #include "CLHEP/Vector/EulerAngles.h"
@@ -156,6 +157,7 @@ void delete_double2(double *d) {
 
 %include ../skymaps/Convolution.h
 %include ../skymaps/PsfFunction.h
+%include ../skymaps/PsfSkyFunction.h
 
 %include ../skymaps/PySkyFunction.h
 %include ../skymaps/Background.h

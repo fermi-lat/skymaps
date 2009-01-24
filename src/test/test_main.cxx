@@ -8,6 +8,7 @@ $Header$
 #include "skymaps/Exposure.h"
 #include "skymaps/BinnedPhotonData.h"
 #include "skymaps/PhotonBinner.h"
+#include "skymaps/PsfSkyFunction.h"
 
 #include "skymaps/LivetimeCube.h"
 #include "skymaps/EffectiveArea.h"
@@ -37,6 +38,16 @@ int main(int , char** )
 
     int rc(0);
     try{
+#if 1
+        {
+            // exercise PsfSkyFunction
+            PsfSkyFunction t(SkyDir(0,0), 2.0, 0.1);
+            double y = t(SkyDir(0,0));
+            double z = t.average(SkyDir(0,0), 10, 0.01);
+            double uu(0);
+
+        }
+#endif
 
 #if 1
         {
