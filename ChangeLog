@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Sat Jan 24 14:41:43 PST 2009
+skymaps/python
+
+Modified Files:
+	swig_setup.in 
+Log Message:
+tag after setting up new PsfSkyFunction
+    *
+------------------------------------------------------------
+User: burnett  Sat Jan 24 14:41:43 PST 2009
 skymaps/doc
 
 Modified Files:
