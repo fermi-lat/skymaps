@@ -1,13 +1,4 @@
 ------------------------------------------------------------
-User: burnett  Sat Jan 24 14:41:42 PST 2009
-skymaps/cmt
-
-Modified Files:
-	requirements 
-Log Message:
-tag after setting up new PsfSkyFunction
-    *
-------------------------------------------------------------
 TAG
 Tag name: skymaps-01-14-03, operation: add
 Package: skymaps
