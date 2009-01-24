@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Sat Jan 24 14:52:28 PST 2009
+skymaps/src
+
+Added Files:
+	PsfSkyFunction.cxx 
+Log Message:
+adding PsfSkyFunction (for real)
+    *
+------------------------------------------------------------
+User: burnett  Sat Jan 24 14:52:28 PST 2009
 skymaps/skymaps
 
 Added Files:
