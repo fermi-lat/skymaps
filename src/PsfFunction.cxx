@@ -8,7 +8,7 @@
 using namespace skymaps;
 
 double PsfFunction::operator () (const astro::SkyDir & r, const astro::SkyDir & r_prime,
-                            double sigma) 
+                            double sigma) const
 {
     double u( 0.5*(r_prime() - r()).mag2()/sigma/sigma);
     return operator()(u);

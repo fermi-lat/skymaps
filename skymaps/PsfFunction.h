@@ -4,8 +4,8 @@
 $Header$
 */
 
-#ifndef wavelet_PsfFunction_h
-#define wavelet_PsfFunction_h
+#ifndef skymaps_PsfFunction_h
+#define skymaps_PsfFunction_h
 
 #include "astro/SkyDir.h"
 #include "CLHEP/Vector/ThreeVector.h"
@@ -33,7 +33,7 @@ class PsfFunction
         */
         double operator () (const astro::SkyDir & r, 
             const astro::SkyDir & r_prime,
-            double sigma) ;
+            double sigma) const ;
 
         ///@return the value as a function of the scaled deviation squared
         double operator()(double u)const;
