@@ -29,8 +29,8 @@ class Exposure : public skymaps::SkySpectrum {
 public:
 
     /** @brief ctor
-    @param fits_file create from a FITS exposure cube
-    @param tablename [Exposure]
+    @param ltcube create from a livetime cube
+    @param aeff an effective area object
     */
     Exposure(const skymaps::LivetimeCube& ltcube, 
         const skymaps::EffectiveArea & aeff);

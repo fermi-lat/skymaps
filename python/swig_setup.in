@@ -6,6 +6,7 @@
 
 #include "astro/EarthCoordinate.h"
 #include "astro/Photon.h"
+#include "astro/IGRField.h"
 #include "healpix/Healpix.h"
 #include "healpix/HealPixel.h"
 #include "healpix/HealpixMap.h"
@@ -129,6 +130,7 @@ void delete_double2(double *d) {
 %include $(ASTROROOT)/astro/SkyProj.h
 %include $(ASTROROOT)/astro/SkyDir.h
 %include $(ASTROROOT)/astro/Photon.h
+%include $(ASTROROOT)/astro/IGRField.h
 
 %include $(HEALPIXROOT)/healpix/Healpix.h
 %include $(HEALPIXROOT)/healpix/HealpixMap.h

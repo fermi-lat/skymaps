@@ -7,6 +7,7 @@
 #include "skymaps/LivetimeCube.h"
 #include "skymaps/SkyImage.h"
 
+#include "astro/PointingTransform.h"
 
 
 #include "healpix/HealpixArrayIO.h"
@@ -26,7 +27,11 @@
 
 using namespace skymaps;
 using healpix::HealpixArrayIO;
+#if 1
 using healpix::CosineBinner;
+#else
+using healpix::ThetaPhiBinner;
+#endif
 using healpix::Healpix;
 using astro::SkyDir;
 using CLHEP::Hep3Vector;
@@ -86,6 +91,9 @@ LivetimeCube::LivetimeCube
         }
         CosineBinner::setBinning(0, cosbins);
     }
+    if( CosineBinner::nphibins()>0 && ! quiet ){
+        std::cout << "Will accumulate phi dependence" << std::endl;
+    }
 
     create_cache();
 }
@@ -115,18 +123,30 @@ void LivetimeCube::create_cache()
 */
 class LivetimeCube::Filler {
 public:
+
     /** @brief ctor
         @param deltat time to add
-        @param dir direction to use to determine angle (presumably the spacecraft z-axis)
+        @param dirz direction to use to determine angle (presumably the spacecraft z-axis)
+        @param dirx direction of x-axis
         @param zenith optional zenith direction for potential cut
         @param zcut optional cut: if -1, ignore
     */
-    Filler( double deltat, const astro::SkyDir& dir, astro::SkyDir zenith=astro::SkyDir(), double zcut=-1)
-        : m_dir(dir())
+    Filler( double deltat, const astro::SkyDir& dirz, const astro::SkyDir& dirx, astro::SkyDir zenith=astro::SkyDir(), double zcut=-1)
+        : m_dirz(dirz())
+        , m_rot(astro::PointingTransform(dirz,dirx).localToCelestial().inverse())
         , m_zenith(zenith())
         , m_deltat(deltat)
         , m_zcut(zcut)
         , m_total(0), m_lost(0)
+        , m_use_phi(CosineBinner::nphibins()>0)
+    {}
+    Filler( double deltat, const astro::SkyDir& dirz, astro::SkyDir zenith=astro::SkyDir(), double zcut=-1)
+        : m_dirz(dirz())
+        , m_zenith(zenith())
+        , m_deltat(deltat)
+        , m_zcut(zcut)
+        , m_total(0), m_lost(0)
+        , m_use_phi(false)
     {}
     void operator()( const std::pair<CosineBinner*, Simple3Vector> & x)
     {
@@ -138,7 +158,15 @@ public:
         }
         if( ok) {
             // if ok, add to the angle histogram
-            x.first->fill(x.second.dot(m_dir), m_deltat);
+            const Simple3Vector& pixeldir(x.second);
+            if( m_use_phi) {
+                CLHEP::Hep3Vector instrument_dir( pixeldir.transform(m_rot) );
+                 double costheta(instrument_dir.z()), phi(instrument_dir.phi());
+                x.first->fill( costheta, phi , m_deltat);
+            }else{
+                x.first->fill( pixeldir.dot(m_dirz), m_deltat);
+            }
+
             m_total += m_deltat;
         }else{
             m_lost += m_deltat;
@@ -147,8 +175,12 @@ public:
     double total()const{return m_total;}
     double lost()const{return m_lost;}
 private:
-    Simple3Vector m_dir, m_zenith;
-    double m_deltat, m_zcut, m_total, m_lost;
+    Simple3Vector m_dirz;
+    CLHEP::HepRotation m_rot;
+    Simple3Vector m_zenith;
+    double m_deltat, m_zcut;
+    mutable double m_total, m_lost;
+    bool m_use_phi;
 };
 
 void LivetimeCube::fill(const astro::SkyDir& dirz, double deltat)
@@ -156,16 +188,20 @@ void LivetimeCube::fill(const astro::SkyDir& dirz, double deltat)
     Filler sum = for_each(m_dir_cache.begin(), m_dir_cache.end(), Filler(deltat, dirz));
     addtotal(deltat);
 }
-
-
-void LivetimeCube::fill_zenith(const astro::SkyDir& dirz, const astro::SkyDir& zenith, double deltat)
+void LivetimeCube::fill(const astro::SkyDir& dirz,const astro::SkyDir& dirx, double deltat)
 {
-    Filler sum = for_each(m_dir_cache.begin(), m_dir_cache.end(), Filler(deltat, dirz, zenith, m_zcut));
+    Filler sum = for_each(m_dir_cache.begin(), m_dir_cache.end(), Filler(deltat, dirz, dirx, astro::SkyDir(), -1) );
+    addtotal(deltat);
+}
+
+
+void LivetimeCube::fill_zenith(const astro::SkyDir& dirz,const astro::SkyDir& dirx, const astro::SkyDir& zenith, double deltat)
+{
+    Filler sum = for_each(m_dir_cache.begin(), m_dir_cache.end(), Filler(deltat, dirz, dirx, zenith, m_zcut));
     double total(sum.total());
     addtotal(total);
     m_lost += sum.lost();
 }
-
 
 
 void LivetimeCube::load_table(const tip::Table * scData, 
@@ -205,11 +241,14 @@ bool LivetimeCube::processEntry(const tip::ConstTableRecord & row, const skymaps
         double ra, dec, razenith, deczenith;
         row["ra_scz"].get(ra);
         row["dec_scz"].get(dec);
+        SkyDir scz(ra,dec);
+
         row["ra_zenith"].get(razenith);
         row["dec_zenith"].get(deczenith);
         SkyDir zenith(razenith, deczenith);
-        SkyDir scz(ra,dec);  
-
+        row["ra_scx"].get(ra);
+        row["dec_scx"].get(dec);
+        SkyDir scx(ra, dec);
         if(m_zenith_frame){
             // special mode for Earth, or zenith frame
             double theta = scz.difference(zenith); 
@@ -230,17 +269,17 @@ bool LivetimeCube::processEntry(const tip::ConstTableRecord & row, const skymaps
             fill(SkyDir(azimuth, theta-90), deltat * fraction);
 
         }else{
-        
-            fill_zenith(scz, zenith, deltat* fraction);
+            fill_zenith(scz, scx,  zenith, deltat* fraction);
         }
     }
     return done; 
 }
-double LivetimeCube::value(const astro::SkyDir& dir, double costh)
+double LivetimeCube::value(const astro::SkyDir& dir, double costh, double phi)
 {
     if( costh==0) costh=1e-9; // avoid error
 
     return bins(dir)[costh];
+    //   return bins(dir)(costh,phi);
 }
 
 void LivetimeCube::load(std::string scfile, const skymaps::Gti & gti, std::string tablename)
@@ -249,6 +288,7 @@ void LivetimeCube::load(std::string scfile, const skymaps::Gti & gti, std::strin
      this->load_table(scData, gti, !m_quiet); // should allow a GTI?
      delete scData; // closes the file, I hope
 }
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //                  create FITS file
 void LivetimeCube::write(const std::string& outputfile, const std::string& tablename)const
@@ -260,8 +300,9 @@ void LivetimeCube::write(const std::string& outputfile, const std::string& table
     tip::IFileSvc & fileSvc(tip::IFileSvc::instance());
     fileSvc.createFile(outputfile, templateFile);
     writeFilename(outputfile);
-
+#if 1 // TODO
     healpix::HealpixArrayIO::instance().write(data(), outputfile, tablename);
+#endif
 #if 0 // doesn't work?
     writeCosbins(outputfile);
 #endif
@@ -288,11 +329,17 @@ void LivetimeCube::setCosbinsFieldFormat(const std::string & outfile) const {
    fitsReportError(status, "LivetimeCube::setCosbinsFieldFormat");
 }
 
-void LivetimeCube::
-computeCosbins(std::vector<double> & mubounds) const {
+void LivetimeCube::computeCosbins(std::vector<double> & mubounds) const {
+#if 1
    bool sqrtbins(healpix::CosineBinner::thetaBinning() == "SQRT(1-COSTHETA)");
    double cosmin(healpix::CosineBinner::cosmin());
    size_t nbins(healpix::CosineBinner::nbins());
+#else
+   bool sqrtbins(healpix::ThetaPhiBinner::thetaBinning() == "SQRT(1-COSTHETA)");
+   double cosmin(healpix::ThetaPhiBinner::cosmin());
+   size_t nbins(healpix::ThetaPhiBinner::nbins());
+
+#endif
    mubounds.clear();
    for (int i(nbins); i >= 0; i--) {
       double factor(static_cast<double>(i)/nbins);
@@ -302,10 +349,13 @@ computeCosbins(std::vector<double> & mubounds) const {
       mubounds.push_back(1. - factor*(1. - cosmin));
    }
 }
+
 void LivetimeCube::writeCosbins(const std::string & outfile) const {
    tip::IFileSvc & fileSvc(tip::IFileSvc::instance());
    tip::Table * table = fileSvc.editTable(outfile, "CTHETABOUNDS");
    table->setNumRecords(healpix::CosineBinner::nbins());
+
+   //table->setNumRecords(healpix::ThetaPhiBinner::nbins());
 
    tip::Table::Iterator it(table->begin());
    tip::TableRecord & row(*it);

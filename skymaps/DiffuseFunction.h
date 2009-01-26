@@ -65,6 +65,9 @@ public:
     /// @brief access to the contained SkyImage
     const skymaps::SkyImage& image()const { return m_data;}
 
+    /// @brief access to the energies (makes a copy)
+    std::vector<double> energies()const{return m_energies;}
+
 private:
     double level_ave(const astro::SkyDir& dir, double angle, int level) const;
 
