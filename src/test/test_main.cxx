@@ -51,10 +51,18 @@ int main(int , char** )
 
 #if 1
         {
-        LivetimeCube lc("", astro::SkyDir(0,0), 0);
-        lc.fill(SkyDir(0,0), 1.);
-        std::cout << "filled with: " << lc.total() << std::endl;
-        lc.write("test_livetimecube.fits");
+            astro::SkyDir tdir(0,0);
+            LivetimeCube lc("", tdir, 90.); // note filling minimal set of pixels around the direction.
+            lc.fill(SkyDir(0,0), 1.);
+            double check = lc.value(tdir, 1.0); // should be 1.0
+            std::cout << "filled with: " << lc.total() << std::endl;
+            lc.write("test_livetimecube.fits");
+            EffectiveArea aeff("simple");
+            Exposure exp(lc, aeff);
+            std::cout << "Exposure check:\n ra\t value"<< std::endl;
+            for( float ra(0); ra< 90; ra+=10.){
+                std::cout<<  ra <<"\t "<< exp(astro::SkyDir(0,ra)) << std::endl;
+            }
         }
 #endif
 #if 0  // exercise EffectiveArea, LivetimeCube, Exposure

@@ -9,6 +9,7 @@
 #ifndef MAP_TOOLS_LivetimeCube_H
 #define MAP_TOOLS_LivetimeCube_H
 
+
 #include "astro/SkyDir.h"
 #include "astro/SkyFunction.h"
 
@@ -16,6 +17,7 @@
 
 #include "healpix/HealpixArray.h"
 #include "healpix/CosineBinner.h"
+
 namespace tip { class Table; class ConstTableRecord;}
 
 #include <utility> // for std::pair
@@ -36,9 +38,6 @@ public:
     BasicLivetime(S sky):m_sky(sky), m_total(0){}
 
     virtual ~BasicLivetime(){}
-
-    virtual void fill(const astro::SkyDir& dirz, double deltat)=0;
-    virtual void fill_zenith(const astro::SkyDir& dirz, const astro::SkyDir& dirzenith, double deltat)=0;
 
     template<class F>
         double operator()(const astro::SkyDir& dir, const F& fun)const
@@ -62,6 +61,7 @@ private:
 // define LivetimeCube as specific instantiation of the above
 typedef healpix::HealpixArray<healpix::CosineBinner> SkyBinner;
 typedef BasicLivetime<SkyBinner, healpix::CosineBinner> SkyLivetimeCube;
+
 
 namespace skymaps {
     class SkyImage; // forward declaration
@@ -91,12 +91,15 @@ public:
          ,double cone_angle=180
          ,double zcut=-1.0
          ,double pixelsize=1. 
-         ,double cosbinsize=1./healpix::CosineBinner::nbins() 
+         ,double cosbinsize=1./healpix::CosineBinner::nbins()
          ,double quiet=false
           );
   
     //! add a time interval at the given position
     virtual void fill(const astro::SkyDir& dirz, double deltat);
+
+    //! @brief add a time interval for the given instrument orientation 
+    virtual void fill(const astro::SkyDir& dirz,const astro::SkyDir& dirx, double deltat);
 
      //! write out to a file.
     void write(const std::string& outputfile, const std::string& tablename="EXPOSURE")const;
@@ -113,7 +116,11 @@ public:
 
     void useZenith(){m_zenith_frame=true;} ///< to convert to Earth coordinates
 
-    double value(const astro::SkyDir& dir, double costh);
+    //! @brief evaluate the livetime for the given direction,and the theta, phi
+    //! @param dir
+    //! @param costh
+    //! @param phi (optional: if negative or not present, return total)
+    double value(const astro::SkyDir& dir, double costh, double phi=-1);
 
     /// access time
     double total()const{return SkyLivetimeCube::total();} // make accessible to SWIG
@@ -128,8 +135,7 @@ private:
         @param dirzenith direction of local zenith
         @param deltat time interval
     */
-    virtual void fill_zenith(const astro::SkyDir& dirz, const astro::SkyDir& dirzenith, double deltat);
-
+    virtual void fill_zenith(const astro::SkyDir& dirz,const astro::SkyDir& dirx, const astro::SkyDir& dirzenith, double deltat);
 
     /** @brief set up the cache of vectors associated with cosine histograms
 
@@ -151,7 +157,14 @@ private:
     public: 
         Simple3Vector(const CLHEP::Hep3Vector& v=CLHEP::Hep3Vector())
             : x(v.x()),y(v.y()),z(v.z()){};
+        Simple3Vector(double a, double b, double c):x(a),y(b), z(c){}
         double dot(const Simple3Vector& u)const{return x*u.x+y*u.y+z*u.z;}
+        CLHEP::Hep3Vector transform(const CLHEP::HepRotation& R)const{
+            return CLHEP::Hep3Vector(
+                R.xx()*x+R.xy()*y+R.xz()*z,
+                R.yx()*x+R.yy()*y+R.yz()*z,
+                R.zx()*x+R.zy()*y+R.zz()*z);
+        }
         double x,y,z;
     };
     std::vector< std::pair<healpix::CosineBinner* ,  Simple3Vector> > m_dir_cache;
