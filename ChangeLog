@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Mon Jan 26 20:07:22 PST 2009
+skymaps/src
+
+Modified Files:
+	Band.cxx 
+Log Message:
+tagging changes affecting query_disk
+    *
+------------------------------------------------------------
+User: burnett  Mon Jan 26 20:07:22 PST 2009
 skymaps/skymaps
 
 Modified Files:
