@@ -127,6 +127,14 @@ int Band::query_disk(const astro::SkyDir&sdir, double radius,
     }
     return total;
 }
+
+int Band::total_pix(const astro::SkyDir&dir, double radius)const
+{
+	std::vector<int> v;
+	m_healpix->query_disc( dir, radius, v);
+	return v.size();
+}
+
 double Band::pixelArea()const
 {
    return m_healpix->pixelArea();

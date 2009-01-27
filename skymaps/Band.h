@@ -81,6 +81,10 @@ namespace skymaps {
         int query_disk(const astro::SkyDir&dir, double radius, 
             std::vector<std::pair<int,int> > & v)const;
 
+		/// @brief return total pixels within the radius about the direction
+		/// @param dir center of cone
+		/// @param radius in radians
+		int total_pix(const astro::SkyDir&dir, double radius)const;
 
         /// @brief fill a vector indeces of 7 or 8 neighbors of given index
         /// Note: requires nested indexing!
