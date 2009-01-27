@@ -5,6 +5,7 @@
 $Id$
 @verbatim
  --------- -----   --- -----------------------------------------------------------------------
+ 24-jan-09 v1r15p2 THB extend Band a bit
  24-jan-09 v1r15p1 THB New class PsfSkyFunction
  22-jan-09 v1r14p3 THB gcc error fix
  21-jan-09 v1r14p1 THB new SpectralFunction class, fixes for LivetimeCube, DiffuseFunction 
