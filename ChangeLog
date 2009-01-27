@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: kerrm  Mon Jan 26 17:30:54 PST 2009
+skymaps/src
+
+Modified Files:
+	Band.cxx 
+Log Message:
+Added total_pix method to estimate actual solid angle included in ROI.
+    *
+------------------------------------------------------------
+User: kerrm  Mon Jan 26 17:30:54 PST 2009
 skymaps/skymaps
 
 Modified Files:
