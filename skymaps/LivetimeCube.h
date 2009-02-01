@@ -83,6 +83,7 @@ public:
     //! @param zcut [-1]  zenith angle cut angle
     //! @param pixelsize (deg) [1] Approximate pixel size, in degrees
     //! @param cosbinsize bin size in the cos(theta) binner
+    //! @param phibins [0] set non-zero to use phi binning
     //! Note that all parameters have defaults to allow keyword args in Python interface
     
     LivetimeCube(
@@ -92,6 +93,7 @@ public:
          ,double zcut=-1.0
          ,double pixelsize=1. 
          ,double cosbinsize=1./healpix::CosineBinner::nbins()
+         //,int    phibins=0
          ,double quiet=false
           );
   

@@ -52,6 +52,7 @@ int main(int , char** )
 #if 1
         {
             astro::SkyDir tdir(0,0);
+            healpix::CosineBinner::setPhiBins(0); // non-zero to exercise phi bins
             LivetimeCube lc("", tdir, 90.); // note filling minimal set of pixels around the direction.
             lc.fill(SkyDir(0,0), 1.);
             double check = lc.value(tdir, 1.0); // should be 1.0
