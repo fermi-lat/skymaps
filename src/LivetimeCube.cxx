@@ -61,6 +61,7 @@ LivetimeCube::LivetimeCube
          ,double zcut
          ,double pixelsize
          ,double cosbinsize
+         //,int    phibins
          ,double quiet
          )
 : SkyLivetimeCube(
@@ -91,6 +92,7 @@ LivetimeCube::LivetimeCube
         }
         CosineBinner::setBinning(0, cosbins);
     }
+    //CosineBinner::setPhiBins( phibins);
     if( CosineBinner::nphibins()>0 && ! quiet ){
         std::cout << "Will accumulate phi dependence" << std::endl;
     }
