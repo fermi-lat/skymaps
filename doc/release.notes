@@ -5,6 +5,7 @@
 $Id$
 @verbatim
  --------- -----   --- -----------------------------------------------------------------------
+ 16-feb-09 v1r16p3 THB better test for new phi binning
  24-jan-09 v1r15p2 THB extend Band a bit
  24-jan-09 v1r15p1 THB New class PsfSkyFunction
  22-jan-09 v1r14p3 THB gcc error fix
