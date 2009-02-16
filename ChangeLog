@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Mon Feb 16 14:09:30 PST 2009
+skymaps/src/test
+
+Modified Files:
+	test_main.cxx 
+Log Message:
+update test using phi binning.
+    *
+------------------------------------------------------------
 User: burnett  Thu Feb 12 08:57:49 PST 2009
 skymaps/python
 
