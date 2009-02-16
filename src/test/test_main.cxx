@@ -26,7 +26,9 @@ $Header$
 #include <iomanip>
 #include <algorithm>
 #include <vector>
+namespace{
 
+}
 using astro::Photon;
 using astro::SkyDir;
 
@@ -52,18 +54,29 @@ int main(int , char** )
 #if 1
         {
             astro::SkyDir tdir(0,0);
-            healpix::CosineBinner::setPhiBins(0); // non-zero to exercise phi bins
+            healpix::CosineBinner::setBinning(0,40); // instead of 40
+            healpix::CosineBinner::setPhiBins(15); // non-zero to exercise phi bins
+            std::string filename("test_philivetimecube.fits");
             LivetimeCube lc("", tdir, 90.); // note filling minimal set of pixels around the direction.
             lc.fill(SkyDir(0,0), 1.);
             double check = lc.value(tdir, 1.0); // should be 1.0
             std::cout << "filled with: " << lc.total() << std::endl;
-            lc.write("test_livetimecube.fits");
+            lc.write(filename);
             EffectiveArea aeff("simple");
             Exposure exp(lc, aeff);
             std::cout << "Exposure check:\n ra\t value"<< std::endl;
             for( float ra(0); ra< 90; ra+=10.){
                 std::cout<<  ra <<"\t "<< exp(astro::SkyDir(0,ra)) << std::endl;
             }
+
+            // read it abck
+            LivetimeCube lc2(filename);
+             Exposure exp2(lc2, aeff);
+             std::cout << "Read back Exposure check:\n ra\t value"<< std::endl;
+            for( float ra(0); ra< 90; ra+=10.){
+                std::cout<<  ra <<"\t "<< exp2(astro::SkyDir(0,ra)) << std::endl;
+            }
+
         }
 #endif
 #if 0  // exercise EffectiveArea, LivetimeCube, Exposure
