@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: burnett  Tue Feb 17 10:01:27 PST 2009
+skymaps/skymaps
+
+Modified Files:
+	Background.h 
+Added Files:
+	IsotropicSpectrum.h 
+Log Message:
+get new class in: update Background
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-16-03, operation: add
 Package: skymaps
