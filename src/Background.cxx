@@ -7,6 +7,15 @@ $Header$
 #include "skymaps/Background.h"
 #include "skymaps/Band.h"
 
+#include "skymaps/DiffuseFunction.h"
+#include "skymaps/CompositeSkySpectrum.h"
+#include "skymaps/BinnedPhotonData.h"
+#include "skymaps/EffectiveArea.h"
+#include "skymaps/IsotropicPowerLaw.h"
+#include "skymaps/LivetimeCube.h"
+#include "skymaps/Exposure.h"
+
+
 #include <stdexcept>
 #include <cmath> 
 #include <iterator>
@@ -28,7 +37,7 @@ void Background::set_simpson(int n){
 }
 
 Background::Background(const skymaps::SkySpectrum& diffuse, double fixedexposure)
-: m_diffuse(diffuse)
+: m_diffuse(&diffuse)
 , m_event_type(0)
 , m_fixedexposure(fixedexposure)
 {
@@ -37,7 +46,7 @@ Background::Background(const skymaps::SkySpectrum& diffuse, double fixedexposure
 
 Background::Background(const skymaps::SkySpectrum& diffuse, 
                        const skymaps::SkySpectrum& exposuremap)
-: m_diffuse(diffuse)
+: m_diffuse(&diffuse)
 , m_event_type(0)
 {
     m_exposures.push_back(&exposuremap);
@@ -45,7 +54,7 @@ Background::Background(const skymaps::SkySpectrum& diffuse,
 
 Background::Background(const skymaps::SkySpectrum& diffuse, 
                        std::vector<const skymaps::SkySpectrum*> exposure_list)
-: m_diffuse(diffuse)
+: m_diffuse(&diffuse)
 , m_event_type(0)
 {
     std::copy(exposure_list.begin(), exposure_list.end(), 
@@ -54,11 +63,40 @@ Background::Background(const skymaps::SkySpectrum& diffuse,
 Background::Background(const skymaps::SkySpectrum& diffuse, 
                        const skymaps::SkySpectrum& front, 
                        const skymaps::SkySpectrum& back)
-: m_diffuse(diffuse)
+: m_diffuse(&diffuse)
 , m_event_type(0)
 {
     m_exposures.push_back(&front);
     m_exposures.push_back(&back);
+}
+
+Background::Background(const std::string& irfname, const std::string& livetimefile,
+        const std::string& galactic, 
+        std::pair<double,double> isotropic)
+{
+    m_aeff_front= new EffectiveArea(irfname+"_front");
+    m_aeff_back = new EffectiveArea(irfname+"_back");
+    m_ltcube=     new LivetimeCube(livetimefile);
+    m_front =     new Exposure(*m_ltcube, *m_aeff_front);
+    m_back =      new Exposure(*m_ltcube, *m_aeff_back);
+
+    m_galaxy    = new DiffuseFunction(galactic);
+    m_isotropic=  new IsotropicPowerLaw(isotropic.first, isotropic.second);
+    m_total_diffuse = new CompositeSkySpectrum(m_galaxy, 1.0);
+    m_total_diffuse->add(m_isotropic, 1.0);
+
+    std::cout << "Set up background with components:"
+        << "\n\tAeff:      " << irfname << "(normal 1 GeV: front="
+                             << (*m_aeff_front)(1000.)
+                             << ", back="<<(*m_aeff_back)(1000.)<<")"
+        << "\n\tlivetime:  " << livetimefile
+        << "\n\tgalactic:  " << galactic
+        << "\n\tisotropic: " << isotropic.first << ", "<< isotropic.second
+        << std::endl;
+
+    m_diffuse = m_total_diffuse;
+    m_exposures.push_back(m_front);
+    m_exposures.push_back(m_back);
 }
 
 
@@ -81,7 +119,7 @@ void Background::set_event_class(int n) const
 
 double Background::value(const astro::SkyDir& dir, double e)const
 {
-    double val( m_diffuse(dir, e) );
+    double val( (*m_diffuse)(dir, e) );
     if( m_exposures.size()==0){
         val *= m_fixedexposure;
     }else{
@@ -120,7 +158,7 @@ double Background::integral(const astro::SkyDir& dir, double a, double b)const
 std::string Background::name()const
 {
     std::stringstream text;
-    text << "Background: "+ m_diffuse.name();
+    text << "Background: "+ m_diffuse->name();
     if( m_exposures.empty() ){
         text <<", Fixed:  "<< m_fixedexposure;
     }else{
