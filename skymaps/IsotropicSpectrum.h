@@ -4,8 +4,8 @@
 $Header$
 
 */
-#ifndef skymaps_IsotropicPowerLaw_h
-#define skymaps_IsotropicPowerLaw_h
+#ifndef skymaps_IsotropicSpectrum_h
+#define skymaps_IsotropicSpectrum_h
 
 #include "skymaps/SkySpectrum.h"
 #include "skymaps/SkyImage.h"
@@ -43,8 +43,11 @@ public:
 
 
 private:
-    double F(double)const;
-    std::map<double, double> m_table;
+
+    size_t layer(double e)const;
+    std::vector<double> m_energies;
+    std::vector<double> m_data;
+    double m_emax, m_emin;
 
 };
 } // namespace skymaps
