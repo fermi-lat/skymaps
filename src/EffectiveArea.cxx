@@ -336,6 +336,7 @@ EffectiveArea::EffectiveArea(std::string irfname, std::string filename)
         if( s_CALDB.empty()){
             const char* c(::getenv("CALDB") );
             if( c==0){
+                std::cerr << "EffectiveArea:: CALDB is not set" << std::endl;
                 throw std::invalid_argument("EffectiveArea:: CALDB is not set");
             }
             s_CALDB = std::string(c);

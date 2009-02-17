@@ -9,9 +9,17 @@ $Header$
 
 #include "skymaps/SkySpectrum.h"
 #include <vector>
+#include <algorithm> // for pair, make_pair
 
 
 namespace skymaps {
+// forward declarations for implementation
+    class DiffuseFunction;
+    class EffectiveArea;
+    class LivetimeCube;
+    class IsotropicPowerLaw;
+    class CompositeSkySpectrum;
+    class Exposure;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 /** @class Background
@@ -43,7 +51,7 @@ public:
     @param exposure_list a vector of pointers to SkySpectrum objects corresponding to the exposure,
                     indexed accordign to the event type (usually front/back)
     */
-    Background::Background(const skymaps::SkySpectrum& diffuse, 
+    Background(const skymaps::SkySpectrum& diffuse, 
                        std::vector<const skymaps::SkySpectrum*> exposure_list);
     /** @brief ctor
     @param diffuse  a SkySpectrum representing the diffuse background flux
@@ -53,6 +61,19 @@ public:
     Background(const skymaps::SkySpectrum& diffuse, 
                        const skymaps::SkySpectrum& front, 
                        const skymaps::SkySpectrum& back);
+
+    /** @brief new ctor
+        @param irfname  name of an IRF component for the effective area
+        @param livetimefile a livetime cube fits file
+        @param galactic a fits file with a galactic diffuse model
+        @param isotropic [1.5e-5, 2.2]
+
+    */
+    Background(const std::string& irfname, 
+        const std::string& livetimefile,
+        const std::string& galactic, 
+        std::pair<double,double> isotropic=std::make_pair(1.5e-5,2.2));
+
     ~Background();
 
     ///@brief a single energy 
@@ -84,12 +105,22 @@ public:
     static void set_simpson(int n);
 
 private:
-    const skymaps::SkySpectrum& m_diffuse;
+    const skymaps::SkySpectrum* m_diffuse;
     typedef std::vector<const skymaps::SkySpectrum*> SpectrumVector;
     SpectrumVector m_exposures;
     mutable int m_event_type;
     double m_fixedexposure; ///< fixed exposure to use if not a map
     static int s_n; ///< simpsons rule 
+
+    // new implementation
+    const EffectiveArea* m_aeff_front;
+    const EffectiveArea* m_aeff_back;
+    const LivetimeCube*  m_ltcube;
+    const Exposure* m_front;
+    const Exposure* m_back;
+    const DiffuseFunction* m_galaxy;
+    const IsotropicPowerLaw* m_isotropic;
+    CompositeSkySpectrum* m_total_diffuse; 
     
 };
 
