@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Tue Feb 17 13:03:46 PST 2009
+skymaps/skymaps
+
+Modified Files:
+	IsotropicSpectrum.h 
+Log Message:
+implement new IsotropicSpectrum class
+    *
+------------------------------------------------------------
+User: burnett  Tue Feb 17 13:03:46 PST 2009
 skymaps/python
 
 Modified Files:
