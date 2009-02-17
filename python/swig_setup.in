@@ -31,6 +31,7 @@
 #include "skymaps/IParams.h"
 #include "skymaps/HealpixDiffuseFunc.h"
 #include "skymaps/PsfSkyFunction.h"
+#include "skymaps/IsotropicSpectrum.h"
 
 #include "CLHEP/Vector/Rotation.h"
 #include "CLHEP/Vector/EulerAngles.h"
@@ -194,6 +195,7 @@ void delete_double2(double *d) {
 %include ../skymaps/HealpixDiffuseFunc.h
 
 %feature("kwargs");  // using keywords for these
+%include ../skymaps/IsotropicSpectrum.h
 %include ../skymaps/DiffuseFunction.h
 %include ../skymaps/LivetimeCube.h
 %include ../skymaps/Exposure.h
