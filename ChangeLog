@@ -1,5 +1,16 @@
 ------------------------------------------------------------
 User: burnett  Tue Feb 17 10:01:27 PST 2009
+skymaps/src
+
+Modified Files:
+	Background.cxx EffectiveArea.cxx 
+Added Files:
+	IsotropicSpectrum.cxx 
+Log Message:
+get new class in: update Background
+    *
+------------------------------------------------------------
+User: burnett  Tue Feb 17 10:01:27 PST 2009
 skymaps/skymaps
 
 Modified Files:
