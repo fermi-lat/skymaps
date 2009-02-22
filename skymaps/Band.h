@@ -69,9 +69,10 @@ namespace skymaps {
         /// @param dir center of cone
         /// @param radius in radians
         /// @param v vector of SkyDir objects to be set
+        /// @param include_empty [false] add empty pixels to the returned list
         /// @return the number of photons 
         int query_disk(const astro::SkyDir&dir, double radius, 
-            std::vector<std::pair<astro::SkyDir,int> > & v)const;
+            std::vector<std::pair<astro::SkyDir,int> > & v, bool include_empty=false)const;
  
         /// @brief set a list of pixel ids and counts within the radius about the direction
         /// @param dir center of cone
@@ -154,8 +155,11 @@ namespace skymaps {
     class WeightedSkyDirList : public astro::SkyFunction, public std::vector<WeightedSkyDir> {
     public:
         /** @brief ctor creates an object from a band
+        @param sdir direction for cone
+        @param radius cone half-angle (radians)
+        @param include_empty [false] include empty pixels
         */
-        WeightedSkyDirList( const Band& band, const astro::SkyDir& sdir, double radius);
+        WeightedSkyDirList( const Band& band, const astro::SkyDir& sdir, double radius, bool include_empty=false);
 
         /// @brief implement SkyFunction: return weight, or zero
         double operator()(const astro::SkyDir& sdir)const;

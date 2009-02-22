@@ -82,7 +82,7 @@ int Band::index(const astro::SkyDir& dir)const
 
 
 int Band::query_disk(const astro::SkyDir&sdir, double radius, 
-                     std::vector<std::pair<astro::SkyDir,int> > & vec)const
+                     std::vector<std::pair<astro::SkyDir,int> > & vec, bool include_empty)const
 {
     std::vector<int> v;
     m_healpix->query_disc( sdir, radius, v); 
@@ -95,10 +95,9 @@ int Band::query_disk(const astro::SkyDir&sdir, double radius,
             int count = it2->second;
             vec.push_back( std::make_pair(dir(it2->first), count));
             total += count;
-#if 0 // option to return empty pixels within range
-        }else{
-            vec.push_back(std::make_pair(*it, 0));
-#endif
+ 
+        }else if(include_empty ){
+            vec.push_back(std::make_pair(dir(*it), 0));
         }
     }
     return total;
@@ -175,11 +174,11 @@ void Band::add(const Band& other)
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-WeightedSkyDirList::WeightedSkyDirList(const Band& band, const astro::SkyDir& sdir, double radius)
+WeightedSkyDirList::WeightedSkyDirList(const Band& band, const astro::SkyDir& sdir, double radius, bool not_empty)
 : m_band(band)
 {
     std::vector<std::pair<astro::SkyDir,int> > vec;
-    band.query_disk(sdir, radius, vec);
+    band.query_disk(sdir, radius, vec, not_empty);
     for( std::vector<std::pair<astro::SkyDir,int> >::const_iterator it=vec.begin(); it!=vec.end(); ++it){
         push_back(WeightedSkyDir(it->first, it->second));
     }
