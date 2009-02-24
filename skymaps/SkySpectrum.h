@@ -59,12 +59,14 @@ public:
     ///! average, for the given energy or energy range, about the direction and cone angle(radians)
     double average(const astro::SkyDir& dir, double angle, double tolerance)const;
 
-private:
+    ///! average using given HEALpix level
+    double level_ave(const astro::SkyDir& dir, double angle, int level) const;
+
+    private:
     mutable double m_energy;
     mutable double m_emin, m_emax; ///< range for integral
     mutable bool m_use_range; ///< true: evaluate specified energy range; false: value at energy
 
-    double level_ave(const astro::SkyDir& dir, double angle, int level) const;
     std::string m_name;
 
 };
