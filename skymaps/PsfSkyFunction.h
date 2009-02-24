@@ -36,11 +36,11 @@ namespace skymaps{
         /// @brief the average value integrated for the region
         double average(const astro::SkyDir& dir, double angle, double tolerance)const;
 
+        double level_ave(const astro::SkyDir& dir, double angle, int level) const;
    
 
 
     private:
-        double level_ave(const astro::SkyDir& dir, double angle, int level) const;
         astro::SkyDir m_dir;
         skymaps::PsfFunction m_psf;
         double m_sigma;

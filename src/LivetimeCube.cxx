@@ -280,8 +280,8 @@ double LivetimeCube::value(const astro::SkyDir& dir, double costh, double phi)
 {
     if( costh==0) costh=1e-9; // avoid error
 
-    return bins(dir)[costh];
-    //   return bins(dir)(costh,phi);
+    if( phi<0)   return bins(dir)[costh];
+    return bins(dir)(costh,phi);
 }
 
 void LivetimeCube::load(std::string scfile, const skymaps::Gti & gti, std::string tablename)
