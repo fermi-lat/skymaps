@@ -189,6 +189,9 @@ void delete_double2(double *d) {
    void intersection(const skymaps::Gti& other){
      self->operator&=(other);
      }
+   void union(const skymaps::Gti& other){
+     self->operator|=(other);
+     }
    
 }
 
