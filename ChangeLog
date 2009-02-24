@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Tue Feb 24 12:53:54 PST 2009
+skymaps/skymaps
+
+Modified Files:
+	LivetimeCube.h PsfSkyFunction.h SkySpectrum.h 
+Log Message:
+update phi access
+    *
+------------------------------------------------------------
 User: kerrm  Mon Feb 23 19:23:50 PST 2009
 skymaps/python
 
