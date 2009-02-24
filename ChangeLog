@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: kerrm  Mon Feb 23 19:23:50 PST 2009
+skymaps/python
+
+Modified Files:
+	swig_setup.in 
+Log Message:
+Added union functionality to SWIG interface for GtiBase.
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-17-00, operation: add
 Package: skymaps
