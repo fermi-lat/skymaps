@@ -154,6 +154,7 @@ void delete_double2(double *d) {
 }
 
 
+//%include ../skymaps/HealpixDiffuseFunc.h
 
 %include ../skymaps/PhotonMap.h
 %include ../skymaps/SkyImage.h
@@ -195,16 +196,7 @@ void delete_double2(double *d) {
    
 }
 
-%include ../skymaps/HealpixDiffuseFunc.h
 
-%feature("kwargs");  // using keywords for these
-%include ../skymaps/IsotropicSpectrum.h
-%include ../skymaps/DiffuseFunction.h
-%include ../skymaps/LivetimeCube.h
-%include ../skymaps/Exposure.h
-%include ../skymaps/EffectiveArea.h
-%include ../skymaps/IsotropicPowerLaw.h
-%include ../skymaps/IParams.h
 %include ../skymaps/CompositeSkySpectrum.h
 
 %extend skymaps::CompositeSkySpectrum{
@@ -224,6 +216,14 @@ void delete_double2(double *d) {
 }
 
 
+%feature("kwargs");  // using keywords for these
+%include ../skymaps/IsotropicSpectrum.h
+%include ../skymaps/DiffuseFunction.h
+%include ../skymaps/LivetimeCube.h
+%include ../skymaps/Exposure.h
+%include ../skymaps/EffectiveArea.h
+%include ../skymaps/IsotropicPowerLaw.h
+%include ../skymaps/IParams.h
 
 
 
