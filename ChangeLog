@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: mar0  Thu Feb 26 13:35:51 PST 2009
+skymaps/python
+
+Modified Files:
+	psf_defaults.py 
+Log Message:
+fixed unnecessary 'update' mode
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-18-00, operation: add
 Package: skymaps
