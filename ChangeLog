@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Thu Feb 26 08:45:17 PST 2009
+skymaps/src
+
+Added Files:
+	BandBackground.cxx 
+Log Message:
+moved BandBackground to here; tagging
+    *
+------------------------------------------------------------
+User: burnett  Thu Feb 26 08:45:17 PST 2009
 skymaps/skymaps
 
 Added Files:
