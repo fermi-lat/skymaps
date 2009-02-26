@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Thu Feb 26 07:18:13 PST 2009
+skymaps/skymaps
+
+Modified Files:
+	HealpixDiffuseFunc.h 
+Log Message:
+tweak SWIG interface
+    *
+------------------------------------------------------------
+User: burnett  Thu Feb 26 07:18:13 PST 2009
 skymaps/python
 
 Modified Files:
