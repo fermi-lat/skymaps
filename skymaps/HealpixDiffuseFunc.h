@@ -67,7 +67,7 @@ public:
     /// @return number of layers
     size_t layers()const { return m_energies.size();}
     
-    
+#ifndef SWIG    
 
     class FitsIO {
        public:
@@ -85,7 +85,7 @@ public:
 	  std::vector<double> m_energies;
     };
     
-
+#endif
 private:
 
     std::string m_name;
