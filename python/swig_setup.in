@@ -32,6 +32,7 @@
 #include "skymaps/HealpixDiffuseFunc.h"
 #include "skymaps/PsfSkyFunction.h"
 #include "skymaps/IsotropicSpectrum.h"
+#include "skymaps/BandBackground.h"
 
 #include "CLHEP/Vector/Rotation.h"
 #include "CLHEP/Vector/EulerAngles.h"
@@ -154,7 +155,7 @@ void delete_double2(double *d) {
 }
 
 
-//%include ../skymaps/HealpixDiffuseFunc.h
+%include ../skymaps/HealpixDiffuseFunc.h
 
 %include ../skymaps/PhotonMap.h
 %include ../skymaps/SkyImage.h
@@ -190,9 +191,8 @@ void delete_double2(double *d) {
    void intersection(const skymaps::Gti& other){
      self->operator&=(other);
      }
-   void union(const skymaps::Gti& other){
-     self->operator|=(other);
-     }
+     // note that the natural "union" is a C++ reserved word
+   void combine(const skymaps::Gti& other){ self->operator|=(other);  }
    
 }
 
@@ -206,6 +206,7 @@ void delete_double2(double *d) {
         return self->average( dir, angle, tolerance);
     }
 }
+
 %include ../skymaps/CompositeSkyFunction.h
 %extend skymaps::CompositeSkyFunction{
 
@@ -224,6 +225,8 @@ void delete_double2(double *d) {
 %include ../skymaps/EffectiveArea.h
 %include ../skymaps/IsotropicPowerLaw.h
 %include ../skymaps/IParams.h
+%include ../skymaps/BandBackground.h
+
 
 
 
