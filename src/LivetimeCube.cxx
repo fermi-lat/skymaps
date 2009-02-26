@@ -190,12 +190,6 @@ void LivetimeCube::fill(const astro::SkyDir& dirz, double deltat)
     Filler sum = for_each(m_dir_cache.begin(), m_dir_cache.end(), Filler(deltat, dirz));
     addtotal(deltat);
 }
-void LivetimeCube::fill(const astro::SkyDir& dirz,const astro::SkyDir& dirx, double deltat)
-{
-    Filler sum = for_each(m_dir_cache.begin(), m_dir_cache.end(), Filler(deltat, dirz, dirx, astro::SkyDir(), -1) );
-    addtotal(deltat);
-}
-
 
 void LivetimeCube::fill_zenith(const astro::SkyDir& dirz,const astro::SkyDir& dirx, const astro::SkyDir& zenith, double deltat)
 {

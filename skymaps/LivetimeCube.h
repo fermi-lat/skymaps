@@ -98,10 +98,7 @@ public:
     //! add a time interval at the given position
     virtual void fill(const astro::SkyDir& dirz, double deltat);
 
-    //! @brief add a time interval for the given instrument orientation 
-    virtual void fill(const astro::SkyDir& dirz,const astro::SkyDir& dirx, double deltat);
-
-     //! write out to a file.
+    //! write out to a file.
     void write(const std::string& outputfile, const std::string& tablename="EXPOSURE")const;
 
     //! load a set of history intervals from a FITS S/C file (FT2)
