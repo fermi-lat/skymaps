@@ -60,8 +60,8 @@ if 'CALDB' in os.environ and ffile=='' and bfile=='':
 	bfile = os.path.join(os.environ['CALDB'],'v0r7p1','CALDB','data', 'glast', 'lat', 'bsf', 'bsf','psf_P6_v1_diff_back.fits')
 
 #open fits files and point to tables
-frontfile = pf.open(ffile,mode='update')
-backfile = pf.open(bfile,mode='update')
+frontfile = pf.open(ffile)
+backfile = pf.open(bfile)
 fpsftable = frontfile[1].data
 bpsftable = backfile[1].data
 
