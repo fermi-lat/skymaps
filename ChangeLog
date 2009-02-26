@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Thu Feb 26 07:18:44 PST 2009
+skymaps/src
+
+Modified Files:
+	LivetimeCube.cxx 
+Log Message:
+remove unused overloaded function
+    *
+------------------------------------------------------------
+User: burnett  Thu Feb 26 07:18:44 PST 2009
 skymaps/skymaps
 
 Modified Files:
