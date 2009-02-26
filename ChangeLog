@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Thu Feb 26 08:45:17 PST 2009
+skymaps/doc
+
+Modified Files:
+	release.notes 
+Log Message:
+moved BandBackground to here; tagging
+    *
+------------------------------------------------------------
+User: burnett  Thu Feb 26 08:45:17 PST 2009
 skymaps/cmt
 
 Modified Files:
