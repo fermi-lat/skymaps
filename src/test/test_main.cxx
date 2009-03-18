@@ -12,6 +12,7 @@ $Header$
 
 #include "skymaps/LivetimeCube.h"
 #include "skymaps/EffectiveArea.h"
+#include "skymaps/SpectralFunction.h"
 
 #include "healpix/HealpixArrayIO.h"
 #include "tip/IFileSvc.h"
@@ -69,12 +70,28 @@ int main(int , char** )
                 std::cout<<  ra <<"\t "<< exp(astro::SkyDir(0,ra)) << std::endl;
             }
 
-            // read it abck
+            // read it back
             LivetimeCube lc2(filename);
              Exposure exp2(lc2, aeff);
              std::cout << "Read back Exposure check:\n ra\t value"<< std::endl;
             for( float ra(0); ra< 90; ra+=10.){
                 std::cout<<  ra <<"\t "<< exp2(astro::SkyDir(0,ra)) << std::endl;
+            }
+
+            // use this Exposure object to test SpectralFunction
+            std::vector<double> pars; pars.push_back(-11); pars.push_back(2.0);
+            SpectralFunction::set_exposures(&exp,&exp);
+            SpectralFunction f(SpectralFunction::PowerLaw, pars);
+            double e1(1000), e2(1010);
+            Band b(8, 0, e1, e2, 0.1, 2.0);
+            double y1(f(e1)), y2(f(e2));
+            double ex1( exp(tdir, e1)), ex2(exp(tdir, e2) );
+            double v( f.expected(tdir, b) );
+            double vcheck( 0.5*(y1*ex1+y2*ex2)*(e2-e1)/v -1 );
+            std::cout << "\nSpectralFunction test: check=" << vcheck << std::endl;
+            if( fabs(vcheck) >1e-3 ){
+                std::cout << "fail SpectralFunction test: check=" << vcheck << std::endl;
+                rc=1;
             }
 
         }
