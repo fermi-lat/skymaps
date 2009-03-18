@@ -5,8 +5,8 @@ $Header$
 */
 #include "skymaps/SpectralFunction.h"
 #include "skymaps/Band.h"
-#include "skymaps/EffectiveArea.h"
-#include "skymaps/Exposure.h"
+#include "skymaps/SkySpectrum.h"
+
 #include <cmath>
 #include <stdexcept>
 
@@ -16,7 +16,7 @@ using namespace skymaps;
 int SpectralFunction::s_n(4);
 double SpectralFunction::s_e0(1000.);
 double SpectralFunction::s_flux_scale(1.);
-std::vector<const skymaps::Exposure*> SpectralFunction::s_exposures;
+std::vector<const skymaps::SkySpectrum*> SpectralFunction::s_exposures;
 
 void SpectralFunction::set_simpson(int n){
     s_n=n;
@@ -26,13 +26,13 @@ void SpectralFunction::set_simpson(int n){
 }
 
 
-void SpectralFunction::set_exposures(const skymaps::Exposure* front, const skymaps::Exposure* back)
+void SpectralFunction::set_exposures(const skymaps::SkySpectrum* front, const skymaps::SkySpectrum* back)
 {
     s_exposures.clear();
     s_exposures.push_back(front);
     s_exposures.push_back(back);
 }
-const skymaps::Exposure* SpectralFunction::exposure(int n){
+const skymaps::SkySpectrum* SpectralFunction::exposure(int n){
     if( s_exposures.size() <2 ) {
         throw std::invalid_argument("SpectralFunction: exposures not set");
     }
@@ -46,6 +46,14 @@ SpectralFunction::SpectralFunction(Type type, const std::vector<double>& pars)
     if( s_exposures.size() <2 ) {
         throw std::invalid_argument("SpectralFunction: exposures not set");
     }
+    setup();
+}
+void SpectralFunction::setup()
+{
+    if( m_pars.empty() ){
+        // load defaults
+
+    }
 }
 
 double SpectralFunction::value(double e)const
@@ -55,7 +63,7 @@ double SpectralFunction::value(double e)const
 /*          n0         log10 differential flux at e0 MeV
             gamma      (absolute value of) spectral index
             return (10**n0/self.flux_scale)*(self.e0/e)**gamma
-  */
+*/
             {
             double n0(m_pars[0]), gamma(m_pars[1]);
             return std::pow(10.,n0)/s_flux_scale*std::pow(s_e0/e, gamma); 
@@ -69,7 +77,7 @@ double SpectralFunction::value(double e)const
       n0,gamma,cutoff=self.p
       if cutoff < 0: return 0
       return (10**n0/self.flux_scale)*(self.e0/e)**gamma*N.exp(-e/cutoff)
-      */
+ */
             {
             double n0(m_pars[0]), gamma(m_pars[1]), cutoff(m_pars[2]);
             return std::pow(10.,n0)/s_flux_scale*std::pow(s_e0/e, gamma)*exp(-e/cutoff);
@@ -84,7 +92,7 @@ double SpectralFunction::value(double e)const
 double SpectralFunction::expected(const astro::SkyDir& dir,const skymaps::Band& band)const
 {
     double a(band.emin()), b(band.emax()); // range of integration
-    const Exposure& expose  =* exposure(band.event_class()) ; // exposure object to use
+    const SkySpectrum& expose  =* exposure(band.event_class()) ; // exposure object to use
 
     double step( log(b/a)/s_n ), // step in log scale
            ratio( exp(step) ), // ratio of energies

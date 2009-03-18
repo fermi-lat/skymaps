@@ -13,24 +13,32 @@ $Header$
 
 namespace skymaps{
 class Band;
-class Exposure;
+class SkySpectrum;
 
     /** @class SpectralFunction
         @brief evaluate a function of energy
 
-
+        Note that the set_exposures method must be called before creating an object
     */
     class SpectralFunction {
     public:
         typedef enum {PowerLaw, ExpCutoff, BrokenPowerLaw} Type;
 
+        /** @brief ctor
+        @param type The spectral function type
+        @param pars specified parameters, appropriate for the type
+
+        */
         SpectralFunction(Type type, const std::vector<double>& pars);
+
+        virtual ~SpectralFunction(){}
 
         /// @brief evaluate function itself
         double operator()(double energy)const{return value(energy);}
-        /// @brief the function
 
-        double value(double energy)const;
+        /// @brief the function--note virtual to allow a polymorphic subclass to override
+
+        virtual double value(double energy)const;
 
         /// @brief return expected counts in band
         ///
@@ -47,15 +55,16 @@ class Exposure;
 
         void set_parameters(const std::vector<double>& pars){m_pars=pars;}
 
-        static void set_exposures(const skymaps::Exposure* front, const skymaps::Exposure* back);
+        static void set_exposures(const skymaps::SkySpectrum* front, const skymaps::SkySpectrum* back);
 
         /// @brief access to exposure object
-        static const skymaps::Exposure* exposure(int n);
+        static const skymaps::SkySpectrum* exposure(int n);
         static void set_simpson(int n);
 
     private:
         Type m_type;
         std::vector<double> m_pars;
+        void setup(); 
         
         static int s_n;///< Simpson's rule count
         static double s_e0; 
@@ -63,7 +72,7 @@ class Exposure;
 
 
         /// list of exposure objects
-        static std::vector<const skymaps::Exposure*> s_exposures;
+        static std::vector<const skymaps::SkySpectrum*> s_exposures;
 
     };
 
