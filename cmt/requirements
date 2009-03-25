@@ -7,6 +7,7 @@ version v1r18
 use astro *
 use healpix *
 use st_facilities *
+use ROOT v* IExternal
 
 # SWIG interface
 use SwigModule *
