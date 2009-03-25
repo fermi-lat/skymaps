@@ -64,6 +64,8 @@ double DiffuseFunction::extraGal(double energy)const
 
 size_t DiffuseFunction::layer(double e)const
 {
+    if (m_energies.size()==1) return 1;
+    
     if( e< m_emin  ){
         std::stringstream error; 
         error << "Diffuse function: energy out of range: "<< e ;
