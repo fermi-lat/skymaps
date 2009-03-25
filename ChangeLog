@@ -1,4 +1,16 @@
 ------------------------------------------------------------
+User: markusa  Tue Mar 24 17:04:38 PDT 2009
+skymaps/src
+
+Modified Files:
+	DiffuseFunction.cxx 
+Log Message:
+added ComplexSkySpectrum
+allowed DiffuseFunction to have only 1 bin in energy
+
+
+    *
+------------------------------------------------------------
 User: markusa  Tue Mar 24 17:04:31 PDT 2009
 skymaps/cmt
 
