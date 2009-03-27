@@ -22,14 +22,13 @@ class SkySpectrum;
     */
     class SpectralFunction {
     public:
-        typedef enum {PowerLaw, ExpCutoff, BrokenPowerLaw} Type;
 
         /** @brief ctor
         @param type The spectral function type
         @param pars specified parameters, appropriate for the type
 
         */
-        SpectralFunction(Type type, const std::vector<double>& pars);
+        SpectralFunction(const std::string& name, const std::vector<double>& pars);
 
         virtual ~SpectralFunction(){}
 
@@ -48,8 +47,7 @@ class SkySpectrum;
         /// It will to the integral over the band
         double expected(const astro::SkyDir& dir,const skymaps::Band& band)const; 
     
-
-        Type type()const{return m_type;}
+        const std::string& name()const{return m_name;}
         
         std::vector<double>pars()const{return m_pars;}
 
@@ -62,7 +60,8 @@ class SkySpectrum;
         static void set_simpson(int n);
 
     private:
-        Type m_type;
+        int m_index;
+        std::string m_name; 
         std::vector<double> m_pars;
         void setup(); 
         
