@@ -9,6 +9,8 @@ $Header$
 
 #include <cmath>
 #include <stdexcept>
+#include <string>
+#include <sstream>
 
 using namespace skymaps;
 
@@ -17,6 +19,21 @@ int SpectralFunction::s_n(4);
 double SpectralFunction::s_e0(1000.);
 double SpectralFunction::s_flux_scale(1.);
 std::vector<const skymaps::SkySpectrum*> SpectralFunction::s_exposures;
+
+namespace{
+
+    class Default{ 
+    public:
+        std::string name; int npar; double param[5];
+    }defaults[]=
+    { 
+        {"PowerLaw",      2, {-11, 2.0}},
+        {"ExpCutoff",     3, {-11, 2.0, 5e3}},
+        {"BrokenPowerLaw",3, {-11, 2.0, 5e3}},
+        {""}
+    };
+
+} //anom namespace
 
 void SpectralFunction::set_simpson(int n){
     s_n=n;
@@ -39,8 +56,8 @@ const skymaps::SkySpectrum* SpectralFunction::exposure(int n){
     return s_exposures.at(n);
 }
 
-SpectralFunction::SpectralFunction(Type type, const std::vector<double>& pars)
-: m_type(type)
+SpectralFunction::SpectralFunction(const std::string& name, const std::vector<double>& pars)
+: m_name(name)
 , m_pars(pars)
 {
     if( s_exposures.size() <2 ) {
@@ -50,44 +67,67 @@ SpectralFunction::SpectralFunction(Type type, const std::vector<double>& pars)
 }
 void SpectralFunction::setup()
 {
+    int i(0); 
+    while(1){
+        if(defaults[i].name.empty()){
+            std::stringstream buf;
+            buf << "Did not find spectral name " << m_name;
+            std::cerr << buf.str() << std::endl;
+            std::cerr << "Names are: ";
+
+            throw std::invalid_argument( buf.str());
+        }
+        if( defaults[i].name == m_name) break;
+        ++i;
+    }
+           
+    int n(defaults[i].npar);
+    m_index = n;
+    
     if( m_pars.empty() ){
         // load defaults
-
+        m_pars.reserve(n);
+        std::copy(defaults[i].param, defaults[i].param+n, m_pars.begin());   
+    }
+    if( m_pars.size() < n ){
+        throw std::invalid_argument("SpectralFunction: two few parameters set");
     }
 }
 
 double SpectralFunction::value(double e)const
 {
-    switch( m_type ){
-        case PowerLaw:
+    switch( m_index ){
+        case 0: //PowerLaw:
 /*          n0         log10 differential flux at e0 MeV
-            gamma      (absolute value of) spectral index
+            gamma      (absolute value of) photon index
             return (10**n0/self.flux_scale)*(self.e0/e)**gamma
 */
             {
             double n0(m_pars[0]), gamma(m_pars[1]);
             return std::pow(10.,n0)/s_flux_scale*std::pow(s_e0/e, gamma); 
             }
-        case ExpCutoff:
-/*              n0         differential flux at e0 MeV
-  gamma      (absolute value of) spectral index
-  cutoff     e-folding cutoff energy (MeV)
+        case 1: //ExpCutoff:
+/*              n0         log10 differential flux at e0 MeV
+                gamma      (absolute value of) photon index
+                cutoff     e-folding cutoff energy (MeV)
       """
-   def __call__(self,e):
-      n0,gamma,cutoff=self.p
       if cutoff < 0: return 0
       return (10**n0/self.flux_scale)*(self.e0/e)**gamma*N.exp(-e/cutoff)
  */
             {
             double n0(m_pars[0]), gamma(m_pars[1]), cutoff(m_pars[2]);
+            if( cutoff<0) return 0;
             return std::pow(10.,n0)/s_flux_scale*std::pow(s_e0/e, gamma)*exp(-e/cutoff);
+            }
+        case 2: // BrokenPowerLaw
+            {
+                return 0;
             }
         default:
             return 0; // temporary
     }
 }
 
-// self.psf_correction   = 1 - (1+sl.umax()/sl.gamma())**(1-sl.gamma())
 
 double SpectralFunction::expected(const astro::SkyDir& dir,const skymaps::Band& band)const
 {
