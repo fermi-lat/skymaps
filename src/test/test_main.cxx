@@ -81,17 +81,25 @@ int main(int , char** )
             // use this Exposure object to test SpectralFunction
             std::vector<double> pars; pars.push_back(-11); pars.push_back(2.0);
             SpectralFunction::set_exposures(&exp,&exp);
-            SpectralFunction f(SpectralFunction::PowerLaw, pars);
-            double e1(1000), e2(1010);
+            SpectralFunction f("PowerLaw", pars);
+            double e1(1000), e2(1100);
             Band b(8, 0, e1, e2, 0.1, 2.0);
             double y1(f(e1)), y2(f(e2));
             double ex1( exp(tdir, e1)), ex2(exp(tdir, e2) );
             double v( f.expected(tdir, b) );
             double vcheck( 0.5*(y1*ex1+y2*ex2)*(e2-e1)/v -1 );
-            std::cout << "\nSpectralFunction test: check=" << vcheck << std::endl;
-            if( fabs(vcheck) >1e-3 ){
-                std::cout << "fail SpectralFunction test: check=" << vcheck << std::endl;
+            std::cout << "\nSpectralFunction test: check=" << vcheck ;
+            double tol(1e-2);
+            if( fabs(vcheck) >tol ){
+                std::cout << " -->fail SpectralFunction test: check>" << tol<< std::endl;
                 rc=1;
+            }else{
+                std::cout << " -- OK!\n";
+            }
+            try{
+                SpectralFunction g("junk", pars);
+            }catch(...){
+                std::cout << "expected this error \n";
             }
 
         }

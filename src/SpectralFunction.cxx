@@ -71,9 +71,13 @@ void SpectralFunction::setup()
     while(1){
         if(defaults[i].name.empty()){
             std::stringstream buf;
-            buf << "Did not find spectral name " << m_name;
+            buf << "Did not find spectral name \"" << m_name<<"\"";;
             std::cerr << buf.str() << std::endl;
             std::cerr << "Names are: ";
+            for( int j(0); ! defaults[j].name.empty(); ++j){
+                std::cerr << defaults[j].name << " " ;
+            }
+            std::cerr << std::endl;
 
             throw std::invalid_argument( buf.str());
         }
@@ -82,7 +86,7 @@ void SpectralFunction::setup()
     }
            
     int n(defaults[i].npar);
-    m_index = n;
+    m_index = i;
     
     if( m_pars.empty() ){
         // load defaults
