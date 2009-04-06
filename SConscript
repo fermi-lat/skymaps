@@ -24,7 +24,7 @@ swigEnv.Append(CPPPATH = ['#/healpix/','#/healpix/src'])
 swigEnv.Replace(SHLIBPREFIX = '_')
 #swigEnv.Replace(SHLIBSUFFIX = '.pyd')
 swigEnv.Append(RPATH = swigEnv['LIBDIR'])
-pySkymapsLib = swigEnv.SharedLibrary('skymaps','python/swig_setup.i')
+pySkymapsLib = swigEnv.SharedLibrary('skymaps','python/swig_setup.i', SHLIBPREFIX = '')
 
 progEnv.Tool('registerObjects', 
         package = 'skymaps', 
