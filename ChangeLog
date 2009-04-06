@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: glastrm  Mon Apr  6 11:25:23 PDT 2009
+ScienceTools-scons/skymaps
+
+Modified Files:
+	SConscript 
+Log Message:
+Fixed swig setup
+    *
+------------------------------------------------------------
 User: burnett  Thu Mar 26 19:46:21 PDT 2009
 skymaps/src/test
 
