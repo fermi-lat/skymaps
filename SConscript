@@ -4,7 +4,7 @@
 #
 # $Header$
 # Authors: T. Burnett <tburnett@u.washington.edu>, M.Roth <mar0@u.washington.edu>
-# Version: skymaps-01-17-00
+# Version: skymaps-01-18-00
 import os
 Import('baseEnv')
 Import('listFiles')
@@ -24,7 +24,7 @@ swigEnv.Append(CPPPATH = ['#/healpix/','#/healpix/src'])
 swigEnv.Replace(SHLIBPREFIX = '_')
 #swigEnv.Replace(SHLIBSUFFIX = '.pyd')
 swigEnv.Append(RPATH = swigEnv['LIBDIR'])
-pySkymapsLib = swigEnv.SharedLibrary('skymaps','python/swig_setup.i')
+pySkymapsLib = swigEnv.SharedLibrary('skymaps','python/swig_setup.i', SHLIBPREFIX = '')
 
 progEnv.Tool('registerObjects', 
         package = 'skymaps', 
