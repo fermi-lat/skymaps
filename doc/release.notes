@@ -5,6 +5,7 @@
 $Id$
 @verbatim
  --------- -----   --- -----------------------------------------------------------------------
+ 13-apr-09 v1r18p1 THB Minor python fix
  26-feb-09 v1r18   THB Move BandBackground to here; update HealpixDiffuseFunc with latest version
  22-feb-09 v1r17   THB WeightedSkyDir interface update, allow to specify inclusion of empty pixels
  16-feb-09 v1r16p3 THB better test for new phi binning
