@@ -199,7 +199,7 @@ class AIT(object):
         if 'interpolation' not in kwargs: kwargs['interpolation']='nearest'
         if 'extent'        not in kwargs: kwargs['extent']=self.extent
         
-        if this.size==180: pylab.axes().set_axis_off()
+        if self.size==180: pylab.axes().set_axis_off()
         if   scale=='linear':  pylab.imshow(self.masked_image*factor,   **kwargs)
         elif scale=='log':     pylab.imshow(ma.log10(self.masked_image), **kwargs)
         else: raise Exception('bad scale: %s, expect either "linear" or "log"'%scale)
