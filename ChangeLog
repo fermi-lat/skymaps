@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: mar0  Wed Apr 15 12:41:40 PDT 2009
+skymaps/src
+
+Modified Files:
+	IParams.cxx 
+Log Message:
+linear interpolation of gamma in IParams
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-18-01, operation: add
 Package: skymaps
