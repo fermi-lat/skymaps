@@ -21,7 +21,7 @@ namespace {
     double f_p[] = {0.01165278, -1.45237162, 1.67211108, 2.28589082};
     double b_p[] = {0.02614202, -1.55092155, 5.18346847, 3.68094493};
 
-    double elist[] = {0   , 100, 178, 316, 562,1000,1778,3162,5623,10000,17783,31623,56234,100000,1000000};
+    double elist[] = {1   , 100, 178, 316, 562,1000,1778,3162,5623,10000,17783,31623,56234,100000,1000000};
 
     double fgam[]=   {2.65,2.65,2.13,1.97,2.08,2.20,2.43,2.51,2.50, 2.17, 1.94, 1.73, 1.66,  1.62};
     double bgam[]=   {2.59,2.59,2.09,1.90,1.90,1.64,1.63,1.72,1.76, 1.78, 1.68, 1.71, 1.73,  1.78};
@@ -68,10 +68,14 @@ double IParams::gamma(double energy, int event_class) {
 
     //find nearest energy bin
     std::vector<double>::const_iterator itold=
-            std::lower_bound(elisti.begin(), elisti.end(), energy, std::less<double>());
+        std::lower_bound(elisti.begin(), elisti.end(), energy, std::less<double>());
     int level = itold-elisti.begin()-1;
-
+    double emin(s_elist[level]),emax(s_elist[level+1]);
+    emin>0?emin:emin=1;
+    double gmin(event_class==0?s_fgam[level]:s_bgam[level]),gmax(event_class==0?s_fgam[level+1]:s_bgam[level+1]);
     //TODO: implement weighting function
+    double m = (gmax-gmin)/(log(emax)-log(emin));
+    double gbar = m*(log(energy)-log(emax))+gmax;
     return event_class==0?s_fgam[level]:s_bgam[level];
 }
 
@@ -86,27 +90,27 @@ void IParams::init() {
     char** argv=((char**)0); // avoid warning message
     std::string python_path("../python");
     try {
-    embed_python::Module setup(python_path , "psf_defaults",  argc, argv);
-    std::vector<double> ps;
-    //get energy list from CALDB file
-    setup.getList("energy",ps);
-    set_elist(ps);
-    ps.clear();
-    //get front sigma paramterization
-    setup.getList("fparams",ps);
-    set_fp(ps);
-    ps.clear();
-    //get back sigma parameterization
-    setup.getList("bparams",ps);
-    set_bp(ps);
-    ps.clear();
-    //now, just get the gamma values
-    setup.getList("fgam",ps);
-    set_fgam(ps);
-    ps.clear();
-    setup.getList("bgam",ps);
-    set_bgam(ps);
-    ps.clear();
+        embed_python::Module setup(python_path , "psf_defaults",  argc, argv);
+        std::vector<double> ps;
+        //get energy list from CALDB file
+        setup.getList("energy",ps);
+        set_elist(ps);
+        ps.clear();
+        //get front sigma paramterization
+        setup.getList("fparams",ps);
+        set_fp(ps);
+        ps.clear();
+        //get back sigma parameterization
+        setup.getList("bparams",ps);
+        set_bp(ps);
+        ps.clear();
+        //now, just get the gamma values
+        setup.getList("fgam",ps);
+        set_fgam(ps);
+        ps.clear();
+        setup.getList("bgam",ps);
+        set_bgam(ps);
+        ps.clear();
     } catch(const std::exception& e){
         std::cout << "Caught exception " << typeid(e).name() 
             << " \"" << e.what() << "\"" << std::endl;
