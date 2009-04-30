@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: kerrm  Wed Apr 29 18:09:25 PDT 2009
+skymaps/skymaps
+
+Added Files:
+	SkyIntegrator.h 
+Log Message:
+Added preliminary version of SkyIntegrator helper class to provide implementations of aperture integration and integration over (level-based) Healpixels.
+    *
+------------------------------------------------------------
 User: kerrm  Wed Apr 29 18:09:24 PDT 2009
 skymaps/python
 
