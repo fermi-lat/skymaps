@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: kerrm  Wed Apr 29 18:09:24 PDT 2009
+skymaps/python
+
+Modified Files:
+	swig_setup.in 
+Log Message:
+Added preliminary version of SkyIntegrator helper class to provide implementations of aperture integration and integration over (level-based) Healpixels.
+    *
+------------------------------------------------------------
 User: mar0  Wed Apr 15 12:41:40 PDT 2009
 skymaps/src
 
