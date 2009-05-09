@@ -5,8 +5,64 @@ $Header$
 """
 
 import pylab
-from numpy import arange, hstack
+import math
+import numpy as np
+from matplotlib import mpl, pyplot, ticker
 from skymaps import SkyImage, SkyDir, double2, SkyProj
+
+
+class Rescale(object):
+
+    def __init__(self, image, nticks=5):
+        """ image: a SkyImage object
+            nticks: suggested number of ticks for the ticker
+        """
+
+        # get ra range from top, dec range along center of SkyImage
+        nx,ny = image.nx, image.ny
+        xl = image.skydir(0,ny).ra()
+        xr = image.skydir(nx,ny).ra()
+        if xl<xr: # did it span the boundary?
+            xr = xr-360 
+        self.vmin = image.skydir(nx/2., 0).dec()
+        self.vmax = image.skydir(nx/2.,ny).dec()
+        ticklocator = ticker.MaxNLocator(nticks, steps=[1,2,5])
+        self.uticks = [ix if ix>-1e-6 else ix+360\
+              for ix in ticklocator.bin_boundaries(xr,xl)[::-1]] #reverse
+        self.ul = xl
+        self.ur = xr
+        self.vticks = ticklocator.bin_boundaries(self.vmin,self.vmax)
+
+        # extract positions in image coords,  text labels
+        self.xticks = [image.pixel(SkyDir(x,self.vmin))[0] for x in self.uticks]
+        self.yticks = [image.pixel(SkyDir(xl,y))[1] for y in self.vticks]
+
+        self.xticklabels = self.formatter(self.uticks)
+        self.yticklabels = self.formatter(self.vticks)
+
+    def formatter(self, t):
+        n=0
+        s = np.abs(np.array(t))+1e-6
+        for i in range(4):
+            #print s, s-np.floor(s), (s-np.floor(s)).max()
+            if (s-np.floor(s)).max()<1e-3: break
+            s = s*10
+            n+=1
+        fmt = '%%5.%df'%n
+        return [(fmt% x).strip() for x in t]
+
+    def apply(self, axes):
+        #note remove outer ones
+        if len(self.xticks)>=3:
+            axes.set_xticks(self.xticks[1:-1])
+            axes.set_xticklabels(self.xticklabels[1:-1])
+        axes.xaxis.set_ticks_position('bottom')
+        if len(self.yticks)>=3:
+            axes.set_yticks(self.yticks[1:-1])
+            axes.set_yticklabels(self.yticklabels[1:-1])
+        axes.yaxis.set_ticks_position('left')
+
+
 
 def draw_grid(ait, labels=True, color='gray', pixelsize=0.5, textsize=8):
         label_offset = 5/pixelsize
@@ -21,16 +77,16 @@ def draw_grid(ait, labels=True, color='gray', pixelsize=0.5, textsize=8):
         #? extent= (ait(180,0)[0],ait(180.001,0)[0], ait(0,-90)[1], ait(0,90)[1])
 
 
-        bs = arange(-90, 91, 5)
-        for l in hstack((arange(0, 360, 45),[180.01])):
+        bs = np.arange(-90, 91, 5)
+        for l in np.hstack((np.arange(0, 360, 45),[180.01])):
             lstyle = '-' if int(l)==180 or int(l)==0 else '--' 
             pylab.plot([ait(l,b)[0] for b in bs], [ait(l,b)[1] for b in bs], lstyle, color=color)
             if labels:
                 x,y = ait(l, 45) 
                 pylab.text(x,y, '%3.0f'%l ,size=textsize, ha='center')
 
-        ls = hstack((arange(180, 0, -5), arange(355, 180,-5), [180.01]))
-        for b in arange(-60, 61, 30):
+        ls = np.hstack((np.arange(180, 0, -5), np.arange(355, 180,-5), [180.01]))
+        for b in np.arange(-60, 61, 30):
             lstyle = '-' if int(b)==0 else '--'
             pylab.plot([ait(l,b)[0] for l in ls], [ait(l,b)[1] for l in ls], lstyle, color=color)
             if labels:
@@ -44,7 +100,7 @@ def draw_grid(ait, labels=True, color='gray', pixelsize=0.5, textsize=8):
 
 class AIT_grid():
 
-    def __init__(self, labels=True, color='gray', pixelsize=0.5, textsize=8):
+    def __init__(self, axes=None, labels=True, color='gray', pixelsize=0.5, textsize=8, linestyle='-'):
 	"""Draws gridlines and labels for map.
         
         """
@@ -57,9 +113,8 @@ class AIT_grid():
         cdelt = double2(-pixelsize, pixelsize)
         self.proj = SkyProj('AIT', crpix, crval, cdelt, 0, True)
         
-        self.axes = pylab.axes() #creates figure and axes if not set
+        self.axes = axes if axes is not None else pylab.gca() #creates figure and axes if not set
 
-        pylab.matplotlib.interactive(False)
         self.axes.set_autoscale_on(False)
         self.axes.set_xlim(0, 360/self.pixelsize)
         self.axes.set_ylim(0, 180/self.pixelsize)
@@ -67,27 +122,24 @@ class AIT_grid():
         self.axes.set_aspect('equal')
         self.extent= (self.ait(180,0)[0],self.ait(180.001,0)[0], self.ait(0,-90)[1], self.ait(0,90)[1])
         label_offset = 5/self.pixelsize
-        bs = arange(-90, 91, 5)
-        for l in hstack((arange(0, 360, 45),[180.01])):
-            lstyle = '-' if int(l)==180 or int(l)==0 else '--' 
-            pylab.plot([self.ait(l,b)[0] for b in bs], [self.ait(l,b)[1] for b in bs], lstyle, color=color)
+        bs = np.arange(-90, 91, 5)
+        for l in np.hstack((np.arange(0, 360, 45),[180.01])):
+            self.axes.plot([self.ait(l,b)[0] for b in bs], [self.ait(l,b)[1] for b in bs], linestyle, color=color)
             if labels:
                 x,y = self.ait(l, 45) 
-                pylab.text(x,y, '%3.0f'%l ,size=textsize, ha='center')
+                self.axes.text(x,y, '%3.0f'%l ,size=textsize, ha='center')
 
-        ls = hstack((arange(180, 0, -5), arange(355, 180,-5), [180.01]))
-        for b in arange(-60, 61, 30):
-            lstyle = '-' if int(b)==0 else '--'
-            pylab.plot([self.ait(l,b)[0] for l in ls], [self.ait(l,b)[1] for l in ls], lstyle, color=color)
+        ls = np.hstack((np.arange(180, 0, -5), np.arange(355, 180,-5), [180.01]))
+        for b in np.arange(-60, 61, 30):
+            lstyle = '-' if int(b)==0 else linestyle
+            self.axes.plot([self.ait(l,b)[0] for l in ls], [self.ait(l,b)[1] for l in ls], lstyle, color=color)
             if labels:
                 x,y = self.ait(180.1, b)                                               
-                pylab.text(x+label_offset,y+b/60*label_offset, '%+3.0f'%b, size=textsize, ha='center',va='center')#, weight = 'bold')
+                self.axes.text(x+label_offset,y+b/60*label_offset, '%+3.0f'%b, size=textsize, ha='center',va='center')#, weight = 'bold')
         if labels:
             for b in [90,-90]:
                 x,y = self.ait(0,b)
-                pylab.text(x,y+b/90*label_offset,'%+3.0f'%b, size=textsize, ha='center',va='center') 
-        pylab.matplotlib.interactive(True)
-        pylab.show()
+                self.axes.text(x,y+b/90*label_offset,'%+3.0f'%b, size=textsize, ha='center',va='center') 
 
     def ait(self, l, b):
         " convert lon, lat to car "
@@ -104,8 +156,10 @@ class AIT_grid():
             X.append(x)
             Y.append(y)
             if text is not None:
-                pylab.text(x,y,text[i],fontsize=fontsize)
-        pylab.plot(X,Y, symbol,  **kwargs)
+                self.axes.text(x,y,text[i],fontsize=fontsize)
+        self.axes.plot(X,Y, symbol,  **kwargs)
+
+
 
 class AIT(object):
     """ Manage a full-sky image of a SkyProjection or SkyFunction, wrapping SkyImage
@@ -129,6 +183,7 @@ class AIT(object):
         self.galactic = galactic
         self.pixelsize = pixelsize
         self.size = size
+        self.center = center
         # set up, then create a SkyImage object to perform the projection to a grid
         if center is None:
             center = SkyDir(0,0, SkyDir.GALACTIC if galactic else SkyDir.EQUATORIAL)
@@ -173,10 +228,11 @@ class AIT(object):
         X=[]
         Y=[]
         for s in sources:
-            x,y = self.proj.sph2pix(s.l(),s.b())
+            if self.galactic:   x,y = self.proj.sph2pix(s.l(),s.b())
+            else:  x,y = self.proj.sph2pix(s.ra(),s.dec())
             X.append(x)
             Y.append(y)
-        pylab.plot(X,Y, symbol,  **kwargs)
+        self.axes.plot(X,Y, symbol,  **kwargs)
 
     def on_move(self, event):
         """Reports mouse's position in galactic coordinates."""
@@ -189,11 +245,12 @@ class AIT(object):
                 self.poslabel.set_text("long=%1.2f\n  lat=%1.2f" %(coords[0],coords[1]))
             except:
                 self.poslabel.set_text("")
-	self.figure.canvas.draw()
+        self.figure.canvas.draw()
                   
     def imshow(self,  title=None, scale='linear', factor=1.0, **kwargs):
         'run imshow'
         from numpy import ma
+        #self.axes = pylab.axes()
         # change defaults
         if 'origin'        not in kwargs: kwargs['origin']='lower'
         if 'interpolation' not in kwargs: kwargs['interpolation']='nearest'
@@ -202,10 +259,12 @@ class AIT(object):
         if self.size==180: pylab.axes().set_axis_off()
         if   scale=='linear':  pylab.imshow(self.masked_image*factor,   **kwargs)
         elif scale=='log':     pylab.imshow(ma.log10(self.masked_image), **kwargs)
+        elif scale=='sqrt':    pylab.imshow(ma.sqrt(self.masked_image), **kwargs)
         else: raise Exception('bad scale: %s, expect either "linear" or "log"'%scale)
                                         
-        self.colorbar =pylab.colorbar(orientation='horizontal', shrink=1.0 if self.size==180 else 0.6)
+        self.colorbar =pylab.colorbar(orientation='horizontal', shrink=1.0 if self.size==180 else 1.0)
         self.title(title)
+        self.axes = pylab.gca()
 
         # for interactive formatting of the coordinates when hovering
         ##pylab.gca().format_coord = self.format_coord # replace the function on the fly!
@@ -214,6 +273,7 @@ class AIT(object):
         'run pcolor'
         from numpy import ma, array
         import pylab
+        #self.axes = pylab.axes()
         if self.galactic:
             xvalues=array([self.skydir(i,0).l() for i in range(self.nx+1)])
             yvalues=array([self.skydir(0,i).b() for i in range(self.ny+1)])
@@ -227,11 +287,12 @@ class AIT(object):
         elif scale=='log':     pylab.pcolor(ma.log10(self.masked_image), **kwargs)
         else: raise Exception('bad scale: %s'%scale)
                                         
-        pylab.colorbar(orientation='horizontal', shrink=1.0 if self.size==180 else 0.6)
+        self.colorbar=pylab.colorbar(orientation='horizontal', shrink=1.0 if self.size==180 else 1.0)
 
         self.title(title)
+        self.axes = pylab.gca()
 
-    def axes(self, color='black',  **kwargs):
+    def axislines(self, color='black',  **kwargs):
         ' overplot axis lines'
         import pylab
         pylab.axvline(0, color=color, **kwargs)
@@ -240,9 +301,8 @@ class AIT(object):
  
     def title(self, text=None, **kwargs):
         ' plot a title, default the name of the SkySpectrum'
-        import pylab
         try:
-            pylab.title( text if text is not None else self.skyfun.name(), **kwargs)
+            self.axes.title( text if text is not None else self.skyfun.name(), **kwargs)
         except AttributeError: #no name?
             pass
 
@@ -255,6 +315,11 @@ class AIT(object):
         sdir = SkyDir(x, y, self.proj)
         return sdir
 
+    def pixel(self, sdir):
+        """ return pixel coordinates for the skydir"""
+        if self.galactic: return  self.proj.sph2pix(sdir.l(),sdir.b())
+        return  self.proj.sph2pix(sdir.ra(),sdir.dec())
+
     def format_coord(self, x, y):
         " replacement for Axes.format_coord"
         sdir = self.skydir(x,y)
@@ -263,3 +328,152 @@ class AIT(object):
         return 'ra,dec: (%7.2f,%6.2f); l,b: (%7.2f,%6.2f), value:%6.3g' %\
             ( sdir.ra(), sdir.dec(), sdir.l(), sdir.b(), val)
                 
+    def scale_bar(self,  delta=1,text='1 deg', color='k'):
+        """ draw a scale bar in lower left """
+        xmin, xmax= self.axes.get_xlim()
+        ymin, ymax = self.axes.get_ylim()
+        x1,y1 = 0.95*xmin + 0.05*xmax, 0.95*ymin+0.05*ymax
+        sd = self.skydir(x1,y1)
+        x2,y2 = self.pixel(SkyDir(sd.ra()-delta/math.cos(math.radians(sd.dec())), sd.dec())) 
+        self.axes.plot([x1,x2],[y1,y1], linestyle='-', color=color, lw=4)
+        self.axes.text( (x1+x2)/2, (y1+y2)/2+self.ny/200., text, ha='center', color=color)
+
+    def box(self, image, **kwargs):
+        """ draw a box at the center, the outlines of the image """
+        if 'lw' not in kwargs: kwargs['lw']=2
+        nx,ny = image.nx, image.ny
+        corners = [(0,0), (0,ny), (nx,ny), (nx,0), (0,0) ]
+        dirs = [image.skydir(x,y) for x,y in corners]
+        rp = [ self.pixel(sdir) for sdir in dirs]
+        self.axes.plot( [r[0] for r in rp], [r[1] for r in rp], 'k', **kwargs)
+
+        
+class ZEA(object):
+    """ Manage a square image SkyImage
+     """
+    
+    def __init__(self, center, size=2, pixelsize=0.1, galactic=False, fitsfile='', axes=None, nticks=5, proj='ZEA'):
+        """
+        center SkyDir specifying center of image
+        size [2]  
+        pixelsize [0.1] size, in degrees, of pixels
+        galactic [False] galactic or equatorial coordinates
+        axes [None] Axes object to use: if None, pyplot.gca() will create one
+        nticks [5] number ot tick marks to attmpt
+
+        """
+       
+        self.galactic = galactic
+        self.pixelsize = pixelsize
+        self.size = size
+        self.center = center
+        self.nticks = nticks
+        # set up, then create a SkyImage object to perform the projection to a grid
+        self.skyimage = SkyImage(center, fitsfile, pixelsize, size, 1, proj, galactic, False)
+        
+        # now extract stuff for the pylab image
+        self.nx, self.ny = self.skyimage.naxis1(), self.skyimage.naxis2()
+
+        # we want access to the projection object, to allow interactive display via pix2sph function
+        self.proj = self.skyimage.projector()
+        if axes is not None:
+            self.set_axes(axes)
+        else: self.axes=None # flag for below
+
+    def skydir(self, x, y):
+        " from pixel coordinates to sky "
+        return SkyDir(x, y, self.proj)
+
+    def pixel(self, sdir):
+        """ return pixel coordinates for the skydir"""
+        if self.galactic: return  self.proj.sph2pix(sdir.l(),sdir.b())
+        return  self.proj.sph2pix(sdir.ra(),sdir.dec())
+
+    def scale_bar(self,  delta=1,text='$1^o$', color='k'):
+        """ draw a scale bar in lower left """
+        xmin, xmax= self.axes.get_xlim()
+        ymin, ymax = self.axes.get_ylim()
+        x1,y1 = 0.95*xmin + 0.05*xmax, 0.95*ymin+0.05*ymax
+        sd = self.skydir(x1,y1)
+        x2,y2 = self.pixel(SkyDir(sd.ra()-delta/math.cos(math.radians(sd.dec())), sd.dec())) 
+        self.axes.plot([x1,x2],[y1,y1], linestyle='-', color=color, lw=4)
+        self.axes.text( (x1+x2)/2, (y1+y2)/2+self.ny/200., text, ha='center', color=color)
+
+    def fill(self, skyfun):
+        """ fill the image from a SkyFunction"""
+        self.skyimage.fill(skyfun)
+        self.image = np.array(self.skyimage.image()).reshape((self.ny, self.nx))
+        self.vmin ,self.vmax = self.skyimage.minimum(), self.skyimage.maximum()
+        return self.image
+
+    def set_axes(self, axes):
+        """ configure the axes object
+        """
+        self.axes=axes
+        self.axes.set_xlim((0,self.nx))
+        self.axes.set_ylim((0,self.ny))
+        self.axes.set_aspect(1)
+        Rescale(self,self.nticks).apply(self.axes)
+        self.axes.set_autoscale_on(False) 
+
+        if not self.galactic:
+            self.axes.set_xlabel('RA'); self.axes.set_ylabel('Dec')
+        else:
+            self.axes.set_xlabel('l'); self.axes.set_ylabel('b')
+        
+    def grid(self, nticks=None, **kwargs):
+        if nticks is None: nticks=self.nticks
+        if self.axes is None: self.set_axes(pyplot.gca())
+        self.axes.xaxis.set_ticks_position('none')
+        self.axes.yaxis.set_ticks_position('none')
+
+        r = Rescale(self, nticks)
+        uticks, vticks = r.uticks, r.vticks
+        for u in uticks:
+            w = [self.pixel(SkyDir(u,v)) for v in  np.linspace(r.vmin,r.vmax, 4*nticks)]
+            self.axes.plot([q[0] for q in w], [q[1] for q in w], '-k', **kwargs)
+        for v in vticks:
+            w = [self.pixel(SkyDir(u,v)) for u in np.linspace(r.ul, r.ur,4*nticks)]
+            self.axes.plot([q[0] for q in w], [q[1] for q in w], '-k', **kwargs)
+                
+
+
+    def scale_bar(self,  delta=1,text='$1^o$', color='k'):
+        """ draw a scale bar in lower left """
+        xmin, xmax= self.axes.get_xlim()
+        ymin, ymax = self.axes.get_ylim()
+        x1,y1 = 0.95*xmin + 0.05*xmax, 0.95*ymin+0.05*ymax
+        sd = self.skydir(x1,y1)
+        x2,y2 = self.pixel(SkyDir(sd.ra()-delta/math.cos(math.radians(sd.dec())), sd.dec())) 
+        self.axes.plot([x1,x2],[y1,y1], linestyle='-', color=color, lw=4)
+        self.axes.text( (x1+x2)/2, (y1+y2)/2+self.ny/200., text, ha='center', color=color)
+
+
+    def box(self, image, **kwargs):
+        """ draw a box at the center, the outlines of the image """
+        if 'lw' not in kwargs: kwargs['lw']=2
+        nx,ny = image.nx, image.ny
+        corners = [(0,0), (0,ny), (nx,ny), (nx,0), (0,0) ]
+        dirs = [image.skydir(x,y) for x,y in corners]
+        rp = [ self.pixel(sdir) for sdir in dirs]
+        self.axes.plot( [r[0] for r in rp], [r[1] for r in rp], 'k', **kwargs)
+
+
+    def plot_source(self, name, source, symbol='+', fontsize=10, **kwargs):
+        " plot symbols at points"
+        if self.galactic:   x,y = self.proj.sph2pix(source.l(),source.b())
+        else:  x,y = self.proj.sph2pix(source.ra(),source.dec())
+        self.axes.plot([x],[y], symbol,  **kwargs)
+        self.axes.text(x,y, name, fontsize=fontsize)
+
+
+
+
+if __name__=='__main__':
+    pyplot.clf()
+    q = ZEA(SkyDir(90,80), size=10, nticks=8)
+    q.grid(color='gray')
+    q.scale_bar(1, '$1^0$')
+    q.axes.set_title('test of ZEA region plot')
+    pyplot.show()
+ 
