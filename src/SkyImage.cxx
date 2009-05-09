@@ -198,8 +198,8 @@ void SkyImage::fill(const astro::SkyFunction& req, unsigned int layer)
     int offset = m_naxis1* m_naxis2 * layer;
     for( size_t k = 0; k< (unsigned int)(m_naxis1)*(m_naxis2); ++k){
         double 
-            x = static_cast<int>(k%m_naxis1)+1.0, 
-            y = static_cast<int>(k/m_naxis1)+1.0;
+            x = static_cast<int>(k%m_naxis1)+0.5, // center of pixel is half/integer! 
+            y = static_cast<int>(k/m_naxis1)+0.5;
         if( m_wcs->testpix2sph(x,y)==0) {
             astro::SkyDir dir(x,y, *m_wcs);
             double t= req(dir);
