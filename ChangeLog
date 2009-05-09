@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Sat May  9 11:08:08 PDT 2009
+skymaps/python
+
+Modified Files:
+	image.py 
+Log Message:
+added ZEA class to manage small images
+    *
+------------------------------------------------------------
 User: burnett  Sat May  9 09:51:52 PDT 2009
 skymaps/src
 
