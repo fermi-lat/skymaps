@@ -7,7 +7,9 @@ $Header$
 
 #include "skymaps/IParams.h"
 #include "skymaps/PhotonBinner.h"
-#include "embed_python/Module.h"
+//#include "embed_python/Module.h"
+#include "tip/IFileSvc.h"
+#include "tip/Table.h"
 #include <cmath>
 #include <algorithm>
 #include <functional>
@@ -23,22 +25,31 @@ namespace {
 
     double elist[] = {1   , 100, 178, 316, 562,1000,1778,3162,5623,10000,17783,31623,56234,100000,1000000};
 
+    double fsig[]=   {75.088,1.423,0.868,0.532,0.329,0.208,0.139,0.103,0.085,0.077,0.074,0.073,0.073,0.073};
+    double bsig[]=   {617.153,3.896,2.07,1.107,0.599,0.338,0.214,0.162,0.146,0.139,0.137,0.137,0.137,0.137};
     double fgam[]=   {2.65,2.65,2.13,1.97,2.08,2.20,2.43,2.51,2.50, 2.17, 1.94, 1.73, 1.66,  1.62};
     double bgam[]=   {2.59,2.59,2.09,1.90,1.90,1.64,1.63,1.72,1.76, 1.78, 1.68, 1.71, 1.73,  1.78};
 
+    double mf(1.5);
+    double mb(1.2);
 }
 
 
 std::vector<double> IParams::s_elist(elist,elist+15);
 std::vector<double> IParams::s_fparams(f_p,f_p+4);
 std::vector<double> IParams::s_bparams(b_p,b_p+4);
+std::vector<double> IParams::s_fsig(fsig,fsig+15);
+std::vector<double> IParams::s_bsig(bsig,bsig+15);
 std::vector<double> IParams::s_fgam(fgam,fgam+15);
 std::vector<double> IParams::s_bgam(bgam,bgam+15);
+std::string         IParams::s_CALDB("");
 bool IParams::s_init(false);
 
 void IParams::set_elist(std::vector<double> elist) {s_elist=elist;}
 void IParams::set_fp(std::vector<double> params){s_fparams=params;}
 void IParams::set_bp(std::vector<double> params){s_bparams=params;}
+void IParams::set_fsig(std::vector<double> sigs) {s_fsig=sigs;}
+void IParams::set_bsig(std::vector<double> sigs) {s_bsig=sigs;}
 void IParams::set_fgam(std::vector<double> gams) {s_fgam=gams;}
 void IParams::set_bgam(std::vector<double> gams) {s_bgam=gams;}
 
@@ -51,13 +62,20 @@ double IParams::sigma(double energy, int event_class){
     //check to see if initialized, if not do it
     //if(!s_init)  init();
     double deg = 0;
-    if(event_class) {
-        //from parameterization of PSF function
-        deg = sqrt(s_bparams[0]*s_bparams[0]+s_bparams[2]*pow(energy/100,IParams::s_bparams[1])+s_bparams[3]*pow(energy/100,2*s_bparams[1]));
-    } else {
-        deg = sqrt(s_fparams[0]*s_fparams[0]+s_fparams[2]*pow(energy/100,IParams::s_fparams[1])+s_fparams[3]*pow(energy/100,2*s_fparams[1]));
-    }
-    return deg*M_PI/180;
+    const std::vector<double>& elisti (s_elist);
+
+    //find nearest energy bin
+    std::vector<double>::const_iterator itold=
+        std::lower_bound(elisti.begin(), elisti.end(), energy, std::less<double>());
+    int level = itold-elisti.begin()-1;
+    double emin(s_elist[level]),emax(s_elist[level+1]);
+    emin>0?emin:emin=1;
+    double smin(event_class==0?s_fsig[level]:s_bsig[level]),smax(event_class==0?s_fsig[level+1]:s_bsig[level+1]);
+    
+    //weighting function
+    double m = (log(smax)-log(smin))/(log(emax)-log(emin));
+    double sbar = exp(m*(log(energy)-log(emax))+log(smax));
+    return sbar*M_PI/180;
 }
 
 double IParams::gamma(double energy, int event_class) {
@@ -73,10 +91,10 @@ double IParams::gamma(double energy, int event_class) {
     double emin(s_elist[level]),emax(s_elist[level+1]);
     emin>0?emin:emin=1;
     double gmin(event_class==0?s_fgam[level]:s_bgam[level]),gmax(event_class==0?s_fgam[level+1]:s_bgam[level+1]);
-    //TODO: implement weighting function
+    //weighting function
     double m = (gmax-gmin)/(log(emax)-log(emin));
     double gbar = m*(log(energy)-log(emax))+gmax;
-    return event_class==0?s_fgam[level]:s_bgam[level];
+    return gbar;
 }
 
 std::vector<double> IParams::params(int event_class) 
@@ -84,9 +102,27 @@ std::vector<double> IParams::params(int event_class)
     return event_class?s_bparams:s_fparams;
 }
 
-void IParams::init() {
+double IParams::scale(double energy, int event_class) {
+    double p0(0),p1(0);
+    if(event_class) {
+        p0=0.096;
+        p1=0.00130;
+    }else {
+        p0=0.058;
+        p1=0.000377;
+    }
+    return sqrt(p0*p0*pow(energy/100.,-1.6)+p1*p1)*180/M_PI;
+}
+
+void IParams::set_CALDB(const std::string& dir) {s_CALDB=dir;}
+
+void IParams::init(const std::string& name, const std::string& clevel, const std::string& file) {
     s_init=true;
-    int argc=0;
+
+    //Seems to crash python, so the routine to read fits has been
+    //changed to C++ implementation
+
+    /*int argc=0;
     char** argv=((char**)0); // avoid warning message
     std::string python_path("../python");
     try {
@@ -115,5 +151,96 @@ void IParams::init() {
         std::cout << "Caught exception " << typeid(e).name() 
             << " \"" << e.what() << "\"" << std::endl;
         std::cout << "Using default PSF values" << std::endl;
+    }*/
+    const tip::Table * ptablef(0);
+    const tip::Table * ptableb(0);
+    std::string psf_table("RPSF");
+    if( file.empty() ){
+        // no overriding filename
+        
+        if( s_CALDB.empty()){
+            const char* c(::getenv("CALDB") );
+            if( c==0){
+                std::cerr << "EffectiveArea:: CALDB is not set" << std::endl;
+                throw std::invalid_argument("EffectiveArea:: CALDB is not set");
+            }
+            s_CALDB = std::string(c);
+        }
     }
+
+    std::string fcaldb(s_CALDB+"/bcf/psf/psf_"+name+"_"+clevel+"_front.fits");
+    std::string bcaldb(s_CALDB+"/bcf/psf/psf_"+name+"_"+clevel+"_back.fits");
+
+    try{
+        ptablef = tip::IFileSvc::instance().readTable(fcaldb,psf_table);
+    }catch(const std::exception&){
+        std::cerr << "IParams: init() "<< psf_table << " not found in file " << fcaldb << std::endl;
+        throw;
+    }
+    std::cout << "Using front PSFs: " << fcaldb << std::endl;
+    try{
+        ptableb = tip::IFileSvc::instance().readTable(bcaldb,psf_table);
+    }catch(const std::exception&){
+        std::cerr << "IParams: init() "<< psf_table << " not found in file " << bcaldb << std::endl;
+        throw;
+    }
+    std::cout << "Using back PSFs: " << bcaldb << std::endl;
+    const tip::Table& ftable(*ptablef);  // reference for convenience
+    const tip::Table& btable(*ptableb);
+    tip::Table::ConstIterator itor = ftable.begin();
+    std::vector<double> energy_lo,energy_hi,fsigmas,fgammas,bsigmas,bgammas,cost_lo;
+    std::vector<double> en,fs,fg,bs,bg;
+
+    (*itor)["ENERG_LO"].get(energy_lo);
+    (*itor)["ENERG_HI"].get(energy_hi);
+    (*itor)["SIGMA"].get(fsigmas);
+    (*itor)["GCORE"].get(fgammas);
+    (*itor)["CTHETA_LO"].get(cost_lo);
+
+    itor = btable.begin();
+    (*itor)["SIGMA"].get(bsigmas);
+    (*itor)["GCORE"].get(bgammas);
+    
+    delete ptablef;
+    delete ptableb;    
+
+    //iterate through energies
+    for(int i(0);i<energy_lo.size();++i) {
+        double w0(0),w1(0),s0(0),s1(0),g0(0),g1(0);
+        //iterate through cos-th bins
+        for(int j(0);j<cost_lo.size();++j) {
+            double cost = (j-7.)/10.-0.5;
+
+            //effective area weighting, estimated from CALDB
+            double wf=mf*cost+1;
+            wf=wf<0?0:wf;
+            double wb=mb*cost+1;
+            wb=wb<0?0:wb;
+            w0+=wf;
+            w1+=wb;
+            s0+=wf*fsigmas[energy_lo.size()*j+i];
+            s1+=wb*bsigmas[energy_lo.size()*j+i];
+            g0+=wf*fgammas[energy_lo.size()*j+i];
+            g1+=wb*bgammas[energy_lo.size()*j+i];
+        }
+
+        double enr=sqrt(energy_lo[i]*energy_hi[i]);
+        en.push_back(enr);
+        s0/=w0;
+        s1/=w1;
+        g0/=w0;
+        g1/=w1;
+        s0*=scale(enr,0);
+        s1*=scale(enr,1);
+        fs.push_back(s0);
+        bs.push_back(s1);
+        fg.push_back(g0);
+        bg.push_back(g1);
+    }
+    //setup parameters
+    set_fsig(fs);
+    set_bsig(bs);
+    set_fgam(fg);
+    set_bgam(bg);
+    set_elist(en);
 }
