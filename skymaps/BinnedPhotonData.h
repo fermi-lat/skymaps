@@ -43,6 +43,8 @@ namespace skymaps {
         ///@param e energy in MeV
         virtual double value(const astro::SkyDir& dir, double e)const;
 
+        double counts(const astro::SkyDir& dir, double emin, double emax)const;
+
         ///@brief integral for the energy limits, in the given direction
         /// Assume that request is for an energy bin.
         virtual double integral(const astro::SkyDir& dir, double a, double b)const;
@@ -96,6 +98,11 @@ namespace skymaps {
 
         int photonCount()const{return m_photons;}
         int pixelCount()const{ return 0;} ///TODO
+
+        /// @brief updates the PSF parameters to the current set used by IParams
+        /// @param name overriden psf name
+        /// @param clevel overriden psf class level
+        void updateIrfs(const std::string& name="", const std::string& clevel="");
 
     private:
         skymaps::PhotonBinner default_binner; ///< object that handles default binning

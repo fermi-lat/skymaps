@@ -5,6 +5,7 @@ $Header$
 */
 
 #include "skymaps/BinnedPhotonData.h"
+#include "skymaps/Iparams.h"
 
 #ifndef OLD
 #include "healpix/HealPixel.h"
@@ -317,7 +318,19 @@ double BinnedPhotonData::value(const astro::SkyDir& dir, double e)const
         result += band(dir);
     }
     return result;
+}
 
+double BinnedPhotonData::counts(const astro::SkyDir& dir,double emin, double emax) const
+{
+    double result(0);
+
+    for(const_iterator it=begin();it!=end(); ++it) {
+        const Band& band = *it;
+        double meane = sqrt(band.emax()*band.emin());
+        if( meane< emin || meane >= emax ) continue;
+        result += band(dir);
+    }
+    return result;
 }
 
 double BinnedPhotonData::integral(const astro::SkyDir& dir, double a, double b)const
@@ -463,3 +476,19 @@ void BinnedPhotonData::operator+=(const skymaps::BinnedPhotonData& other) {
     addgti(other.gti());
 }
 
+void BinnedPhotonData::updateIrfs(const std::string& name, const std::string& clevel) {
+    //default: use current IParams values
+    if(name.empty()||clevel.empty()) {
+    }
+    //use specified irfs
+    else {
+        IParams::init(name,clevel);
+    }
+    for(iterator it = begin();it!=end();++it) {
+        double energy = sqrt(it->emin()*it->emax());
+        it->setSigma(IParams::sigma(energy,it->event_class()));
+        it->setSigma2(IParams::sigma(energy,it->event_class()));
+        it->setGamma(IParams::gamma(energy,it->event_class()));
+        it->setGamma2(IParams::gamma(energy,it->event_class()));
+    }
+}
