@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: mar0  Mon May 11 15:36:56 PDT 2009
+skymaps/src
+
+Modified Files:
+	IParams.cxx 
+Log Message:
+Changed interface to CALDB psf files and added environment variable support
+    *
+------------------------------------------------------------
 User: mar0  Mon May 11 15:36:55 PDT 2009
 skymaps/skymaps
 
