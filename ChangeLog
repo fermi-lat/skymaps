@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: mar0  Mon May 11 15:44:47 PDT 2009
+skymaps/src
+
+Modified Files:
+	BinnedPhotonData.cxx 
+Log Message:
+Added CALDB name support to BinnedPhotonData
+    *
+------------------------------------------------------------
+User: mar0  Mon May 11 15:44:47 PDT 2009
 skymaps/skymaps
 
 Modified Files:
