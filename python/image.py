@@ -20,11 +20,12 @@ class Rescale(object):
 
         # get ra range from top, dec range along center of SkyImage
         nx,ny = image.nx, image.ny
+        self.nx=nx
         xl = image.skydir(0,ny).ra()
         xr = image.skydir(nx,ny).ra()
         if xl<xr: # did it span the boundary?
             xr = xr-360 
-        self.vmin = image.skydir(nx/2., 0).dec()
+        self.vmin = image.skydir(0, 0).dec()
         self.vmax = image.skydir(nx/2.,ny).dec()
         ticklocator = ticker.MaxNLocator(nticks, steps=[1,2,5])
         self.uticks = [ix if ix>-1e-6 else ix+360\
@@ -35,7 +36,10 @@ class Rescale(object):
 
         # extract positions in image coords,  text labels
         self.xticks = [image.pixel(SkyDir(x,self.vmin))[0] for x in self.uticks]
-        self.yticks = [image.pixel(SkyDir(xl,y))[1] for y in self.vticks]
+        #self.yticks = [image.pixel(SkyDir(xl,v))[1] for v in self.vticks]
+        # proportional is usually good?
+        yscale = ny/(image.skydir(0,ny).dec()-self.vmin)
+        self.yticks = [ (v-self.vmin)*yscale for v in self.vticks]
 
         self.xticklabels = self.formatter(self.uticks)
         self.yticklabels = self.formatter(self.vticks)
@@ -57,6 +61,8 @@ class Rescale(object):
             axes.set_xticks(self.xticks[1:-1])
             axes.set_xticklabels(self.xticklabels[1:-1])
         axes.xaxis.set_ticks_position('bottom')
+        axes.set_xlim((0,self.nx)) # have to do again?
+
         if len(self.yticks)>=3:
             axes.set_yticks(self.yticks[1:-1])
             axes.set_yticklabels(self.yticklabels[1:-1])
@@ -358,7 +364,7 @@ class ZEA(object):
         size [2]  
         pixelsize [0.1] size, in degrees, of pixels
         galactic [False] galactic or equatorial coordinates
-        axes [None] Axes object to use: if None, pyplot.gca() will create one
+        axes [None] Axes object to use: if None
         nticks [5] number ot tick marks to attmpt
 
         """
@@ -368,7 +374,7 @@ class ZEA(object):
         self.size = size
         self.center = center
         self.nticks = nticks
-        # set up, then create a SkyImage object to perform the projection to a grid
+        # set up, then create a SkyImage object to perform the projection to a grid and manage an image
         self.skyimage = SkyImage(center, fitsfile, pixelsize, size, 1, proj, galactic, False)
         
         # now extract stuff for the pylab image
@@ -376,9 +382,7 @@ class ZEA(object):
 
         # we want access to the projection object, to allow interactive display via pix2sph function
         self.proj = self.skyimage.projector()
-        if axes is not None:
-            self.set_axes(axes)
-        else: self.axes=None # flag for below
+        self.set_axes(axes)
 
     def skydir(self, x, y):
         " from pixel coordinates to sky "
@@ -406,15 +410,17 @@ class ZEA(object):
         self.vmin ,self.vmax = self.skyimage.minimum(), self.skyimage.maximum()
         return self.image
 
-    def set_axes(self, axes):
+    def set_axes(self, axes=None):
         """ configure the axes object
+          +axes [None] if None, simply use gca()
         """
-        self.axes=axes
+        self.axes=axes if axes is not None else pyplot.gca()
+        self.axes.set_aspect(1)
         self.axes.set_xlim((0,self.nx))
         self.axes.set_ylim((0,self.ny))
-        self.axes.set_aspect(1)
-        Rescale(self,self.nticks).apply(self.axes)
         self.axes.set_autoscale_on(False) 
+        r =Rescale(self,self.nticks)
+        r.apply(self.axes)
 
         if not self.galactic:
             self.axes.set_xlabel('RA'); self.axes.set_ylabel('Dec')
@@ -422,19 +428,22 @@ class ZEA(object):
             self.axes.set_xlabel('l'); self.axes.set_ylabel('b')
         
     def grid(self, nticks=None, **kwargs):
+        """ draw a grid
+        """
+
         if nticks is None: nticks=self.nticks
-        if self.axes is None: self.set_axes(pyplot.gca())
+        r = Rescale(self, nticks)
+        r.apply(self.axes)
         self.axes.xaxis.set_ticks_position('none')
         self.axes.yaxis.set_ticks_position('none')
-
-        r = Rescale(self, nticks)
         uticks, vticks = r.uticks, r.vticks
         for u in uticks:
-            w = [self.pixel(SkyDir(u,v)) for v in  np.linspace(r.vmin,r.vmax, 4*nticks)]
+            w = [self.pixel(SkyDir(u,v)) for v in  np.linspace(r.vmin,r.vmax, 2*nticks)]
             self.axes.plot([q[0] for q in w], [q[1] for q in w], '-k', **kwargs)
         for v in vticks:
-            w = [self.pixel(SkyDir(u,v)) for u in np.linspace(r.ul, r.ur,4*nticks)]
+            w = [self.pixel(SkyDir(u,v)) for u in np.linspace(r.ul, r.ur,2*nticks)]
             self.axes.plot([q[0] for q in w], [q[1] for q in w], '-k', **kwargs)
+        return r
                 
 
 
@@ -446,11 +455,13 @@ class ZEA(object):
         sd = self.skydir(x1,y1)
         x2,y2 = self.pixel(SkyDir(sd.ra()-delta/math.cos(math.radians(sd.dec())), sd.dec())) 
         self.axes.plot([x1,x2],[y1,y1], linestyle='-', color=color, lw=4)
-        self.axes.text( (x1+x2)/2, (y1+y2)/2+self.ny/200., text, ha='center', color=color)
+        self.axes.text( (x1+x2)/2, (y1+y2)/2+self.ny/50., text, ha='center', color=color)
 
 
     def box(self, image, **kwargs):
-        """ draw a box at the center, the outlines of the image """
+        """ draw a box at the center, the outlines of the image
+            +image An object of this class, or implementing the skydir function
+        """
         if 'lw' not in kwargs: kwargs['lw']=2
         nx,ny = image.nx, image.ny
         corners = [(0,0), (0,ny), (nx,ny), (nx,0), (0,0) ]
@@ -463,17 +474,42 @@ class ZEA(object):
         " plot symbols at points"
         if self.galactic:   x,y = self.proj.sph2pix(source.l(),source.b())
         else:  x,y = self.proj.sph2pix(source.ra(),source.dec())
+        if x<0 or x> self.nx or y<0 or y>self.ny: return False
         self.axes.plot([x],[y], symbol,  **kwargs)
-        self.axes.text(x,y, name, fontsize=fontsize)
+        self.axes.text(x,y, name, fontsize=fontsize, **kwargs)
+        return True
 
+    def cross(self, sdir, size, text=None, **kwargs):
+        """ draw a cross  
+        
+        """    
+        x,y = self.pixel(sdir)
+        if x<0 or x> self.nx or y<0 or y>self.ny: return False
+        pixelsize = self.pixelsize
+        delta = size/pixelsize
+        axes = self.axes
+        axes.plot([x-delta, x+delta], [y,y], '-k', **kwargs)
+        axes.plot([x,x], [y-delta, y+delta], '-k', **kwargs)
+        if text is not None:
+            if 'lw' in kwargs: kwargs.pop('lw') # allow lw for the lines. 
+            axes.text(x,y, text, **kwargs)
+        return True
 
-
-
-if __name__=='__main__':
+def ZEA_test():
     pyplot.clf()
-    q = ZEA(SkyDir(90,80), size=10, nticks=8)
+    q = ZEA(SkyDir(90,75), size=10, nticks=8)
     q.grid(color='gray')
     q.scale_bar(1, '$1^0$')
     q.axes.set_title('test of ZEA region plot')
+    q.cross( SkyDir(90,75), 1, 'a red cross, arms +/- 1 deg', color='r', lw=2)
+    q.plot_source('(80,76)', SkyDir(80,76), 'd')
+    q.plot_source('(110,74)', SkyDir(110,74), 'x')
+    q.plot_source('(90,70)', SkyDir(90,70), 'x')
+    q.plot_source('(60,78)', SkyDir(60,78), 'x')
     pyplot.show()
+    return q
+
+
+if __name__=='__main__':
+    pass
  
