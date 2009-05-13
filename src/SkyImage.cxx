@@ -83,7 +83,7 @@ SkyImage::SkyImage(const astro::SkyDir& center,
 
     double crval[2] = { galactic?center.l():center.ra(),galactic? center.b(): center.dec()};
     double cdelt[2] = { earth? pixel_size: -pixel_size, pixel_size };
-    double crpix[2] = { (m_naxis1+1)/2.0, (m_naxis2+1)/2.0};
+    double crpix[2] = { (m_naxis1)/2.0, (m_naxis2)/2.0}; // center pixel
 
     m_wcs = new astro::SkyProj(ptype, crpix, crval, cdelt, 0., galactic);
     m_pixelCount = m_naxis1*m_naxis2*m_naxis3;
