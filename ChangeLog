@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Tue May 12 17:20:00 PDT 2009
+skymaps/src
+
+Modified Files:
+	SkyImage.cxx 
+Log Message:
+fix pixel center
+    *
+------------------------------------------------------------
 User: mar0  Mon May 11 15:44:47 PDT 2009
 skymaps/src
 
