@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: kerrm  Thu May 14 10:38:07 PDT 2009
+skymaps/src
+
+Modified Files:
+	BinnedPhotonData.cxx 
+Log Message:
+Changes to ::density and ::smoothDensity.  Most functionality now placed in Band, but leaving signatures the same for backwards compatibility.
+    *
+------------------------------------------------------------
 User: kerrm  Thu May 14 10:32:50 PDT 2009
 skymaps/src
 
