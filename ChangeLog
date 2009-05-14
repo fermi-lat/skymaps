@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: kerrm  Thu May 14 10:30:27 PDT 2009
+skymaps/skymaps
+
+Modified Files:
+	Band.h SkyIntegrator.h 
+Log Message:
+Band -- added a caching feature to make the total pixel count available cheaply (no query disk.)
+SkyIntegrator -- improvements and streamlines to to adaptive features.  Still has kluges for SWIG's inheritance problems.
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-19-00, operation: add
 Package: skymaps
