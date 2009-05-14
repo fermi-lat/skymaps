@@ -256,8 +256,7 @@ double BinnedPhotonData::density (const astro::SkyDir & sd) const
 
     for (const_iterator it = begin(); it!=end(); ++it) {
         const Band& band ( *it);
-        int count( band(sd) );
-        result += count / band.pixelArea();
+        result += band.density(sd,false);
     }
     return result*norm;
 }
@@ -269,41 +268,7 @@ double BinnedPhotonData::smoothDensity (const astro::SkyDir & sd, int mincount) 
     for (const_iterator it = begin(); it!=end(); ++it) // For each band
     {
         const Band& band ( *it);
-        double value = 0.0, weight = 0.0;
-        
-        int index(band.index(sd));
-        astro::SkyDir dir(band.dir(index));
-        
-        double d = dir.difference(sd); 
-        if (fabs(d) < 1e-6) // Though unlikely, check for "exact" hit.
-        {
-            int count( band(sd) );
-            if (count < mincount)
-                count = 0;
-            result += count / band.pixelArea();
-            continue;
-        }
-
-        // Not exact hit, so add this pixel's weighted count to total
-        weight += 1 / d;  // Use 1/distance as weight factor.
-        value += band(sd) * (1/d);
-        
-        // Now average in contributions from neighbors.
-        std::vector<int> v;
-        band.findNeighbors(index, v);
-        for (std::vector<int>::const_iterator n = v.begin(); n != v.end(); ++n)
-        {
-            int index(*n);
-            astro::SkyDir dir(band.dir(index));
-            double d = dir.difference(sd);
-            weight += 1 / d;
-            int count(band(dir));
-            if (count < mincount)
-                count = 0;
-            value += count * (1/d);
-        }
-        
-        result += value / weight / band.pixelArea();
+        result += band.density(sd,true,mincount);
     }
     return result*norm;
 }
