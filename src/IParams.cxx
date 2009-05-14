@@ -68,6 +68,7 @@ double IParams::sigma(double energy, int event_class){
     std::vector<double>::const_iterator itold=
         std::lower_bound(elisti.begin(), elisti.end(), energy, std::less<double>());
     int level = itold-elisti.begin()-1;
+    if (level==elisti.size()-1) level--;
     double emin(s_elist[level]),emax(s_elist[level+1]);
     emin>0?emin:emin=1;
     double smin(event_class==0?s_fsig[level]:s_bsig[level]),smax(event_class==0?s_fsig[level+1]:s_bsig[level+1]);
@@ -88,6 +89,7 @@ double IParams::gamma(double energy, int event_class) {
     std::vector<double>::const_iterator itold=
         std::lower_bound(elisti.begin(), elisti.end(), energy, std::less<double>());
     int level = itold-elisti.begin()-1;
+    if (level==elisti.size()-1) level--;
     double emin(s_elist[level]),emax(s_elist[level+1]);
     emin>0?emin:emin=1;
     double gmin(event_class==0?s_fgam[level]:s_bgam[level]),gmax(event_class==0?s_fgam[level+1]:s_bgam[level+1]);
