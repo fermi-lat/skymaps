@@ -3,6 +3,7 @@
 $Header$
 
 """
+version = '$Id$'.split()[-1]
 
 import pylab
 import math
@@ -13,7 +14,7 @@ from skymaps import SkyImage, SkyDir, double2, SkyProj
 
 class Rescale(object):
 
-    def __init__(self, image, nticks=5):
+    def __init__(self, image, nticks=5, galactic=False):
         """ image: a SkyImage object
             nticks: suggested number of ticks for the ticker
         """
@@ -21,12 +22,13 @@ class Rescale(object):
         # get ra range from top, dec range along center of SkyImage
         nx,ny = image.nx, image.ny
         self.nx=nx
-        xl = image.skydir(0,ny).ra()
-        xr = image.skydir(nx,ny).ra()
+        self.ny=ny
+        xl = image.skydir(0,ny).l() if galactic else image.skydir(0,ny).ra()
+        xr = image.skydir(nx,ny).l() if galactic else image.skydir(nx,ny).ra()
         if xl<xr: # did it span the boundary?
             xr = xr-360 
-        self.vmin = image.skydir(0, 0).dec()
-        self.vmax = image.skydir(nx/2.,ny).dec()
+        self.vmin = image.skydir(0, 0).b() if galactic else image.skydir(0, 0).dec()
+        self.vmax = image.skydir(nx/2.,ny).b() if galactic else image.skydir(nx/2.,ny).dec()
         ticklocator = ticker.MaxNLocator(nticks, steps=[1,2,5])
         self.uticks = [ix if ix>-1e-6 else ix+360\
               for ix in ticklocator.bin_boundaries(xr,xl)[::-1]] #reverse
@@ -35,10 +37,11 @@ class Rescale(object):
         self.vticks = ticklocator.bin_boundaries(self.vmin,self.vmax)
 
         # extract positions in image coords,  text labels
-        self.xticks = [image.pixel(SkyDir(x,self.vmin))[0] for x in self.uticks]
+        self.xticks = [image.pixel(SkyDir(x,self.vmin,SkyDir.GALACTIC if galactic else SkyDir.EQUATORIAL))[0]\
+                       for x in self.uticks]
         #self.yticks = [image.pixel(SkyDir(xl,v))[1] for v in self.vticks]
         # proportional is usually good?
-        yscale = ny/(image.skydir(0,ny).dec()-self.vmin)
+        yscale = ny/((image.skydir(0,ny).b() if galactic else image.skydir(0,ny).dec())-self.vmin)
         self.yticks = [ (v-self.vmin)*yscale for v in self.vticks]
 
         self.xticklabels = self.formatter(self.uticks)
@@ -67,6 +70,7 @@ class Rescale(object):
             axes.set_yticks(self.yticks[1:-1])
             axes.set_yticklabels(self.yticklabels[1:-1])
         axes.yaxis.set_ticks_position('left')
+        axes.set_ylim((0,self.ny)) # have to do again?
 
 
 
@@ -432,16 +436,17 @@ class ZEA(object):
         """
 
         if nticks is None: nticks=self.nticks
-        r = Rescale(self, nticks)
+        r = Rescale(self, nticks, galactic = self.galactic)
         r.apply(self.axes)
         self.axes.xaxis.set_ticks_position('none')
         self.axes.yaxis.set_ticks_position('none')
         uticks, vticks = r.uticks, r.vticks
+        cs = SkyDir.GALACTIC if self.galactic else SkyDir.EQUATORIAL
         for u in uticks:
-            w = [self.pixel(SkyDir(u,v)) for v in  np.linspace(r.vmin,r.vmax, 2*nticks)]
+            w = [self.pixel(SkyDir(u,v,cs)) for v in  np.linspace(r.vmin,r.vmax, 2*nticks)]
             self.axes.plot([q[0] for q in w], [q[1] for q in w], '-k', **kwargs)
         for v in vticks:
-            w = [self.pixel(SkyDir(u,v)) for u in np.linspace(r.ul, r.ur,2*nticks)]
+            w = [self.pixel(SkyDir(u,v,cs)) for u in np.linspace(r.ul, r.ur,2*nticks)]
             self.axes.plot([q[0] for q in w], [q[1] for q in w], '-k', **kwargs)
         return r
                 
@@ -453,9 +458,12 @@ class ZEA(object):
         ymin, ymax = self.axes.get_ylim()
         x1,y1 = 0.95*xmin + 0.05*xmax, 0.95*ymin+0.05*ymax
         sd = self.skydir(x1,y1)
-        x2,y2 = self.pixel(SkyDir(sd.ra()-delta/math.cos(math.radians(sd.dec())), sd.dec())) 
+        if self.galactic:
+            x2,y2 = self.pixel(SkyDir(sd.l()-delta/math.cos(math.radians(sd.b())), sd.b(),SkyDir.GALACTIC)) 
+        else:
+            x2,y2 = self.pixel(SkyDir(sd.ra()-delta/math.cos(math.radians(sd.dec())), sd.dec())) 
         self.axes.plot([x1,x2],[y1,y1], linestyle='-', color=color, lw=4)
-        self.axes.text( (x1+x2)/2, (y1+y2)/2+self.ny/50., text, ha='center', color=color)
+        self.axes.text( (x1+x2)/2, (y1+y2)/2+self.ny/80., text, ha='center', color=color)
 
 
     def box(self, image, **kwargs):
@@ -495,17 +503,17 @@ class ZEA(object):
             axes.text(x,y, text, **kwargs)
         return True
 
-def ZEA_test():
+def ZEA_test(ra=90, dec=85, size=10, nticks=8, galactic=False):
     pyplot.clf()
-    q = ZEA(SkyDir(90,75), size=10, nticks=8)
+    q = ZEA(SkyDir(ra,dec), size=size, nticks=nticks, galactic=galactic)
     q.grid(color='gray')
     q.scale_bar(1, '$1^0$')
     q.axes.set_title('test of ZEA region plot')
     q.cross( SkyDir(90,75), 1, 'a red cross, arms +/- 1 deg', color='r', lw=2)
     q.plot_source('(80,76)', SkyDir(80,76), 'd')
     q.plot_source('(110,74)', SkyDir(110,74), 'x')
-    q.plot_source('(90,70)', SkyDir(90,70), 'x')
-    q.plot_source('(60,78)', SkyDir(60,78), 'x')
+    for dec in np.arange(-90, 91, 2):
+        q.plot_source( '(%d,%d)'%(ra,dec), SkyDir(ra,dec), 'x')
     pyplot.show()
     return q
 
