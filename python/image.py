@@ -1,9 +1,13 @@
-""" image processing
+""" image processing:
+    class AIT for full sky
+          ZEA for square region
+          
+     author: T. Burnett tburnett@u.washington.edu
 
 $Header$
 
 """
-version = '$Id$'.split()[-1]
+version = '$Id$'.split()[2]
 
 import pylab
 import math
@@ -503,13 +507,14 @@ class ZEA(object):
             axes.text(x,y, text, **kwargs)
         return True
 
-def ZEA_test(ra=90, dec=85, size=10, nticks=8, galactic=False):
+def ZEA_test(ra=90, dec=85, size=5, nticks=8, galactic=False):
     pyplot.clf()
     q = ZEA(SkyDir(ra,dec), size=size, nticks=nticks, galactic=galactic)
     q.grid(color='gray')
     q.scale_bar(1, '$1^0$')
     q.axes.set_title('test of ZEA region plot')
-    q.cross( SkyDir(90,75), 1, 'a red cross, arms +/- 1 deg', color='r', lw=2)
+    t=q.cross( SkyDir(ra,dec), 1, 'a red cross, arms +/- 1 deg', color='r', lw=2)
+    if not t: print 'failed to plot the cross'
     q.plot_source('(80,76)', SkyDir(80,76), 'd')
     q.plot_source('(110,74)', SkyDir(110,74), 'x')
     for dec in np.arange(-90, 91, 2):
