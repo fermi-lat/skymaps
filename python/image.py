@@ -401,15 +401,6 @@ class ZEA(object):
         if self.galactic: return  self.proj.sph2pix(sdir.l(),sdir.b())
         return  self.proj.sph2pix(sdir.ra(),sdir.dec())
 
-    def scale_bar(self,  delta=1,text='$1^o$', color='k'):
-        """ draw a scale bar in lower left """
-        xmin, xmax= self.axes.get_xlim()
-        ymin, ymax = self.axes.get_ylim()
-        x1,y1 = 0.95*xmin + 0.05*xmax, 0.95*ymin+0.05*ymax
-        sd = self.skydir(x1,y1)
-        x2,y2 = self.pixel(SkyDir(sd.ra()-delta/math.cos(math.radians(sd.dec())), sd.dec())) 
-        self.axes.plot([x1,x2],[y1,y1], linestyle='-', color=color, lw=4)
-        self.axes.text( (x1+x2)/2, (y1+y2)/2+self.ny/200., text, ha='center', color=color)
 
     def fill(self, skyfun):
         """ fill the image from a SkyFunction"""
@@ -453,7 +444,6 @@ class ZEA(object):
             w = [self.pixel(SkyDir(u,v,cs)) for u in np.linspace(r.ul, r.ur,2*nticks)]
             self.axes.plot([q[0] for q in w], [q[1] for q in w], '-k', **kwargs)
         return r
-                
 
 
     def scale_bar(self,  delta=1,text='$1^o$', color='k'):
