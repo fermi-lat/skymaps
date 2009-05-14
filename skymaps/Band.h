@@ -92,6 +92,9 @@ namespace skymaps {
         /// Note: requires nested indexing!
         void findNeighbors(int index, std::vector<int> &neighbors)const;
 
+        /// @brief return the photon density at the given direction
+        double density(const astro::SkyDir&dir, bool smooth=false, int mincount = 0)const;
+
 
         /// @brief the solid angle for this pixelization
         double pixelArea()const;
@@ -110,6 +113,8 @@ namespace skymaps {
         double sigma2()const{return m_sigma2;}
         double gamma2()const{return m_gamma2;}
         double frac2() const { return m_frac2;}
+
+        static int cache_pix() {return cache_pix_counts;}
   
         void setSigma(double s){m_sigma=s;}
         void setGamma(double g){m_gamma=g;}
@@ -133,7 +138,8 @@ namespace skymaps {
         double m_emin, m_emax;
         double m_sigma, m_gamma;
         double m_sigma2, m_gamma2, m_frac2;
-        const healpix::Healpix* m_healpix; 
+        const healpix::Healpix* m_healpix;
+        static int cache_pix_counts;
     };
 
    /** @class WeightedSkyDir
@@ -163,9 +169,11 @@ namespace skymaps {
 
         /// @brief implement SkyFunction: return weight, or zero
         double operator()(const astro::SkyDir& sdir)const;
+        int total_pix()const {return npix;}
 
     private:
         const skymaps::Band& m_band; ///< the band used to make
+        int npix;
     };
 
 
