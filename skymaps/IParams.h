@@ -63,7 +63,7 @@ private:
 
     /** @brief ctor not used
     */
-    IParams(std::string& name);
+    IParams();
 
     static std::vector<double> s_elist; //energy bin list 4/decade
     static std::vector<double> s_fparams; //front width parameterization
