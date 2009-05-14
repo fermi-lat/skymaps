@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: mar0  Thu May 14 16:41:48 PDT 2009
+skymaps/src
+
+Modified Files:
+	IParams.cxx 
+Log Message:
+Fixed some SCons and gcc errors
+    *
+------------------------------------------------------------
+User: mar0  Thu May 14 16:41:48 PDT 2009
 skymaps/skymaps
 
 Modified Files:
