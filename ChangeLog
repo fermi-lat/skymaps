@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: mar0  Thu May 14 14:33:14 PDT 2009
+skymaps/src
+
+Modified Files:
+	IParams.cxx 
+Log Message:
+Fixed iterator problem in IParams which fouled up interpolation
+    *
+------------------------------------------------------------
 User: kerrm  Thu May 14 10:38:07 PDT 2009
 skymaps/src
 
