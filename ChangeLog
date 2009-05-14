@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Thu May 14 07:12:47 PDT 2009
+skymaps/python
+
+Modified Files:
+	image.py 
+Log Message:
+remove duplicate function
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r19, operation: add
 Package: skymaps
