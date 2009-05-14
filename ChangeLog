@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Thu May 14 06:48:18 PDT 2009
+skymaps/python
+
+Modified Files:
+	image.py 
+Log Message:
+fixes, mostly from Matthew, to support galactic coordinate display
+    *
+------------------------------------------------------------
 User: burnett  Tue May 12 17:20:00 PDT 2009
 skymaps/src
 
