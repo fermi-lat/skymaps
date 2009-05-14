@@ -53,7 +53,7 @@ void IParams::set_bsig(std::vector<double> sigs) {s_bsig=sigs;}
 void IParams::set_fgam(std::vector<double> gams) {s_fgam=gams;}
 void IParams::set_bgam(std::vector<double> gams) {s_bgam=gams;}
 
-IParams::IParams(std::string& name)
+IParams::IParams()
 {
     //TODO: setup database, for now use defaults from allGamma v14r8 
 }
@@ -61,7 +61,6 @@ IParams::IParams(std::string& name)
 double IParams::sigma(double energy, int event_class){
     //check to see if initialized, if not do it
     //if(!s_init)  init();
-    double deg = 0;
     const std::vector<double>& elisti (s_elist);
 
     //find nearest energy bin
@@ -124,47 +123,18 @@ void IParams::init(const std::string& name, const std::string& clevel, const std
     //Seems to crash python, so the routine to read fits has been
     //changed to C++ implementation
 
-    /*int argc=0;
-    char** argv=((char**)0); // avoid warning message
-    std::string python_path("../python");
-    try {
-        embed_python::Module setup(python_path , "psf_defaults",  argc, argv);
-        std::vector<double> ps;
-        //get energy list from CALDB file
-        setup.getList("energy",ps);
-        set_elist(ps);
-        ps.clear();
-        //get front sigma paramterization
-        setup.getList("fparams",ps);
-        set_fp(ps);
-        ps.clear();
-        //get back sigma parameterization
-        setup.getList("bparams",ps);
-        set_bp(ps);
-        ps.clear();
-        //now, just get the gamma values
-        setup.getList("fgam",ps);
-        set_fgam(ps);
-        ps.clear();
-        setup.getList("bgam",ps);
-        set_bgam(ps);
-        ps.clear();
-    } catch(const std::exception& e){
-        std::cout << "Caught exception " << typeid(e).name() 
-            << " \"" << e.what() << "\"" << std::endl;
-        std::cout << "Using default PSF values" << std::endl;
-    }*/
     const tip::Table * ptablef(0);
     const tip::Table * ptableb(0);
     std::string psf_table("RPSF");
+
     if( file.empty() ){
         // no overriding filename
         
         if( s_CALDB.empty()){
             const char* c(::getenv("CALDB") );
             if( c==0){
-                std::cerr << "EffectiveArea:: CALDB is not set" << std::endl;
-                throw std::invalid_argument("EffectiveArea:: CALDB is not set");
+                std::cerr << "IParams:: CALDB is not set" << std::endl;
+                throw std::invalid_argument("IParams:: CALDB is not set");
             }
             s_CALDB = std::string(c);
         }
@@ -207,10 +177,10 @@ void IParams::init(const std::string& name, const std::string& clevel, const std
     delete ptableb;    
 
     //iterate through energies
-    for(int i(0);i<energy_lo.size();++i) {
+    for(unsigned int i(0);i<energy_lo.size();++i) {
         double w0(0),w1(0),s0(0),s1(0),g0(0),g1(0);
         //iterate through cos-th bins
-        for(int j(0);j<cost_lo.size();++j) {
+        for(unsigned int j(0);j<cost_lo.size();++j) {
             double cost = (j-7.)/10.-0.5;
 
             //effective area weighting, estimated from CALDB
