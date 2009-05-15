@@ -5,11 +5,9 @@ $Header$
 */
 
 #include "skymaps/BinnedPhotonData.h"
-#include "skymaps/Iparams.h"
+#include "skymaps/IParams.h"
 
-#ifndef OLD
 #include "healpix/HealPixel.h"
-#endif
 #include "astro/Photon.h"
 
 #include "tip/IFileSvc.h"
@@ -444,9 +442,9 @@ void BinnedPhotonData::operator+=(const skymaps::BinnedPhotonData& other) {
 void BinnedPhotonData::updateIrfs(const std::string& name, const std::string& clevel) {
     //default: use current IParams values
     if(name.empty()||clevel.empty()) {
-    }
-    //use specified irfs
-    else {
+    }else {
+         //use specified irfs
+
         IParams::init(name,clevel);
     }
     for(iterator it = begin();it!=end();++it) {
