@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Fri May 15 07:04:45 PDT 2009
+skymaps/src
+
+Modified Files:
+	BinnedPhotonData.cxx 
+Log Message:
+fix capitalization error, tag
+    *
+------------------------------------------------------------
+User: burnett  Fri May 15 07:04:45 PDT 2009
 skymaps/doc
 
 Modified Files:
