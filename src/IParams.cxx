@@ -14,6 +14,7 @@ $Header$
 #include <algorithm>
 #include <functional>
 #include <iterator>
+#include <stdexcept>
 
 using namespace skymaps;
 
