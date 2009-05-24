@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Sun May 24 15:22:24 PDT 2009
+skymaps/src/test
+
+Modified Files:
+	test_main.cxx 
+Log Message:
+tagging after implementing cache in EffectiveArea
+    *
+------------------------------------------------------------
+User: burnett  Sun May 24 15:22:24 PDT 2009
 skymaps/src
 
 Modified Files:
