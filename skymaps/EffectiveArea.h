@@ -10,6 +10,7 @@
 #define skymaps_EffectiveArea_h
 
 #include <string>
+#include <map>
 
 
 
@@ -49,11 +50,17 @@ namespace skymaps {
         double operator()(double energy=1000, double costh=1.0)const{return value(energy,costh);}
 
         static void set_CALDB(std::string CALDB);
+
+        static bool enable_cache(bool value=true);
     private:
         class FitsTable; // forward declaration
         bool m_simple;
         FitsTable * m_aeffTable;
         static std::string s_CALDB;
+        static bool s_cache_enabled;
+        class CacheKey; // forward declaration of Key used for cache
+        typedef std::map<CacheKey, float> Cache;
+        mutable Cache m_cache; ///< cache values for speed
     };
 } // namespace skymaps
 

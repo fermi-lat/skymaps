@@ -63,7 +63,8 @@ int main(int , char** )
             double check = lc.value(tdir, 1.0); // should be 1.0
             std::cout << "filled with: " << lc.total() << std::endl;
             lc.write(filename);
-            EffectiveArea aeff("simple");
+            EffectiveArea aeff_simple("simple");
+            EffectiveArea aeff("", "../data/aeff_P6_v1_diff_front.fits");
             Exposure exp(lc, aeff);
             std::cout << "Exposure check:\n ra\t value"<< std::endl;
             for( float ra(0); ra< 90; ra+=10.){
