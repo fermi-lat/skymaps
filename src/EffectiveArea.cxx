@@ -15,7 +15,6 @@ $Header$
 #include "tip/Table.h"
 
 namespace{
-// special cache for speedup
 
 // this code is copied from the latResponse package, mostly authored by J. Chiang 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -389,17 +388,15 @@ private:
 double EffectiveArea::value(double energy, double costheta)const
 {
     if(m_simple) {
-        static double ctmin(0.2);
+        static double ctmin(0.3);
         return costheta>ctmin? 4000.*(costheta-ctmin)/(1.-ctmin) : 0 ;
     }
     double loge(std::log10(energy));
     CacheKey key(loge,costheta);
-    bool found(false);
     if( s_cache_enabled ){
         Cache::const_iterator it = m_cache.find(key);
         if( it != m_cache.end() ){
-            float x = (*it).second;
-            return x;
+            return (*it).second;
         }
     }
     bool interpolate;

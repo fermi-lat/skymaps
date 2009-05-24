@@ -17,6 +17,7 @@ $Header$
 #include "healpix/HealpixArrayIO.h"
 #include "tip/IFileSvc.h"
 #include "tip/Table.h"
+#include "facilities/commonUtilities.h"
 
 
 #include "astro/Photon.h"
@@ -64,7 +65,9 @@ int main(int , char** )
             std::cout << "filled with: " << lc.total() << std::endl;
             lc.write(filename);
             EffectiveArea aeff_simple("simple");
-            EffectiveArea aeff("", "../data/aeff_P6_v1_diff_front.fits");
+            EffectiveArea aeff("",
+                facilities::commonUtilities::joinPath(facilities::commonUtilities::getDataPath("skymaps"), 
+                    "aeff_P6_v1_diff_front.fits"));
             Exposure exp(lc, aeff);
             std::cout << "Exposure check:\n ra\t value"<< std::endl;
             for( float ra(0); ra< 90; ra+=10.){
