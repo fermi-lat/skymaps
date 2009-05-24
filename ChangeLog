@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Sun May 24 15:22:23 PDT 2009
+skymaps/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+tagging after implementing cache in EffectiveArea
+    *
+------------------------------------------------------------
 User: burnett  Sun May 24 15:15:40 PDT 2009
 skymaps/data
 
