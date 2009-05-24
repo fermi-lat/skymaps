@@ -15,6 +15,8 @@ $Header$
 #include "tip/Table.h"
 
 namespace{
+// special cache for speedup
+
 // this code is copied from the latResponse package, mostly authored by J. Chiang 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     size_t binIndex(double x, const std::vector<float> & xx) {
@@ -148,11 +150,22 @@ double Bilinear::operator()(float x, float y) const {
                     + (1. - tt)*uu*y4 ); 
    return value;
 }
+
 }//anon namespace
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 using namespace skymaps;
-   
+
+bool EffectiveArea::s_cache_enabled(true);
+bool EffectiveArea::enable_cache(bool newval)
+{ 
+    bool oldval(s_cache_enabled);
+    s_cache_enabled=newval;
+    return oldval;
+}
+
+
+
 class EffectiveArea::FitsTable {
 
 public:
@@ -313,6 +326,8 @@ void EffectiveArea::FitsTable::getVectorData(const tip::Table * table,
    }
    row[fieldName].get(values);
 }
+
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -359,14 +374,41 @@ EffectiveArea::~EffectiveArea()
     delete m_aeffTable;
 }
 
+class EffectiveArea::CacheKey{
+public:
+    CacheKey(double logenergy, double costheta)
+        : m_key( static_cast<unsigned int>(logenergy*1000) 
+        + static_cast<unsigned int>(costheta*100.)  )
+    {}
+    operator unsigned int()const{return m_key;}
+private:
+    unsigned int m_key;
+};
+
+
 double EffectiveArea::value(double energy, double costheta)const
 {
     if(m_simple) {
         static double ctmin(0.2);
         return costheta>ctmin? 4000.*(costheta-ctmin)/(1.-ctmin) : 0 ;
     }
+    double loge(std::log10(energy));
+    CacheKey key(loge,costheta);
+    bool found(false);
+    if( s_cache_enabled ){
+        Cache::const_iterator it = m_cache.find(key);
+        if( it != m_cache.end() ){
+            float x = (*it).second;
+            return x;
+        }
+    }
     bool interpolate;
-    return m_aeffTable->value(std::log10(energy), costheta, interpolate=true)*1e4;
+    double val= m_aeffTable->value(loge, costheta, interpolate=true)*1e4;
+
+    if( s_cache_enabled){
+        m_cache[key]=val;
+    }
+    return val;
 }
 
 

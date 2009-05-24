@@ -12,11 +12,11 @@ $Header$
 #include <stdexcept>
 
 namespace{  // anonymous namespace for helper classes
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 /** @class Aeff
 @brief function class implements effective area vs costh, as adapter to EffectiveArea
 
-(currently linear only, no area.)
 */
 class Aeff {
 public:
@@ -33,13 +33,13 @@ public:
     double operator()(double costh) const
     {
         return costh<m_cutoff? 0 : m_aeff(m_energy, costh);
- //          return costh<m_cutoff? 0 : (costh-m_cutoff)/(1.-m_cutoff);
     }
     const skymaps::EffectiveArea& m_aeff;
     double m_energy;
     double m_cutoff;
 };
 
+#if 0 // not used???
    void writeEnergies(const std::string & filename,
                       const std::vector<double> & energies) {
       std::string ext("ENERGIES");
@@ -61,7 +61,7 @@ public:
 
       delete table;
    }
-
+#endif
 }  // anonymous namespace
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
