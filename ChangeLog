@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: kerrm  Mon May 25 11:01:33 PDT 2009
+skymaps/skymaps
+
+Modified Files:
+	Background.h Band.h Exposure.h PsfSkyFunction.h 
+Log Message:
+Added vector-valued functions for Python speed in Exposure and PsfSkyFunction.  Added a counts member for WeightedSkyDirList.  Band density code extensively modified, not yet settled.
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-09-13-00, operation: add
 Package: skymaps
