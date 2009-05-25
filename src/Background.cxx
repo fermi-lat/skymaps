@@ -168,3 +168,12 @@ std::string Background::name()const
     }
     return text.str();
 }
+
+std::vector<double> Background::wsdl_vector_value(skymaps::WeightedSkyDirList& dirs)const
+{
+    std::vector<double> rvals;
+    for (std::vector<skymaps::WeightedSkyDir>::const_iterator it = dirs.begin(); it != dirs.end(); ++it) {
+        rvals.push_back(this->operator()(*it) );
+    }
+    return rvals;
+}
