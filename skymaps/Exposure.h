@@ -51,6 +51,8 @@ public:
     /// @brief access to gti from the livetime cube
     const skymaps::Gti& gti()const{return m_ltcube.gti();}
 
+    std::vector<double> vector_value(const astro::SkyDir& dir, std::vector<double>& energies)const;
+
     /// @brief set the number of points used for Simpson's rule integration
     static void set_simpson(int n);
 

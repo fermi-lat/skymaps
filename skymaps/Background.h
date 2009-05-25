@@ -8,6 +8,7 @@ $Header$
 #define skymaps_Background_h
 
 #include "skymaps/SkySpectrum.h"
+#include "skymaps/Band.h"
 #include <vector>
 #include <algorithm> // for pair, make_pair
 
@@ -103,6 +104,8 @@ public:
 
     /// @brief set the number of points used for Simpson's rule integration
     static void set_simpson(int n);
+
+    std::vector<double> wsdl_vector_value (skymaps::WeightedSkyDirList & wsdl) const;
 
 private:
     const skymaps::SkySpectrum* m_diffuse;
