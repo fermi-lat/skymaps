@@ -93,7 +93,7 @@ namespace skymaps {
         void findNeighbors(int index, std::vector<int> &neighbors)const;
 
         /// @brief return the photon density at the given direction
-        double density(const astro::SkyDir&dir, bool smooth=false, int mincount = 0)const;
+        double density(const astro::SkyDir&dir, bool smooth=false, int mincount = 0, int kernel = 0, double smooth_radius = 3)const;
 
 
         /// @brief the solid angle for this pixelization
@@ -169,11 +169,15 @@ namespace skymaps {
 
         /// @brief implement SkyFunction: return weight, or zero
         double operator()(const astro::SkyDir& sdir)const;
-        int total_pix()const {return npix;}
+
+        /// @brief total pixels in list, including empties
+        int total_pix()const {return m_pix;}
+        int counts()const {return m_counts;}
 
     private:
         const skymaps::Band& m_band; ///< the band used to make
-        int npix;
+        int m_pix;
+        int m_counts;
     };
 
 

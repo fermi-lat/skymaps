@@ -9,6 +9,10 @@ $Header$
 #include "astro/SkyDir.h"
 #include "astro/SkyFunction.h"
 #include "skymaps/PsfFunction.h"
+#include "skymaps/Band.h"
+
+#include <vector>
+
 
 namespace skymaps{
 
@@ -37,6 +41,8 @@ namespace skymaps{
         double average(const astro::SkyDir& dir, double angle, double tolerance)const;
 
         double level_ave(const astro::SkyDir& dir, double angle, int level) const;
+
+        std::vector<double> wsdl_vector_value (skymaps::WeightedSkyDirList & wsdl) const;
    
 
 
