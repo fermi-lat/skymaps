@@ -111,6 +111,14 @@ double Exposure::integral(const astro::SkyDir& dir, double a, double b)const
     return result*step/3.;
 }
 
+std::vector<double> Exposure::vector_value(const astro::SkyDir& dir, std::vector<double>& energies)const
+{
+    std::vector<double> rvals;
+    for (std::vector<double>::const_iterator it = energies.begin(); it != energies.end(); ++it) {
+        rvals.push_back(value(dir,*it));
+    }
+    return rvals;
+}
 std::string Exposure::name()const
 {
     return "Exposure";

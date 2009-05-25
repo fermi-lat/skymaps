@@ -5,6 +5,7 @@ $Header$
 */
 
 #include "skymaps/Band.h"
+#include "skymaps/PsfSkyFunction.h"
 
 #include "healpix/Healpix.h"
 #include <stdexcept>
@@ -177,37 +178,29 @@ void Band::add(const Band& other)
     }
 }
 
-double Band::density(const astro::SkyDir& sd, bool smooth,int mincount)const
+double Band::density(const astro::SkyDir& sd, bool smooth, int mincount, int kernel, double smooth_radius)const
 {
     
     double value = 0.0, weight = 0.0;
-        
-    int my_index(index(sd));
-    astro::SkyDir my_dir(dir(my_index));
-    PixelMap::const_iterator it;
-        
-    double d = my_dir.difference(sd);
+    double cweight, d;
+    int count;
 
-    it = m_pixels.find(my_index);
-    int count( it == m_pixels.end() ? 0 : it->second );
-
-    if (!smooth)
+    if (!smooth) { 
+        int my_index(index(sd));
+        astro::SkyDir my_dir(dir(my_index));
+        PixelMap::const_iterator it = m_pixels.find(my_index);
+        count = ( it == m_pixels.end() ? 0 : it->second );
         return count/pixelArea();
-
-    if (fabs(d) < 1e-6) // Though unlikely, check for "exact" hit.
-    {
-        if (count < mincount)
-            count = 0;
-        return count / pixelArea();
     }
 
-    // Not exact hit, so add this pixel's weighted count to total
-    weight += 1 / d;  // Use 1/distance as weight factor.
-    value += count * (1/d);
-        
+    // Though unlikely, check for "exact" hit.
+    // if (fabs(d) < 1e-6) { return (count<mincount?0:count) / pixelArea(); }
+   
+    /*
     // Now average in contributions from neighbors.
     std::vector<int> v;
     findNeighbors(my_index, v);
+    bool neighbors_all_zero(true);
     for (std::vector<int>::const_iterator n = v.begin(); n != v.end(); ++n)
     {
         int my_index(*n);
@@ -215,13 +208,35 @@ double Band::density(const astro::SkyDir& sd, bool smooth,int mincount)const
         double d = my_dir.difference(sd);
         weight += 1 / d;
         it = m_pixels.find(my_index);
-        int count(it == m_pixels.end() ? 0 : it->second);
-        if (count < mincount)
-            count = 0;
-        value += count * (1/d);
+        count = (it == m_pixels.end() ? 0 : it->second);
+        neighbors_all_zero = neighbors_all_zero && (count == 0);
+        value += (count<mincount?0:count) * (1/d);
+    }
+    */
+
+        
+    skymaps::PsfSkyFunction psf(sd,gamma(),sigma());
+    std::vector<std::pair<astro::SkyDir,int> > v;
+    query_disk(sd,smooth_radius*sigma(),v,true);
+    bool neighbors_all_zero(true);
+    for (std::vector<std::pair<astro::SkyDir,int> >::const_iterator n = v.begin(); n!= v.end(); ++n)
+    {
+
+        if (kernel == 0) { cweight = psf(n->first); }
+        else {
+            d = sd.difference(n->first);
+            cweight = 1 / d;
+        }
+
+        count = n->second;
+        neighbors_all_zero = neighbors_all_zero && (count == 0);
+
+        weight += cweight;
+        value  += (count<mincount?0:count) * cweight;
     }
         
-    return value / weight / pixelArea();
+    return (neighbors_all_zero?0:value) / weight / pixelArea();
+    //return value / weight / pixelArea();
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -230,8 +245,8 @@ WeightedSkyDirList::WeightedSkyDirList(const Band& band, const astro::SkyDir& sd
 : m_band(band)
 {
     std::vector<std::pair<astro::SkyDir,int> > vec;
-    band.query_disk(sdir, radius, vec, not_empty);
-    npix = band.cache_pix(); // save this to avoid a query_disc call in future
+    m_counts = band.query_disk(sdir, radius, vec, not_empty);
+    m_pix = band.cache_pix(); // save this to avoid a possibly-expensive query_disc call in future
     for( std::vector<std::pair<astro::SkyDir,int> >::const_iterator it=vec.begin(); it!=vec.end(); ++it){
         push_back(WeightedSkyDir(it->first, it->second));
     }

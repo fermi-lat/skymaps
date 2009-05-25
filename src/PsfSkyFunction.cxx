@@ -25,6 +25,15 @@ double PsfSkyFunction::operator () (const astro::SkyDir & r)const
     return m_psf(r, m_dir, m_sigma);
 }
 
+std::vector<double> PsfSkyFunction::wsdl_vector_value(skymaps::WeightedSkyDirList& dirs)const
+{
+    std::vector<double> rvals;
+    for (std::vector<skymaps::WeightedSkyDir>::const_iterator it = dirs.begin(); it != dirs.end(); ++it) {
+        rvals.push_back(m_psf(*it,m_dir,m_sigma));
+    }
+    return rvals;
+}
+
 //copied from SkySpectrum.cxx by M. Kerr 14 January 2009
 double PsfSkyFunction::average(const astro::SkyDir& dir, double angle, double tolerance)const
 {
