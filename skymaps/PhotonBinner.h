@@ -45,6 +45,11 @@ namespace skymaps {
         ///@brief bin a photon by returning an appropriate Band object
         virtual skymaps::Band operator()(const astro::Photon& photon)const;
            
+        static void set_max_nside(int new_nside);
+        static int  get_max_nside();
+
+        static void set_sigma_scale(double sigscale);
+        static double get_sigma_scale();
 
     private:
         /**@brief setupbins  sets up bin to pixel connection with current bin set
@@ -58,6 +63,8 @@ namespace skymaps {
         static std::vector<double> s_benergy; //the mapping between energy and healpix levels for back events
         static std::vector<double> s_sigma_level;
         static std::vector<double> s_gamma_level;
+        static int max_nside;
+        static double m_sigma_scale;
     };
 }
 
