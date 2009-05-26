@@ -48,6 +48,16 @@ std::vector<double> PhotonBinner::s_benergy(back_list,  back_list+sizeof(back_li
 std::vector<double> PhotonBinner::s_gamma_level(gamma_list,gamma_list+14);
 std::vector<double> PhotonBinner::s_sigma_level(sigma_list,sigma_list+14);
 
+//maximum nside (default 8192 set by 32 bit limit)
+int PhotonBinner::max_nside(8192);
+void PhotonBinner::set_max_nside(int new_nside){max_nside = new_nside;}
+int PhotonBinner::get_max_nside(){return max_nside;}
+
+//sigma scale - constant factor by which to multiply 1/sigma to get nside
+//default value gives a pixel side of about sigma/2
+double PhotonBinner::m_sigma_scale(2*M_PI/3);
+void PhotonBinner::set_sigma_scale(double sigscale){m_sigma_scale = sigscale;}
+double PhotonBinner::get_sigma_scale(){return m_sigma_scale;}
 
 PhotonBinner::PhotonBinner(double bins_per_decade)
 : m_bins_per_decade(bins_per_decade)
@@ -122,8 +132,10 @@ skymaps::Band PhotonBinner::operator()(const astro::Photon& p)const
         //  kluge, from Marshall's fits
         sigma = IParams::sigma(ebar,event_class);
         gamma = IParams::gamma(ebar,event_class);
-        nside = (2*M_PI/(3*sigma));
-        nside=nside>8192?8192:nside;
+        //nside = (2*M_PI/(3*sigma));
+        nside = m_sigma_scale/sigma;
+        //nside=nside>8192?8192:nside;
+        nside=nside>max_nside?max_nside:nside;
         nside=nside<1?1:nside;
     }
     return  Band(nside, event_class, elow, ehigh, sigma, gamma);
