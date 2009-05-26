@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: kerrm  Tue May 26 14:07:22 PDT 2009
+skymaps/src
+
+Modified Files:
+	PhotonBinner.cxx 
+Log Message:
+Band modified with additional options for displaying density.  PhotonBinner generalized to arbitrary maximum nside and scaling of nside with 1/sigma.
+    *
+------------------------------------------------------------
 User: kerrm  Mon May 25 11:42:22 PDT 2009
 skymaps/python
 
