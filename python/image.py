@@ -1,17 +1,19 @@
 """ image processing:
     class AIT for full sky
           ZEA for square region
+          TSplot special adapter for ZEA
           
      author: T. Burnett tburnett@u.washington.edu
 
 $Header$
 
 """
-version = '$Id$'.split()[2]
+version = '$Revision 1.12$'.split()[1]
 
 import pylab
 import math
 import numpy as np
+import pylab as pl
 from matplotlib import mpl, pyplot, ticker
 from skymaps import SkyImage, SkyDir, double2, SkyProj
 
@@ -53,7 +55,7 @@ class Rescale(object):
 
     def formatter(self, t):
         n=0
-        s = np.abs(np.array(t))+1e-6
+        s = np.abs(np.array(t))+1e-9
         for i in range(4):
             #print s, s-np.floor(s), (s-np.floor(s)).max()
             if (s-np.floor(s)).max()<1e-3: break
@@ -511,6 +513,121 @@ def ZEA_test(ra=90, dec=85, size=5, nticks=8, galactic=False):
         q.plot_source( '(%d,%d)'%(ra,dec), SkyDir(ra,dec), 'x')
     pyplot.show()
     return q
+
+class TSplot(object):
+    """
+    Create a "TS plot" 
+    Uses ghe ZEA class for display
+
+    """
+    def __init__(self, tsmap, center, size, pixelsize=None, axes=None, nticks=4):
+        """
+        parameters:
+        *tsmap*   a SkyFunction, that takes a SkyDir argument and returns a value
+        *center*  SkyDir direction to center the plot
+        *size*    (degrees) half width of plot
+        *pixelsize* [None] size (degrees) of a pixel: if not specified, will be size/10
+        *axes* [None] Axes object to use: if None, use current
+        *nticks* [4] Suggestion for labeling
+        """
+
+        self.tsmap = tsmap
+        self.size=size
+        if pixelsize is None: pixelsize=size/10. 
+        self.zea= ZEA(center, size, pixelsize, axes=axes, nticks=nticks)
+        print 'filling %d pixels...'% (size/pixelsize)**2
+        self.zea.fill(tsmap)
+        print 'converting...'
+        Imax= self.zea.image.max()
+        self.image =np.sqrt(np.abs(Imax-self.zea.image))
+        self.cb=None
+        # np.sqrt(-2* np.log(1-np.array([0.68,0.95, 0.99]))
+        self.clevels = np.array([1.51, 2.45, 3.03])
+
+
+    def show(self):
+        """
+        Generate the basic plot, with contours, scale bar, color bar, and grid
+        """
+        norm2 = mpl.colors.Normalize(vmin=0, vmax=5)
+        cmap2 = mpl.cm.hot_r
+
+        self.nx,self.ny = self.image.shape
+        axes = self.zea.axes
+        t = axes.imshow(self.image, origin='lower', 
+            extent=(0,self.nx,0,self.ny),
+            cmap=cmap2, norm=norm2,
+            interpolation='bilinear')
+        if self.cb is None:
+            self.cb = pyplot.colorbar(t, ax=axes, 
+                cmap=cmap2, norm=norm2,
+                ticks=ticker.MultipleLocator(),
+                orientation='vertical',
+                #shrink=1.0,
+                )
+        self.cb.set_label('$\mathrm{sqrt(TS difference)}$')
+
+        ct=axes.contour(  np.arange(0.5, self.nx,1), np.arange(0.5, self.ny, 1), self.image,
+            self.clevels, 
+            colors='k', linestyles='-' )
+        if axes.get_xlim()[0] !=0:
+            print 'Warning: coutour modified: limits', axes.get_xlim(), axes.get_ylim()
+        cfmt={} 
+        for key,t in zip(self.clevels,['68%','95%', '99%']): cfmt[key]=t
+        pl.clabel(ct, fmt=cfmt, fontsize=10)
+        #axes.set_xlim((0,nx)); axes.set_ylim((0,ny))
+        #print 'after reset', axes.get_xlim(), axes.get_ylim()
+        if self.size< 0.2:
+            self.zea.scale_bar(1/120.,  '30"', color='w')
+        else:
+            self.zea.scale_bar(1./60, "1'", color='w')
+        self.zea.grid(color='gray')
+
+    def overplot(self, quadfit, sigma):
+        """
+        OVerplot contours from a fit to surface
+        """
+        axes = self.zea.axes
+        x,y = quadfit.ellipse.contour(2)
+        #sigma = quadfit.sigma #effective sigma from quad fit
+        ra,dec = quadfit.ra, quadfit.dec
+        pixelsize=self.zea.pixelsize #scale for plot
+        x0,y0 = self.zea.pixel(SkyDir(ra,dec))
+        f=sigma/pixelsize #scale factor
+        xa = f*np.array(x)
+        ya = f*np.array(y)
+        axes.plot([x0],[y0], '+b')
+        for r in self.clevels:
+            axes.plot(r*xa+x0,r*ya+y0, '-.b');
+        axes.text(0.5, 0.93,'chisq=%5.2f'%quadfit.ellipse.chisq, color='w', fontsize=10,
+            transform = axes.transAxes)
+
+    def cross(self, sdir, size, label=None,  fontsize=12, markersize=10, fontcolor='k', **kwargs):
+        """ make a cross at the position, size defined in celestial coordinats
+        """
+      
+        image=self.zea
+        x,y = image.pixel(sdir)
+        pixelsize = image.pixelsize
+        delta = size/pixelsize
+        axes = self.zea.axes
+        axes.plot([x-delta, x+delta], [y,y], '-k', **kwargs)
+        axes.plot([x,x], [y-delta, y+delta], '-k', **kwargs)
+        if label is not None:
+            nx = image.nx 
+            image.axes.text( x+nx/100., y+nx/100., label, fontsize=fontsize, color=fontcolor)
+
+    def plot(self, loc, label=None, symbol='+',  fontsize=12, markersize=10, fontcolor='k',  **kwargs):
+        """ plot a single point at the celestial location
+            return the tsmap value there
+        """
+        image = self.zea
+        nx = image.nx 
+        x,y = image.pixel(loc)
+        image.axes.plot([x], [y], symbol, markersize=markersize, **kwargs)
+        if label is not None:
+            image.axes.text( x+nx/100., y+nx/100., label, fontsize=fontsize, color=fontcolor)
+        return self.tsmap(loc)
 
 
 if __name__=='__main__':
