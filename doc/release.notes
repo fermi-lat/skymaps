@@ -5,6 +5,7 @@
 $Id$
 @verbatim
  --------- -----   --- -----------------------------------------------------------------------
+ 27-may-09 v1r21p1 THB added TSmap class to image.py
  24-may-09 v1r21   THB enhanced EffectiveArea to use caching--speeds up!
  17-may-09 v1r20p2 THB gcc fix
  14-may-09 v1r20   MR  Fixed extrapolation error in IParams
