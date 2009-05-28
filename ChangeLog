@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Thu May 28 07:36:37 PDT 2009
+skymaps/python
+
+Modified Files:
+	image.py 
+Log Message:
+tweak formatting for TSplot
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-21-01, operation: add
 Package: skymaps
