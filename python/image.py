@@ -545,7 +545,7 @@ class TSplot(object):
         self.clevels = np.array([1.51, 2.45, 3.03])
 
 
-    def show(self):
+    def show(self, colorbar=True):
         """
         Generate the basic plot, with contours, scale bar, color bar, and grid
         """
@@ -558,14 +558,15 @@ class TSplot(object):
             extent=(0,self.nx,0,self.ny),
             cmap=cmap2, norm=norm2,
             interpolation='bilinear')
-        if self.cb is None:
-            self.cb = pyplot.colorbar(t, ax=axes, 
-                cmap=cmap2, norm=norm2,
-                ticks=ticker.MultipleLocator(),
-                orientation='vertical',
-                #shrink=1.0,
-                )
-        self.cb.set_label('$\mathrm{sqrt(TS difference)}$')
+        if colorbar:
+            if self.cb is None:
+                self.cb = pyplot.colorbar(t, ax=axes, 
+                    cmap=cmap2, norm=norm2,
+                    ticks=ticker.MultipleLocator(),
+                    orientation='vertical',
+                    #shrink=1.0,
+                    )
+            self.cb.set_label('$\mathrm{sqrt(TS difference)}$')
 
         ct=axes.contour(  np.arange(0.5, self.nx,1), np.arange(0.5, self.ny, 1), self.image,
             self.clevels, 
@@ -577,7 +578,7 @@ class TSplot(object):
         pl.clabel(ct, fmt=cfmt, fontsize=10)
         #axes.set_xlim((0,nx)); axes.set_ylim((0,ny))
         #print 'after reset', axes.get_xlim(), axes.get_ylim()
-        if self.size< 0.2:
+        if self.size< 0.03:
             self.zea.scale_bar(1/120.,  '30"', color='w')
         else:
             self.zea.scale_bar(1./60, "1'", color='w')
@@ -602,7 +603,7 @@ class TSplot(object):
         axes.text(0.5, 0.93,'chisq=%5.2f'%quadfit.ellipse.chisq, color='w', fontsize=10,
             transform = axes.transAxes)
 
-    def cross(self, sdir, size, label=None,  fontsize=12, markersize=10, fontcolor='k', **kwargs):
+    def cross(self, sdir, size, label=None,  fontsize=12, markersize=10,  **kwargs):
         """ make a cross at the position, size defined in celestial coordinats
         """
       
@@ -615,9 +616,10 @@ class TSplot(object):
         axes.plot([x,x], [y-delta, y+delta], '-k', **kwargs)
         if label is not None:
             nx = image.nx 
-            image.axes.text( x+nx/100., y+nx/100., label, fontsize=fontsize, color=fontcolor)
+            if 'lw' in kwargs: kwargs.pop('lw')
+            image.axes.text( x+nx/100., y+nx/100., label, fontsize=fontsize, **kwargs)
 
-    def plot(self, loc, label=None, symbol='+',  fontsize=12, markersize=10, fontcolor='k',  **kwargs):
+    def plot(self, loc, label=None, symbol='+',  fontsize=12, markersize=10,  **kwargs):
         """ plot a single point at the celestial location
             return the tsmap value there
         """
@@ -626,7 +628,7 @@ class TSplot(object):
         x,y = image.pixel(loc)
         image.axes.plot([x], [y], symbol, markersize=markersize, **kwargs)
         if label is not None:
-            image.axes.text( x+nx/100., y+nx/100., label, fontsize=fontsize, color=fontcolor)
+            image.axes.text( x+nx/100., y+nx/100., label, fontsize=fontsize)
         return self.tsmap(loc)
 
 
