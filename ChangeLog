@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Sat May 30 15:41:51 PDT 2009
+skymaps/src/test
+
+Modified Files:
+	test_main.cxx 
+Log Message:
+adjust tolerance so unit test passes
+    *
+------------------------------------------------------------
 User: burnett  Thu May 28 07:36:37 PDT 2009
 skymaps/python
 
