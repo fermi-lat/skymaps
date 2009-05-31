@@ -357,6 +357,7 @@ EffectiveArea::EffectiveArea(std::string irfname, std::string filename)
         }
         filename = std::string(s_CALDB+"/bcf/ea/aeff_"+irfname+".fits");
     }
+    m_cache.clear();
     static std::string table_name("EFFECTIVE AREA");
     try{
         //const tip::Table * table = tip::IFileSvc::instance().readTable(infile, table_name, "");
@@ -373,16 +374,10 @@ EffectiveArea::~EffectiveArea()
     delete m_aeffTable;
 }
 
-class EffectiveArea::CacheKey{
-public:
-    CacheKey(double logenergy, double costheta)
-        : m_key( static_cast<unsigned int>(logenergy*1000) 
-        + static_cast<unsigned int>(costheta*100.)  )
-    {}
-    operator unsigned int()const{return m_key;}
-private:
-    unsigned int m_key;
-};
+EffectiveArea::CacheKey::CacheKey(double logenergy, double costheta)
+                : m_key( static_cast<unsigned int>(logenergy*100)*100 
+                + static_cast<unsigned int>(costheta*100.)  )
+            {}
 
 
 double EffectiveArea::value(double energy, double costheta)const

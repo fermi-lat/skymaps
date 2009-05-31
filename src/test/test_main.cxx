@@ -65,9 +65,19 @@ int main(int , char** )
             std::cout << "filled with: " << lc.total() << std::endl;
             lc.write(filename);
             EffectiveArea aeff_simple("simple");
+
             EffectiveArea aeff("",
                 facilities::commonUtilities::joinPath(facilities::commonUtilities::getDataPath("skymaps"), 
                     "aeff_P6_v1_diff_front.fits"));
+            double energy(1000);
+            for( double ct=1.0; ct>0.2; ct-=0.01){
+                std::cout << ct <<"  " <<  aeff(energy, ct) << ", " << aeff(energy,ct) << std::endl;
+            }
+            energy=1001; // slightly different
+            for( double ct=1.0; ct>0.2; ct-=0.01){
+                std::cout << ct <<"  " <<  aeff(energy, ct) << ", " << aeff(energy,ct) << std::endl;
+            }
+
             Exposure exp(lc, aeff);
             std::cout << "Exposure check:\n ra\t value"<< std::endl;
             for( float ra(0); ra< 90; ra+=10.){

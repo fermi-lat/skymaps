@@ -53,12 +53,22 @@ namespace skymaps {
 
         static bool enable_cache(bool value=true);
     private:
+        EffectiveArea(const EffectiveArea& other){} // hide copy ctor
         class FitsTable; // forward declaration
         bool m_simple;
         FitsTable * m_aeffTable;
         static std::string s_CALDB;
         static bool s_cache_enabled;
-        class CacheKey; // forward declaration of Key used for cache
+
+        /// @class private class to hash a key for lookup
+        class CacheKey{
+        public:
+            CacheKey(double logenergy, double costheta);
+            operator unsigned int()const{return m_key;}
+        private:
+            unsigned int m_key;
+        };
+
         typedef std::map<CacheKey, float> Cache;
         mutable Cache m_cache; ///< cache values for speed
     };
