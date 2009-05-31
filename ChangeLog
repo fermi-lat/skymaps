@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Sun May 31 13:29:56 PDT 2009
+skymaps/skymaps
+
+Modified Files:
+	EffectiveArea.h 
+Log Message:
+separate energy and angle fields for  integer cache key; tag
+    *
+------------------------------------------------------------
 User: burnett  Sun May 31 13:29:55 PDT 2009
 skymaps/doc
 
