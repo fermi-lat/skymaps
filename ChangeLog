@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Sun May 31 13:29:55 PDT 2009
+skymaps/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+separate energy and angle fields for  integer cache key; tag
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-21-03, operation: add
 Package: skymaps
