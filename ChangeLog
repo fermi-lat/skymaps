@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Sun May 31 13:29:55 PDT 2009
+skymaps/doc
+
+Modified Files:
+	release.notes 
+Log Message:
+separate energy and angle fields for  integer cache key; tag
+    *
+------------------------------------------------------------
+User: burnett  Sun May 31 13:29:55 PDT 2009
 skymaps/cmt
 
 Modified Files:
