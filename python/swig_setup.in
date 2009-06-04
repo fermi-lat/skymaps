@@ -35,6 +35,7 @@
 #include "skymaps/BandBackground.h"
 #include "skymaps/SpectralFunction.h"
 #include "skymaps/SkyIntegrator.h"
+#include "skymaps/ComplexSkySpectrum.h"
 
 #include "CLHEP/Vector/Rotation.h"
 #include "CLHEP/Vector/EulerAngles.h"
@@ -238,6 +239,7 @@ void delete_double2(double *d) {
 %include ../skymaps/BandBackground.h
 %include ../skymaps/SpectralFunction.h
 %include ../skymaps/SkyIntegrator.h
+%include ../skymaps/ComplexSkySpectrum.h
 
 
 
