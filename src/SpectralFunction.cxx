@@ -17,8 +17,8 @@ using namespace skymaps;
 
 int SpectralFunction::s_n(4);
 double SpectralFunction::s_e0(1000.);
+double SpectralFunction::e0(){return s_e0;}
 double SpectralFunction::s_flux_scale(1.);
-std::vector<const skymaps::SkySpectrum*> SpectralFunction::s_exposures;
 
 namespace{
 
@@ -45,28 +45,42 @@ void SpectralFunction::set_simpson(int n){
 
 void SpectralFunction::set_exposures(const skymaps::SkySpectrum* front, const skymaps::SkySpectrum* back)
 {
-    s_exposures.clear();
-    s_exposures.push_back(front);
-    s_exposures.push_back(back);
+    m_exposures.clear();
+    m_exposures.push_back(front);
+    m_exposures.push_back(back);
 }
-const skymaps::SkySpectrum* SpectralFunction::exposure(int n){
-    if( s_exposures.size() <2 ) {
+const skymaps::SkySpectrum* SpectralFunction::exposure(int n)const{
+    if( m_exposures.size() <2 ) {
         throw std::invalid_argument("SpectralFunction: exposures not set");
     }
-    return s_exposures.at(n);
+    return m_exposures.at(n);
 }
 
 SpectralFunction::SpectralFunction(const std::string& name, const std::vector<double>& pars)
 : m_name(name)
 , m_pars(pars)
 {
-    if( s_exposures.size() <2 ) {
-        throw std::invalid_argument("SpectralFunction: exposures not set");
-    }
+    setup();
+}
+
+SpectralFunction::SpectralFunction(const std::string& name, 
+                                   const std::vector<double>& pars,
+                                   const skymaps::SkySpectrum* front, 
+                                   const skymaps::SkySpectrum* back
+                                   )
+: m_name(name)
+, m_pars(pars)
+{
+    set_exposures(front,back);
     setup();
 }
 void SpectralFunction::setup()
 {
+
+    if( m_exposures.size() <2 ) {
+        throw std::invalid_argument("SpectralFunction: exposures not set");
+    }
+
     int i(0); 
     while(1){
         if(defaults[i].name.empty()){
