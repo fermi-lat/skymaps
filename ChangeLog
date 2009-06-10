@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Wed Jun 10 11:07:28 PDT 2009
+skymaps/skymaps
+
+Modified Files:
+	SpectralFunction.h 
+Log Message:
+move exposure pointers to the object after python dll conflict.
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-09-15-01, operation: add
 Package: skymaps
