@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Wed Jun 10 11:07:28 PDT 2009
+skymaps/src
+
+Modified Files:
+	SpectralFunction.cxx 
+Log Message:
+move exposure pointers to the object after python dll conflict.
+    *
+------------------------------------------------------------
+User: burnett  Wed Jun 10 11:07:28 PDT 2009
 skymaps/skymaps
 
 Modified Files:
