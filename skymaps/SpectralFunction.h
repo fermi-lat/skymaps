@@ -24,11 +24,23 @@ class SkySpectrum;
     public:
 
         /** @brief ctor
-        @param type The spectral function type
-        @param pars specified parameters, appropriate for the type
+        @param name The spectral function name: if not recognized, error message will provide the list
+        @param pars specified parameters, appropriate for the type (set set_exposures to modify)
 
         */
-        SpectralFunction(const std::string& name, const std::vector<double>& pars);
+        SpectralFunction(const std::string& name, 
+            const std::vector<double>& pars);
+
+        /** @brief ctor
+        @param name The spectral function name: if not recognized, error message will provide the list
+        @param pars specified parameters, appropriate for the type (set set_exposures to modify)
+        @param front front exposure object
+        @param back  back exposure object
+
+        */
+        SpectralFunction(const std::string& name, 
+            const std::vector<double>& pars,
+            const skymaps::SkySpectrum* front, const skymaps::SkySpectrum* back);
 
         virtual ~SpectralFunction(){}
 
@@ -44,20 +56,24 @@ class SkySpectrum;
         /// @param dir the direction for exposure
         /// @param band the band object
         /// Note that this depends on exposure and effective area
-        /// It will to the integral over the band
+        /// It will do the integral over the band
         double expected(const astro::SkyDir& dir,const skymaps::Band& band)const; 
     
         const std::string& name()const{return m_name;}
         
         std::vector<double>pars()const{return m_pars;}
+		/// for consistency with the Kerr system
+		std::vector<double>get_parameters()const{return m_pars;}
 
         void set_parameters(const std::vector<double>& pars){m_pars=pars;}
 
-        static void set_exposures(const skymaps::SkySpectrum* front, const skymaps::SkySpectrum* back);
+        void set_exposures(const skymaps::SkySpectrum* front, const skymaps::SkySpectrum* back);
 
         /// @brief access to exposure object
-        static const skymaps::SkySpectrum* exposure(int n);
+        const skymaps::SkySpectrum* exposure(int n)const;
         static void set_simpson(int n);
+
+	static double e0();
 
     private:
         int m_index;
@@ -71,7 +87,7 @@ class SkySpectrum;
 
 
         /// list of exposure objects
-        static std::vector<const skymaps::SkySpectrum*> s_exposures;
+         std::vector<const skymaps::SkySpectrum*> m_exposures;
 
     };
 
