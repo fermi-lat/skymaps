@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Thu Jun 11 08:03:10 PDT 2009
+skymaps/src/test
+
+Modified Files:
+	test_main.cxx 
+Log Message:
+compilation error in test program
+    *
+------------------------------------------------------------
+User: burnett  Thu Jun 11 08:03:10 PDT 2009
 skymaps/src
 
 Modified Files:
