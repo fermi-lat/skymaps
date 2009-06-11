@@ -5,6 +5,7 @@
 $Id$
 @verbatim
  --------- -----   --- -----------------------------------------------------------------------
+ 12-jun-09 v1r22p1 THB fix compilation error in test
  11-jun-09 v1r22   THB Changed ctor for SpectralFunction
  31-may-09 v1r21p4 THB cacheing algorithm fix
  30-may-09 v1r21p3 THB fix test
