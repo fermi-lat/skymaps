@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Thu Jun 11 08:03:10 PDT 2009
+skymaps/src
+
+Modified Files:
+	SkyIntegrator.cxx 
+Log Message:
+compilation error in test program
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-22-00, operation: add
 Package: skymaps
