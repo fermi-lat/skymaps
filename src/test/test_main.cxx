@@ -73,10 +73,6 @@ int main(int , char** )
             for( double ct=1.0; ct>0.2; ct-=0.01){
                 std::cout << ct <<"  " <<  aeff(energy, ct) << ", " << aeff(energy,ct) << std::endl;
             }
-            energy=1001; // slightly different
-            for( double ct=1.0; ct>0.2; ct-=0.01){
-                std::cout << ct <<"  " <<  aeff(energy, ct) << ", " << aeff(energy,ct) << std::endl;
-            }
 
             Exposure exp(lc, aeff);
             std::cout << "Exposure check:\n ra\t value"<< std::endl;
@@ -94,8 +90,7 @@ int main(int , char** )
 
             // use this Exposure object to test SpectralFunction
             std::vector<double> pars; pars.push_back(-11); pars.push_back(2.0);
-            SpectralFunction::set_exposures(&exp,&exp);
-            SpectralFunction f("PowerLaw", pars);
+            SpectralFunction f("PowerLaw", pars, &exp, &exp);
             double e1(1000), e2(1010);
             Band b(8, 0, e1, e2, 0.1, 2.0);
             double y1(f(e1)), y2(f(e2));
@@ -112,6 +107,7 @@ int main(int , char** )
                 std::cout << " -- OK!\n";
             }
             try{
+                std::cout << "Try bad SpectralFunction name:" << std::endl;
                 SpectralFunction g("junk", pars);
             }catch(...){
                 std::cout << "expected this error \n";
