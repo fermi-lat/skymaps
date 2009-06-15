@@ -10,6 +10,8 @@ $Header$
 #include <string>
 #include <vector>
 
+#include "skymaps/Exposure.h"
+
 namespace skymaps {
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -55,6 +57,9 @@ public:
     //set the CALDB directory
     static void set_CALDB(const std::string& dir);
 
+    static void set_livetimefile(const std::string& ltfile);
+    static void set_skydir(const astro::SkyDir& dir);
+
     //returns 
     static std::vector<double> params(int event_class);
     static double scale(double energy, int event_class);
@@ -74,8 +79,12 @@ private:
     static std::vector<double> s_bgam; //back tail parameterization
 
     static std::string s_CALDB;
+    static std::string s_livetimefile;
 
     static bool s_init; //checks to see whether initialization has been performed
+
+    static astro::SkyDir dir;
+    
 };
 
 }

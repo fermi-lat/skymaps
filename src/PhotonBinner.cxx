@@ -82,7 +82,8 @@ PhotonBinner::PhotonBinner(const std::vector<double>& bins)
     // surround the user list with 30 and 1e6 to catch under and overflows
     m_bins.push_back(30);
     std::copy(bins.begin(), bins.end(), std::back_insert_iterator<std::vector<double> >(m_bins));
-    m_bins.push_back(1e6); 
+    m_bins.push_back(1e6);
+    m_bins_per_decade = 1; //MTK kluge
     setupbins();
 }
 
