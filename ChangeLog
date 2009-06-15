@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: kerrm  Mon Jun 15 14:44:31 PDT 2009
+skymaps/skymaps
+
+Modified Files:
+	Band.h Exposure.h IParams.h 
+Log Message:
+Added code to IParams to use the EffectiveArea and/or Livetime to calculate the averaged PSF to use in an energy band.
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-09-15-02, operation: add
 Package: skymaps
