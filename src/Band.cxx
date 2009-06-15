@@ -15,6 +15,12 @@ using healpix::Healpix;
 using astro::SkyDir;
 
 int Band::cache_pix_counts(0);
+bool Band::m_enable_cache(true);
+bool Band::enable_cache(bool b) {
+    bool t = m_enable_cache;
+    m_enable_cache = b;
+    return t;
+}
 
 Band::Band(int nside)
             : m_nside(nside)
@@ -184,37 +190,22 @@ double Band::density(const astro::SkyDir& sd, bool smooth, int mincount, int ker
     double value = 0.0, weight = 0.0;
     double cweight, d;
     int count;
+    int my_index(index(sd));
+    if (m_enable_cache) {
+        std::map<int,double>::const_iterator it = m_density_cache.find(my_index);
+        if (it != m_density_cache.end()){
+            return it->second;
+        }
+    }
 
     if (!smooth) { 
-        int my_index(index(sd));
         astro::SkyDir my_dir(dir(my_index));
         PixelMap::const_iterator it = m_pixels.find(my_index);
-        count = ( it == m_pixels.end() ? 0 : it->second );
-        return count/pixelArea();
+        value = ( it == m_pixels.end() ? 0 : it->second )/pixelArea();
+        if (m_enable_cache) m_density_cache[my_index] = value;
+        return value;
     }
-
-    // Though unlikely, check for "exact" hit.
-    // if (fabs(d) < 1e-6) { return (count<mincount?0:count) / pixelArea(); }
-   
-    /*
-    // Now average in contributions from neighbors.
-    std::vector<int> v;
-    findNeighbors(my_index, v);
-    bool neighbors_all_zero(true);
-    for (std::vector<int>::const_iterator n = v.begin(); n != v.end(); ++n)
-    {
-        int my_index(*n);
-        astro::SkyDir my_dir(dir(my_index));
-        double d = my_dir.difference(sd);
-        weight += 1 / d;
-        it = m_pixels.find(my_index);
-        count = (it == m_pixels.end() ? 0 : it->second);
-        neighbors_all_zero = neighbors_all_zero && (count == 0);
-        value += (count<mincount?0:count) * (1/d);
-    }
-    */
-
-        
+       
     skymaps::PsfSkyFunction psf(sd,gamma(),sigma());
     std::vector<std::pair<astro::SkyDir,int> > v;
     query_disk(sd,smooth_radius*sigma(),v,true);
@@ -235,7 +226,9 @@ double Band::density(const astro::SkyDir& sd, bool smooth, int mincount, int ker
         value  += (count<mincount?0:count) * cweight;
     }
         
-    return (neighbors_all_zero?0:value) / weight / pixelArea();
+    value = (neighbors_all_zero?0:value) / weight / pixelArea();
+    if (m_enable_cache) m_density_cache[my_index] = value;
+    return value;
     //return value / weight / pixelArea();
 }
 

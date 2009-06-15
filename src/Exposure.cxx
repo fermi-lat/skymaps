@@ -111,6 +111,12 @@ double Exposure::integral(const astro::SkyDir& dir, double a, double b)const
     return result*step/3.;
 }
 
+double Exposure::diff_value(const astro::SkyDir& dir, double e, double costh) const {
+    double ae( m_aeff.value(e,costh) );
+    double lt( const_cast<skymaps::LivetimeCube&>(m_ltcube).value(dir,costh) );
+    return ae * lt;
+}
+
 std::vector<double> Exposure::vector_value(const astro::SkyDir& dir, std::vector<double>& energies)const
 {
     std::vector<double> rvals;

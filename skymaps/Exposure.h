@@ -46,6 +46,9 @@ public:
     ///@param b upper limit
     virtual double integral(const astro::SkyDir& dir, double a, double b)const;
 
+    ///@brief return differential (in cosine incidence) value for PSF averaging
+    double diff_value(const astro::SkyDir& dir, double e, double costh) const;
+
     virtual std::string name()const;
 
     /// @brief access to gti from the livetime cube

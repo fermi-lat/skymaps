@@ -115,6 +115,7 @@ namespace skymaps {
         double frac2() const { return m_frac2;}
 
         static int cache_pix() {return cache_pix_counts;}
+        static bool enable_cache(bool b);
   
         void setSigma(double s){m_sigma=s;}
         void setGamma(double g){m_gamma=g;}
@@ -140,6 +141,8 @@ namespace skymaps {
         double m_sigma2, m_gamma2, m_frac2;
         const healpix::Healpix* m_healpix;
         static int cache_pix_counts;
+        static bool m_enable_cache;
+        mutable std::map<int,double> m_density_cache;
     };
 
    /** @class WeightedSkyDir

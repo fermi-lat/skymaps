@@ -44,7 +44,9 @@ std::vector<double> IParams::s_bsig(bsig,bsig+15);
 std::vector<double> IParams::s_fgam(fgam,fgam+15);
 std::vector<double> IParams::s_bgam(bgam,bgam+15);
 std::string         IParams::s_CALDB("");
+std::string         IParams::s_livetimefile("");
 bool IParams::s_init(false);
+astro::SkyDir s_dir;
 
 void IParams::set_elist(std::vector<double> elist) {s_elist=elist;}
 void IParams::set_fp(std::vector<double> params){s_fparams=params;}
@@ -53,11 +55,78 @@ void IParams::set_fsig(std::vector<double> sigs) {s_fsig=sigs;}
 void IParams::set_bsig(std::vector<double> sigs) {s_bsig=sigs;}
 void IParams::set_fgam(std::vector<double> gams) {s_fgam=gams;}
 void IParams::set_bgam(std::vector<double> gams) {s_bgam=gams;}
+void IParams::set_CALDB(const std::string& dir) {s_CALDB=dir;}
+void IParams::set_livetimefile(const std::string& ltfile) {s_livetimefile = ltfile;}
+void IParams::set_skydir(const astro::SkyDir& dir) {s_dir = dir;}
+
+
+class TopHat {
+public:
+    /**
+    @param c_lo lower cosine limit
+    @param c_hi upper cosine limit
+    */
+    TopHat( double c_lo, double c_hi ) : m_clo(c_lo) , m_chi(c_hi) {}
+
+    double operator()(double costh) const
+    {
+        return ( (costh > m_clo) && (costh <= m_chi) ) ? 1 : 0;
+    }
+    double m_clo, m_chi;
+};
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/** @class ExposureWeighter
+@helper class to provide proper weighting of PSF over effective area and/or livetime
+
+*/
+
+class ExposureWeighter {
+public:
+
+    ExposureWeighter(std::string& faeff_str, std::string& baeff_str, std::string& livetimefile) {
+        
+        m_faeff = new EffectiveArea("",faeff_str);
+        m_baeff = new EffectiveArea("",baeff_str);
+
+        if (livetimefile.empty()) {
+            m_uselt = false;
+        }
+        else {
+            m_uselt = true;
+            m_lt = new LivetimeCube(livetimefile);
+        }
+    }
+
+    ~ExposureWeighter() {
+        delete m_faeff;
+        delete m_baeff;
+        if (m_uselt) { delete m_lt; }
+    }
+
+    double operator()(double c_lo, double c_hi, double e, int event_class, astro::SkyDir& dir) {
+
+        double ae(event_class == 0 ? m_faeff->value(e, (c_hi+c_lo)/2.) : m_baeff->value(e, (c_hi+c_lo)/2.));
+        
+        if (m_uselt) {
+            TopHat fun(c_lo,c_hi);
+            return ae * (m_lt->bins(dir))(fun);
+        }
+        return ae;
+    }
+
+    EffectiveArea* m_faeff;
+    EffectiveArea* m_baeff;
+    LivetimeCube* m_lt;
+    bool m_uselt;
+};
+
+
 
 IParams::IParams()
 {
     //TODO: setup database, for now use defaults from allGamma v14r8 
 }
+
 
 double IParams::sigma(double energy, int event_class){
     //check to see if initialized, if not do it
@@ -116,8 +185,6 @@ double IParams::scale(double energy, int event_class) {
     return sqrt(p0*p0*pow(energy/100.,-1.6)+p1*p1)*180/M_PI;
 }
 
-void IParams::set_CALDB(const std::string& dir) {s_CALDB=dir;}
-
 void IParams::init(const std::string& name, const std::string& clevel, const std::string& file) {
     s_init=true;
 
@@ -161,7 +228,7 @@ void IParams::init(const std::string& name, const std::string& clevel, const std
     const tip::Table& ftable(*ptablef);  // reference for convenience
     const tip::Table& btable(*ptableb);
     tip::Table::ConstIterator itor = ftable.begin();
-    std::vector<double> energy_lo,energy_hi,fsigmas,fgammas,bsigmas,bgammas,cost_lo;
+    std::vector<double> energy_lo,energy_hi,fsigmas,fgammas,bsigmas,bgammas,cost_lo,cost_hi;
     std::vector<double> en,fs,fg,bs,bg;
 
     (*itor)["ENERG_LO"].get(energy_lo);
@@ -169,26 +236,33 @@ void IParams::init(const std::string& name, const std::string& clevel, const std
     (*itor)["SIGMA"].get(fsigmas);
     (*itor)["GCORE"].get(fgammas);
     (*itor)["CTHETA_LO"].get(cost_lo);
+    (*itor)["CTHETA_HI"].get(cost_hi);
 
     itor = btable.begin();
     (*itor)["SIGMA"].get(bsigmas);
     (*itor)["GCORE"].get(bgammas);
     
     delete ptablef;
-    delete ptableb;    
+    delete ptableb;
+
+    //Build something to weight the PSF in average; if static variable giving a
+    //livetime cube file is set, uses full exposure -- n.b. set the static SkyDir
+    //as well or else get the default location!
+    std::string faeff_str(s_CALDB+"/bcf/ea/aeff_"+name+"_"+clevel+"_front.fits");
+    std::string baeff_str(s_CALDB+"/bcf/ea/aeff_"+name+"_"+clevel+"_back.fits");
+    ExposureWeighter ew(faeff_str,baeff_str,s_livetimefile);
 
     //iterate through energies
     for(unsigned int i(0);i<energy_lo.size();++i) {
         double w0(0),w1(0),s0(0),s1(0),g0(0),g1(0);
+        double enr( sqrt(energy_lo[i]*energy_hi[i]) );
+
         //iterate through cos-th bins
         for(unsigned int j(0);j<cost_lo.size();++j) {
-            double cost = (j-7.)/10.-0.5;
+            
+            double wf ( ew(cost_lo[j],cost_hi[j],enr,0,s_dir) );
+            double wb ( ew(cost_lo[j],cost_hi[j],enr,1,s_dir) );
 
-            //effective area weighting, estimated from CALDB
-            double wf=mf*cost+1;
-            wf=wf<0?0:wf;
-            double wb=mb*cost+1;
-            wb=wb<0?0:wb;
             w0+=wf;
             w1+=wb;
             s0+=wf*fsigmas[energy_lo.size()*j+i];
@@ -197,7 +271,6 @@ void IParams::init(const std::string& name, const std::string& clevel, const std
             g1+=wb*bgammas[energy_lo.size()*j+i];
         }
 
-        double enr=sqrt(energy_lo[i]*energy_hi[i]);
         en.push_back(enr);
         s0/=w0;
         s1/=w1;
@@ -217,3 +290,8 @@ void IParams::init(const std::string& name, const std::string& clevel, const std
     set_bgam(bg);
     set_elist(en);
 }
+
+
+
+
+
