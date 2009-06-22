@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: kerrm  Mon Jun 22 16:42:08 PDT 2009
+skymaps/src
+
+Modified Files:
+	Convolution.cxx DiffuseFunction.cxx IParams.cxx SkyImage.cxx 
+Log Message:
+Added a normalization constraint to Convolution to make it appropriate for folding a background with the PSF.  Added a small modification to IParams to make it extrapolate the PSF at low energies.  Made a small fix in SkyImage to get the low energy layer to work properly.
+    *
+------------------------------------------------------------
+User: kerrm  Mon Jun 22 16:42:08 PDT 2009
 skymaps/skymaps
 
 Modified Files:
