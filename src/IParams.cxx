@@ -129,8 +129,10 @@ IParams::IParams()
 
 
 double IParams::sigma(double energy, int event_class){
+
     //check to see if initialized, if not do it
     //if(!s_init)  init();
+
     const std::vector<double>& elisti (s_elist);
 
     //find nearest energy bin
@@ -138,6 +140,7 @@ double IParams::sigma(double energy, int event_class){
         std::lower_bound(elisti.begin(), elisti.end(), energy, std::less<double>());
     int level = itold-elisti.begin()-1;
     if (level==elisti.size()-1) level--;
+    if (energy <= s_elist[0]) { level = 0; } // Kerr - does power law extrapolation at low energies
     double emin(s_elist[level]),emax(s_elist[level+1]);
     emin>0?emin:emin=1;
     double smin(event_class==0?s_fsig[level]:s_bsig[level]),smax(event_class==0?s_fsig[level+1]:s_bsig[level+1]);
@@ -151,6 +154,10 @@ double IParams::sigma(double energy, int event_class){
 double IParams::gamma(double energy, int event_class) {
     //check to see if initialized, if not do it
     //if(!s_init)  init();
+
+    if (energy <= s_elist[0]) { // Kerr -- handle "underflow" by returning parameters for low energy
+        return event_class==0 ? s_fgam[0] : s_bgam[0];
+    }
 
     const std::vector<double>& elisti (s_elist);
 
@@ -263,6 +270,9 @@ void IParams::init(const std::string& name, const std::string& clevel, const std
             double wf ( ew(cost_lo[j],cost_hi[j],enr,0,s_dir) );
             double wb ( ew(cost_lo[j],cost_hi[j],enr,1,s_dir) );
 
+            wf = wf > 0 ? wf : 1e-20; //guard against 0 effective area
+            wb = wb > 0 ? wb : 1e-20;
+
             w0+=wf;
             w1+=wb;
             s0+=wf*fsigmas[energy_lo.size()*j+i];
@@ -293,5 +303,9 @@ void IParams::init(const std::string& name, const std::string& clevel, const std
 
 
 
-
-
+void IParams::print_parameters() {
+    std::cout << "Energy     F_sig    B_sig    F_gam    B_gam" << std::endl;
+    for (int j(0); j < s_elist.size(); ++j) {
+        std::cout << s_elist[j] << "    " << s_fsig[j] << "    " << s_bsig[j] << "    " << s_fgam[j] << "    " << s_bgam[j] << std::endl;
+    }
+}

@@ -71,7 +71,7 @@ size_t DiffuseFunction::layer(double e)const
         error << "Diffuse function: energy out of range: "<< e ;
         throw std::invalid_argument(error.str());
     }
-    if( e>m_emax ) {
+    if( e>=m_emax ) {
         return m_energies.size();
     }
     size_t step(0);
@@ -85,7 +85,6 @@ size_t DiffuseFunction::layer(double e)const
 double DiffuseFunction::value(const astro::SkyDir& dir, double e)const
 {
     size_t l(layer(e)); 
-    
     if( l==m_energies.size()) return m_data.pixelValue(dir,l-1);
 
     double e1(m_energies[l]), e2(m_energies[l+1]);

@@ -29,7 +29,7 @@ namespace{
         if( percent==lastpercent) return;
         lastpercent=percent;
         char   s[50];
-        sprintf(s, "%d%%, %d found.", percent, found);
+        sprintf(s, "%d%%,  %d found.", percent, found);
         std::cout << s;
         if (sofar < total)
         {
@@ -119,19 +119,30 @@ void Convolution::createConv(const skymaps::SkySpectrum& sf, const skymaps::SkyS
         std::cout << "          Allocating map and harmonic storage...";
         Map<double> sfm(m_level);
         Map<double> kerm(m_level);
+
         AlmOp<xcomplex<double> > sfh(2*sfm.map()->Nside(),2*sfm.map()->Nside());
-        AlmOp<xcomplex<double> > kerh(2*sfm.map()->Nside(),2*sfm.map()->Nside());
+        AlmOp<xcomplex<double> > kerh(2*kerm.map()->Nside(),2*kerm.map()->Nside());
         std::cout << "done!" << std::endl;
-        std::cout << "          Populating sky and psf maps...";
-        for(int i(0);i<sfm.map()->Npix();++i) {
-            ShowPercent(i,sfm.map()->Npix(),i);
+        std::cout << "          Populating kernel and sky function maps...";
+        int idx(0);
+        int npix(sfm.map()->Npix());
+        for(int i(0);i<npix;++i) {
+            ShowPercent(i,npix,i);
             HealPixel hp(i,m_level);
-            (*sfm.map())[sfm.map()->nest2ring(i)] = sf(hp,energy);
-            (*kerm.map())[kerm.map()->nest2ring(i)]= ker(hp,energy);
+            idx = (sfm.map()->nest2ring(i));
+
+            (*sfm.map())[idx]  = sf(hp,energy);
+            (*kerm.map())[idx] = ker(hp,energy);
         }
-        map2alm_iter(*sfm.map(),*sfh.Alms(),0);
-        map2alm_iter(*kerm.map(),*kerh.Alms(),0);
+
+        // map2alm_iter(*sfm.map(),*sfh.Alms(),0); // Kerr -- is this redundant?
+        // map2alm_iter(*kerm.map(),*kerh.Alms(),0);
         std::cout << "done!" << std::endl;
+        // Get normalizations
+        double sf_norm = sfm.map()->average()*sfm.map()->Npix();
+        double ker_norm = kerm.map()->average()*kerm.map()->Npix();
+        std::cout << "             map integral: " << sf_norm << std::endl;
+        std::cout << "             ker integral: " << ker_norm << std::endl;
         std::cout << "          Calculating sky harmonics...";
         map2alm_iter(*sfm.map(),*sfh.Alms(),0);
         std::cout << "done!" << std::endl;
@@ -142,6 +153,18 @@ void Convolution::createConv(const skymaps::SkySpectrum& sf, const skymaps::SkyS
         std::cout << "          Performing convolution...";
         alm2map(*sfh.Alms(),*sfm.map());
         std::cout << "done!" << std::endl;
+        // Check normalization
+        double sf_norm_pc = sfm.map()->average()*sfm.map()->Npix();
+        double scale(sf_norm/sf_norm_pc);
+        std::cout << "             map integral: " << sf_norm_pc << " percent difference: " << (sf_norm_pc-sf_norm)/sf_norm*100 << std::endl;
+        std::cout << "          Renormalizing...";
+        for (int j = 0; j < sfm.map()->Npix(); ++j) {
+            double& pval = sfm.map()->operator[](j);
+            pval *= scale;
+        }
+        double sf_norm_renorm = sfm.map()->average()*sfm.map()->Npix();
+        std:: cout << "done!" << std::endl;
+        std::cout << "             map integral: " << sf_norm_renorm << " percent difference: " << (sf_norm_renorm-sf_norm)/sf_norm*100 << std::endl;
         this->insert(std::map<int,healpix::Map<double> >::value_type((int)energy,sfm));
     }
 }

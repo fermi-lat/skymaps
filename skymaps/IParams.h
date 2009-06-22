@@ -64,6 +64,9 @@ public:
     static std::vector<double> params(int event_class);
     static double scale(double energy, int event_class);
 
+    // output
+    static void print_parameters();
+
 private:
 
     /** @brief ctor not used
