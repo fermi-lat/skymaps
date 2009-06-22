@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: kerrm  Mon Jun 22 16:43:40 PDT 2009
+skymaps/src
+
+Added Files:
+	PsfSkySpectrum.cxx 
+Log Message:
+Added class PsfSkySpectrum to give the point spread function as a function of energy and sky location.
+    *
+------------------------------------------------------------
+User: kerrm  Mon Jun 22 16:43:40 PDT 2009
 skymaps/skymaps
 
 Added Files:
