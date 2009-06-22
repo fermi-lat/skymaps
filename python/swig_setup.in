@@ -36,6 +36,8 @@
 #include "skymaps/SpectralFunction.h"
 #include "skymaps/SkyIntegrator.h"
 #include "skymaps/ComplexSkySpectrum.h"
+#include "skymaps/SmoothedSkySpectrum.h"
+#include "skymaps/PsfSkySpectrum.h"
 
 #include "CLHEP/Vector/Rotation.h"
 #include "CLHEP/Vector/EulerAngles.h"
@@ -60,11 +62,14 @@
 }
 
 
+%include std_vector.i
+%include std_pair.i
 %template(DoublePair) std::pair<double, double>;
 %template(StringVector) std::vector<std::string>;
 %template(DoubleVector) std::vector<double>;
 %template(FloatVector) std::vector<float>;
 %template(LongVector) std::vector<long>;
+%template(IntVector) std::vector<int>;
 
 %include $(GLAST_EXT)/CLHEP/1.9.2.2/include/CLHEP/Vector/ThreeVector.h
 namespace CLHEP {
@@ -170,7 +175,8 @@ void delete_double2(double *d) {
 %include ../skymaps/PySkyFunction.h
 %include ../skymaps/Background.h
 %include ../skymaps/Band.h
-
+%include ../skymaps/SmoothedSkySpectrum.h
+%include ../skymaps/PsfSkySpectrum.h
 
 %extend skymaps::WeightedSkyDirList{
 // provide access to the WeightedSKyDir objects as an array
@@ -218,6 +224,13 @@ void delete_double2(double *d) {
     }
 }
 
+%extend skymaps::SmoothedSkySpectrum{
+    void setEnergy(double e)
+    {
+        self->setEnergy(e);
+    }
+}
+
 %include ../skymaps/CompositeSkyFunction.h
 %extend skymaps::CompositeSkyFunction{
 
@@ -240,6 +253,7 @@ void delete_double2(double *d) {
 %include ../skymaps/SpectralFunction.h
 %include ../skymaps/SkyIntegrator.h
 %include ../skymaps/ComplexSkySpectrum.h
+%include ../skymaps/SmoothedSkySpectrum.h
 
 
 

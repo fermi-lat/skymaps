@@ -517,7 +517,7 @@ def ZEA_test(ra=90, dec=85, size=5, nticks=8, galactic=False):
 class TSplot(object):
     """
     Create a "TS plot" 
-    Uses ghe ZEA class for display
+    Uses the ZEA class for display
 
     """
     def __init__(self, tsmap, center, size, pixelsize=None, axes=None, nticks=4):

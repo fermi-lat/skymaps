@@ -105,6 +105,8 @@ void SkyImage::setupImage(const std::string& outputFile,  bool clobber)
             );
     }
 
+    m_outfile = outputFile; // Kerr added; this prevent writeEnergies from failing if setupImage called independently
+
     // setup the image: it needs an axis dimension array and the file name to write to
     std::vector<long> naxes(3);
     naxes[0]=m_naxis1;
