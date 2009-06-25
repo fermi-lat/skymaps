@@ -232,6 +232,9 @@ void BinnedPhotonData::addPhoton(const astro::Photon& gamma, int count)
     // now add the counts to the band's pixel
     (*it).add(gamma.dir(), count);
 
+    // photon source id
+    (*it).add_source(gamma.source());
+
     m_photons+= count;
 }
 void BinnedPhotonData::add(const BinnedPhotonData& other)

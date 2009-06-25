@@ -132,6 +132,10 @@ namespace skymaps {
         const_iterator end()const{return m_pixels.end();}
         size_t size()const{return m_pixels.size();}
 
+        /// @access photon source ids
+        void add_source(int source_id);
+        std::vector<std::pair<int,int> > source(){return m_source;}
+
     private:
         PixelMap m_pixels; 
         int m_nside;
@@ -143,6 +147,9 @@ namespace skymaps {
         static int cache_pix_counts;
         static bool m_enable_cache;
         mutable std::map<int,double> m_density_cache;
+
+        // @photon source ids
+        std::vector<std::pair<int,int> > m_source;
     };
 
    /** @class WeightedSkyDir
