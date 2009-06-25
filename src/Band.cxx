@@ -159,6 +159,20 @@ int Band::photons()const
     return count;
 }
 
+// source ids
+void Band::add_source(int source_id){
+  bool found=false;
+  for( std::vector<std::pair<int,int> >::iterator it=m_source.begin(); it!=m_source.end(); ++it){
+    if(it->first==source_id){
+      it->second++;
+      found=true;
+      break;
+    }
+  }
+  if(!found)
+    m_source.push_back(std::pair<int,int>(source_id,1));
+}
+
 void Band::findNeighbors(int index, std::vector<int> &neighbors)const
 {
     m_healpix->findNeighbors(index, neighbors);
@@ -177,6 +191,7 @@ void Band::add(const Band& other)
 	m_sigma2 = other.sigma2();
 	m_gamma2 = other.gamma2();
 	m_frac2  = other.frac2();
+	m_source = other.source(); // source ids
     }
 
     for( Band::const_iterator it= other.begin(); it!=other.end(); ++it){
