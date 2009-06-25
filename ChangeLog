@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: bechtol  Thu Jun 25 14:18:00 PDT 2009
+skymaps/src
+
+Modified Files:
+	Band.cxx BinnedPhotonData.cxx 
+Log Message:
+access monte carlo source ids 
+
+    *
+------------------------------------------------------------
 User: bechtol  Thu Jun 25 14:17:55 PDT 2009
 skymaps/skymaps
 
