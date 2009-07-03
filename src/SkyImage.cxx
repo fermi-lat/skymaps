@@ -57,6 +57,8 @@ SkyImage::SkyImage(const astro::SkyDir& center,
 , m_layer(0)
 , m_interpolate(false)
 , m_outfile(outputFile)
+, m_ax1_offset(0)
+, m_ax2_offset(0)
 {
 
     if( fov>90) {
@@ -147,6 +149,12 @@ SkyImage::SkyImage(const std::string& fits_file, const std::string& extension, b
     }else{ m_naxis3=1;}
     m_pixelCount = m_naxis1*m_naxis2*m_naxis3;
 
+    header["CRPIX1"].get(m_ax1_offset);
+    header["CRPIX2"].get(m_ax2_offset);
+
+    m_ax1_offset = m_ax1_offset - int(m_ax1_offset) == 0.5 ? 0.5 : 0;
+    m_ax2_offset = m_ax2_offset - int(m_ax2_offset) == 0.5 ? 0.5 : 0;
+
 #if 0 // this seems not to interpret CAR properly
     m_wcs = new astro::SkyProj(fits_file,1);
 #else
@@ -200,8 +208,11 @@ void SkyImage::fill(const astro::SkyFunction& req, unsigned int layer)
     int offset = m_naxis1* m_naxis2 * layer;
     for( size_t k = 0; k< (unsigned int)(m_naxis1)*(m_naxis2); ++k){
         double 
-            x = static_cast<int>(k%m_naxis1)+0.5, // center of pixel is half/integer! 
-            y = static_cast<int>(k/m_naxis1)+0.5;
+            //x = static_cast<int>(k%m_naxis1)+0.5, // center of pixel is half/integer! 
+            //y = static_cast<int>(k/m_naxis1)+0.5;
+            x = static_cast<int>(k%m_naxis1)+1 + m_ax1_offset, // wcs is 1-indexed
+            y = static_cast<int>(k/m_naxis1)+1 + m_ax2_offset;
+
         if( m_wcs->testpix2sph(x,y)==0) {
             astro::SkyDir dir(x,y, *m_wcs);
             double t= req(dir);
@@ -250,28 +261,67 @@ double SkyImage::pixelValue(const astro::SkyDir& pos,unsigned  int layer)const
 {
     checkLayer(layer); 
     double v(0) ;
-    
+
+    /*
     if( m_interpolate ){
-        // interpolating
+        if( layer<0 ) layer = m_layer;
         // project using wcslib interface
         std::pair<double,double> p= pos.project(*m_wcs);
-        double x( floor(p.first-0.5) ),
+        if (p.first < 0) {p.first += m_naxis1; }
+        if (p.second < 0) {p.second += m_naxis2; }
+
+        double x( floor(p.first-0.5 ) ),
                y( floor(p.second-0.5) ),
-               dx( p.first-x -1 ),
+               dx( p.first-x-1 ),
                dy( p.second-y-1 );
+
         unsigned int k = static_cast<unsigned int>(x + m_naxis1*(y+layer*m_naxis2));
         v = m_imageData.at(k);
         if( dx>0. && x < m_naxis1){ 
             v = v*(1.-dx) + m_imageData[k+1]*dx;
-        }else if( x >1) {
+        }else if( x >1 ) {
             v = v*(1+dx) - m_imageData[k-1]*dx;
         }
         if( dy>0. && y < m_naxis2){ 
             v = v*(1.-dy) + m_imageData[k+m_naxis1]*dy;
-        }else if( y > 1) {
+        }else if( y > 1 ) {
             v = v*(1.+dy) - m_imageData[k-m_naxis1]*dy;
         }
-    }else{
+    }
+    */
+    
+    if (m_interpolate) {
+        // using a bilinear interpolation scheme
+        // project using wcslib interface
+        if( layer<0 ) layer = m_layer;
+        std::pair<double,double> p= pos.project(*m_wcs);
+
+        p.first  -= 1.0 + m_ax1_offset; // convert from wcs base-1 indexing
+        p.second -= 1.0 + m_ax2_offset;
+
+        int x1(p.first),y1(p.second),x2(x1+1),y2(y1+1);
+        double dx(p.first - x1),dy(p.second - y1);
+
+        unsigned int offset = layer * m_naxis1 * m_naxis2;
+
+        // protect against going over edges -- not sure why this should happen, but it does.
+        if (x1 < 0) { x1 = 0; x2 = 0; }
+        if (y1 < 0) { y1 = 0; y2 = 0; }
+        if (x2 > m_naxis1 -1) { x2 = m_naxis1 - 1; x1 = m_naxis1 - 1; }
+        if (y2 > m_naxis2 -1) { y2 = m_naxis2 - 1; y1 = m_naxis2 - 1; }
+
+        if (x1 < 0 || y1 < 0 || x2 > m_naxis1 - 1 || y2 > m_naxis2 -1) {
+            std::cout << x1 << "\t" << x2 << "\t" << y1 << "\t" << y2 << std::endl;
+        }
+              
+        double v11( m_imageData[offset + x1 + y1*m_naxis1] );
+        double v12( m_imageData[offset + x1 + y2*m_naxis1] );
+        double v21( m_imageData[offset + x2 + y1*m_naxis1] );
+        double v22( m_imageData[offset + x2 + y2*m_naxis1] );
+
+        return v11*(1-dx)*(1-dy) + v12*(1-dx)*dy + v21*dx*(1-dy) + v22*dx*dy;
+    }
+    else{
         unsigned int k = pixel_index(pos,layer);
         v = m_imageData.at(k);
     }
@@ -324,16 +374,44 @@ unsigned int SkyImage::pixel_index(const astro::SkyDir& pos, int layer) const
 
     // project using wcslib interface, then adjust to be positive
     std::pair<double,double> p= pos.project(*m_wcs);
-    if( p.first<0) p.first += m_naxis1;
+    p.first  -= m_ax1_offset;
+    p.second -= m_ax2_offset;
+    
+    // round pixel value and subtract 1 (wcs indexing starts at 1)
+    int i = static_cast<int>(p.first);
+    i = p.first - i >= 0.5 ? i : i - 1;
+    int j = static_cast<int>(p.second);
+    j = p.second - j >= 0.5 ? j: j - 1;
+
+    //if ((!m_isPeriodic && (i < 0 || i >= m_nlon)) 
+    //    || j < 0 || j >= m_nlat) {
+    //   return 0;
+    //}
+
+    //if ( (i < 0 || i > m_naxis1) || j < 0 || j >= m_naxis2 ) {
+    //    return 0;
+    //}
+    if (i < 0 && i >= -1) {
+        i = 0;
+    }
+    return (layer*m_naxis2 + j)*m_naxis1 + i;
+    /*
+    // if not specified, use the data member
+    if( layer<0 ) layer = m_layer;
+
+    // project using wcslib interface, then adjust to be positive
+    std::pair<double,double> p= pos.project(*m_wcs);
+    if( p.first<0) p.first  += m_naxis1;
     if(p.second<0) p.second += m_naxis2;
     unsigned int 
         i = static_cast<unsigned int>(p.first-0.5),
         j = static_cast<unsigned int>(p.second-0.5),
         k = i+m_naxis1*(j + layer*m_naxis2);
-     if( k > m_pixelCount ) {
+    if( k > m_pixelCount ) {
         throw std::range_error("SkyImage::pixel_index -- outside image hyper cube");
     }
     return k;
+    */
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void SkyImage::reimage( const astro::SkyDir& center,
