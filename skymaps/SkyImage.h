@@ -198,6 +198,9 @@ private:
 
     bool m_interpolate; ///< flag to determine if interpolate
     std::string m_outfile;
+
+    float m_ax1_offset, m_ax2_offset;
+
 };
 } //namesace skymaps
 
