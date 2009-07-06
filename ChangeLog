@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: glastrm  Mon Jul  6 10:46:05 PDT 2009
+ScienceTools-scons/skymaps
+
+Modified Files:
+	SConscript 
+Log Message:
+Use LoadableModule for creating swig modules
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-23-00, operation: add
 Package: skymaps
