@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Tue Jul  7 12:14:21 PDT 2009
+skymaps/python
+
+Added Files:
+	colormaps.py 
+Log Message:
+provide sls and c colormaps for matplotlib
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-23-00, operation: mov
 Package: skymaps
