@@ -13,7 +13,7 @@ libEnv = baseEnv.Clone()
 swigEnv = baseEnv.Clone()
 
 progEnv.Tool('skymapsLib')
-test_healpix = progEnv.Program('test_skymaps', listFiles(['src/test/*.cxx']))
+test_skymaps = progEnv.Program('test_skymaps', listFiles(['src/test/*.cxx']))
 
 libEnv.Tool('skymapsLib', depsOnly = 1)
 libEnv.Append(CPPPATH = ['#/healpix/','#/healpix/src'])
@@ -26,10 +26,12 @@ swigEnv.Replace(SHLIBPREFIX = '_')
 swigEnv.Append(RPATH = swigEnv['LIBDIR'])
 pySkymapsLib = swigEnv.LoadableModule('_skymaps','python/swig_setup.i')
 
-progEnv.Tool('registerObjects',
+progEnv.Tool('registerTargets',
              package = 'skymaps',
              includes = listFiles(['skymaps/*.h']),
-             libraries = [skymapsLib, pySkymapsLib],
+             libraryCxts = [[skymapsLib, libEnv]],
+             swigLibaryCxts = [[pySkymapsLib, swigEnv]],
+             testAppCxts = [[test_skymaps, progEnv]],
              python = ['python/skymaps.py']
              )
 
