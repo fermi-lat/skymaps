@@ -252,9 +252,9 @@ void IParams::init(const std::string& name, const std::string& clevel, const std
     delete ptablef;
     delete ptableb;
 
-    //Build something to weight the PSF in average; if static variable giving a
-    //livetime cube file is set, uses full exposure -- n.b. set the static SkyDir
-    //as well or else get the default location!
+    // Build something to weight the PSF in average; if static variable giving a
+    // livetime cube file is set, uses full exposure -- n.b. set the static SkyDir
+    // as well or else get the default location!
     std::string faeff_str(s_CALDB+"/bcf/ea/aeff_"+name+"_"+clevel+"_front.fits");
     std::string baeff_str(s_CALDB+"/bcf/ea/aeff_"+name+"_"+clevel+"_back.fits");
     ExposureWeighter ew(faeff_str,baeff_str,s_livetimefile);
