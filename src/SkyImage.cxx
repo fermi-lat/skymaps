@@ -152,8 +152,8 @@ SkyImage::SkyImage(const std::string& fits_file, const std::string& extension, b
     header["CRPIX1"].get(m_ax1_offset);
     header["CRPIX2"].get(m_ax2_offset);
 
-    m_ax1_offset = m_ax1_offset - int(m_ax1_offset) == 0.5 ? 0.5 : 0;
-    m_ax2_offset = m_ax2_offset - int(m_ax2_offset) == 0.5 ? 0.5 : 0;
+    m_ax1_offset = m_ax1_offset - int(m_ax1_offset) == 0.5 ? 1.0 : 1.0;
+    m_ax2_offset = m_ax2_offset - int(m_ax2_offset) == 0.5 ? 1.0 : 1.0;
 
 #if 0 // this seems not to interpret CAR properly
     m_wcs = new astro::SkyProj(fits_file,1);
@@ -210,8 +210,8 @@ void SkyImage::fill(const astro::SkyFunction& req, unsigned int layer)
         double 
             //x = static_cast<int>(k%m_naxis1)+0.5, // center of pixel is half/integer! 
             //y = static_cast<int>(k/m_naxis1)+0.5;
-            x = static_cast<int>(k%m_naxis1)+1 + m_ax1_offset, // wcs is 1-indexed
-            y = static_cast<int>(k/m_naxis1)+1 + m_ax2_offset;
+            x = static_cast<int>(k%m_naxis1)+0 + m_ax1_offset, // wcs is 1-indexed
+            y = static_cast<int>(k/m_naxis1)+0 + m_ax2_offset;
 
         if( m_wcs->testpix2sph(x,y)==0) {
             astro::SkyDir dir(x,y, *m_wcs);
@@ -296,23 +296,23 @@ double SkyImage::pixelValue(const astro::SkyDir& pos,unsigned  int layer)const
         if( layer<0 ) layer = m_layer;
         std::pair<double,double> p= pos.project(*m_wcs);
 
-        p.first  -= 1.0 + m_ax1_offset; // convert from wcs base-1 indexing
-        p.second -= 1.0 + m_ax2_offset;
+        p.first  -= m_ax1_offset; // convert from wcs base-1 indexing
+        p.second -= m_ax2_offset;
 
         int x1(p.first),y1(p.second),x2(x1+1),y2(y1+1);
         double dx(p.first - x1),dy(p.second - y1);
 
         unsigned int offset = layer * m_naxis1 * m_naxis2;
 
+        //if (x1 < 0 || y1 < 0 || x2 > m_naxis1 - 1 || y2 > m_naxis2 -1) {
+        //    std::cout << x1 << "\t" << x2 << "\t" << y1 << "\t" << y2 << std::endl;
+        //}
+
         // protect against going over edges -- not sure why this should happen, but it does.
         if (x1 < 0) { x1 = 0; x2 = 0; }
         if (y1 < 0) { y1 = 0; y2 = 0; }
         if (x2 > m_naxis1 -1) { x2 = m_naxis1 - 1; x1 = m_naxis1 - 1; }
         if (y2 > m_naxis2 -1) { y2 = m_naxis2 - 1; y1 = m_naxis2 - 1; }
-
-        if (x1 < 0 || y1 < 0 || x2 > m_naxis1 - 1 || y2 > m_naxis2 -1) {
-            std::cout << x1 << "\t" << x2 << "\t" << y1 << "\t" << y2 << std::endl;
-        }
               
         double v11( m_imageData[offset + x1 + y1*m_naxis1] );
         double v12( m_imageData[offset + x1 + y2*m_naxis1] );
@@ -379,9 +379,11 @@ unsigned int SkyImage::pixel_index(const astro::SkyDir& pos, int layer) const
     
     // round pixel value and subtract 1 (wcs indexing starts at 1)
     int i = static_cast<int>(p.first);
-    i = p.first - i >= 0.5 ? i : i - 1;
+    i = p.first  - i >= 0.5 ? i : i - 1;
     int j = static_cast<int>(p.second);
-    j = p.second - j >= 0.5 ? j: j - 1;
+    j = p.second - j >= 0.5 ? j : j - 1;
+    i += 1;
+    j += 1;
 
     //if ((!m_isPeriodic && (i < 0 || i >= m_nlon)) 
     //    || j < 0 || j >= m_nlat) {
