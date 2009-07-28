@@ -33,6 +33,8 @@ namespace {
 
     double mf(1.5);
     double mb(1.2);
+
+    bool verbose(false);
 }
 
 
@@ -224,14 +226,14 @@ void IParams::init(const std::string& name, const std::string& clevel, const std
         std::cerr << "IParams: init() "<< psf_table << " not found in file " << fcaldb << std::endl;
         throw;
     }
-    std::cout << "Using front PSFs: " << fcaldb << std::endl;
+    if( verbose) std::cout << "Using front PSFs: " << fcaldb << std::endl;
     try{
         ptableb = tip::IFileSvc::instance().readTable(bcaldb,psf_table);
     }catch(const std::exception&){
         std::cerr << "IParams: init() "<< psf_table << " not found in file " << bcaldb << std::endl;
         throw;
     }
-    std::cout << "Using back PSFs: " << bcaldb << std::endl;
+    if( verbose) std::cout << "Using back PSFs: " << bcaldb << std::endl;
     const tip::Table& ftable(*ptablef);  // reference for convenience
     const tip::Table& btable(*ptableb);
     tip::Table::ConstIterator itor = ftable.begin();
