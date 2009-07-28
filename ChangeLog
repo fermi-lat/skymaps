@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Tue Jul 28 05:31:42 PDT 2009
+skymaps/src
+
+Modified Files:
+	DiffuseFunction.cxx IParams.cxx 
+Log Message:
+remove annoying printout
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-23-02, operation: add
 Package: skymaps
