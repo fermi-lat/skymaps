@@ -15,7 +15,9 @@ $Header$
 #include <stdexcept>
 
 using namespace skymaps;
-
+namespace {
+    bool verbose(false); // control printout
+}
 
 DiffuseFunction::DiffuseFunction(std::string diffuse_cube_file, double energy, bool interpolate)
 : SkySpectrum(energy)
@@ -42,7 +44,7 @@ DiffuseFunction::DiffuseFunction(std::string diffuse_cube_file, double energy, b
     }
     m_emin = m_energies[0];
     m_emax = m_energies.back();
-    std::cout << "DiffuseFunction: read file "<< diffuse_cube_file <<", with " 
+    if( verbose) std::cout << "DiffuseFunction: read file "<< diffuse_cube_file <<", with " 
         << layers() << " energies from " << m_emin << " to " << m_emax << std::endl;
     setEnergy(energy);
 }
