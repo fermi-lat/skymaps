@@ -21,7 +21,7 @@ skymapsLib = libEnv.SharedLibrary('skymaps', listFiles(['src/*.cxx']))
 
 swigEnv.Tool('skymapsLib')
 swigEnv.Append(CPPPATH = ['#/healpix/','#/healpix/src'])
-swigEnv.Replace(SHLIBPREFIX = '_')
+#swigEnv.Replace(SHLIBPREFIX = '_')
 #swigEnv.Replace(SHLIBSUFFIX = '.pyd')
 swigEnv.Append(RPATH = swigEnv['LIBDIR'])
 pySkymapsLib = swigEnv.LoadableModule('_skymaps','python/swig_setup.i')
