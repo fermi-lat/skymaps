@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: jrb  Wed Jul 29 15:07:11 PDT 2009
+ScienceTools-scons/skymaps
+
+Modified Files:
+	SConscript 
+Log Message:
+Comment out line concerning SHLIBPREFIX.  It's only causing trouble
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-23-03, operation: add
 Package: skymaps
