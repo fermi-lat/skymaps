@@ -290,7 +290,7 @@ void LivetimeCube::load(std::string scfile, const skymaps::Gti & gti, std::strin
 void LivetimeCube::write(const std::string& outputfile, const std::string& tablename)const
 {
     std::string dataPath = 
-        facilities::commonUtilities::getDataPath("Skymaps");
+        facilities::commonUtilities::getDataPath("skymaps");
     std::string templateFile = 
         facilities::commonUtilities::joinPath(dataPath, "LivetimeCubeTemplate");
     tip::IFileSvc & fileSvc(tip::IFileSvc::instance());
