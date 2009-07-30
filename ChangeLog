@@ -2,6 +2,14 @@
 TAG
 Tag name: ScienceTools-09-15-04, operation: add
 Package: skymaps
+User: glastrm  Thu Jul 30 16:22:25 2009
+Files:
+
+    *
+------------------------------------------------------------
+TAG
+Tag name: ScienceTools-09-15-04, operation: add
+Package: skymaps
 User: glastrm  Thu Jul 30 15:52:12 2009
 Files:
   skymaps/.cvsignore  1.1.1.1
