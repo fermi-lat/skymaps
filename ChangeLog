@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: elwinter  Thu Jul 30 10:07:54 PDT 2009
+skymaps/src
+
+Modified Files:
+      Tag: ScienceToolsv9r15p2
+	LivetimeCube.cxx 
+Log Message:
+Imported changes from FSSC.
+    *
+------------------------------------------------------------
 User: jrb  Wed Jul 29 15:07:11 PDT 2009
 ScienceTools-scons/skymaps
 
