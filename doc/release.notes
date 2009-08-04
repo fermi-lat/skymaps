@@ -6,6 +6,7 @@ $Id$
 @verbatim
  --------- -----   --- -----------------------------------------------------------------------
  * EOH *
+ 28-jul-09 v1r23p4 THB fix SkyImage and image.ZEA to conform to pixel indexing convention.
  28-jul-09 v1r23p3 THB remove some printout
  27-jul-09 v1r23p2 THB Fix test program on unix
  15-Jul-09 v1r23p1 jrb Update SConscript
