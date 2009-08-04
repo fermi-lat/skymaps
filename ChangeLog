@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Mon Aug  3 18:54:49 PDT 2009
+skymaps/src
+
+Modified Files:
+	SkyImage.cxx 
+Log Message:
+fix to adhere to convention that the center of a pixel is an integer
+    *
+------------------------------------------------------------
+User: burnett  Mon Aug  3 18:54:49 PDT 2009
 skymaps/python
 
 Modified Files:
