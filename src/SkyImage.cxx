@@ -57,8 +57,8 @@ SkyImage::SkyImage(const astro::SkyDir& center,
 , m_layer(0)
 , m_interpolate(false)
 , m_outfile(outputFile)
-, m_ax1_offset(0)
-, m_ax2_offset(0)
+, m_ax1_offset(1)
+, m_ax2_offset(1)
 {
 
     if( fov>90) {
@@ -85,7 +85,7 @@ SkyImage::SkyImage(const astro::SkyDir& center,
 
     double crval[2] = { galactic?center.l():center.ra(),galactic? center.b(): center.dec()};
     double cdelt[2] = { earth? pixel_size: -pixel_size, pixel_size };
-    double crpix[2] = { (m_naxis1)/2.0, (m_naxis2)/2.0}; // center pixel
+    double crpix[2] = { (m_naxis1+1)/2.0, (m_naxis2+1)/2.0}; // center pixel; WCS convention is that center of a pixel is a half-integer
 
     m_wcs = new astro::SkyProj(ptype, crpix, crval, cdelt, 0., galactic);
     m_pixelCount = m_naxis1*m_naxis2*m_naxis3;

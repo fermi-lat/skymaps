@@ -70,13 +70,13 @@ class Rescale(object):
             axes.set_xticks(self.xticks[1:-1])
             axes.set_xticklabels(self.xticklabels[1:-1])
         axes.xaxis.set_ticks_position('bottom')
-        axes.set_xlim((0,self.nx)) # have to do again?
+        #axes.set_xlim((0.5,self.nx+0.5)) # have to do again?
 
         if len(self.yticks)>=3:
             axes.set_yticks(self.yticks[1:-1])
             axes.set_yticklabels(self.yticklabels[1:-1])
         axes.yaxis.set_ticks_position('left')
-        axes.set_ylim((0,self.ny)) # have to do again?
+        #axes.set_ylim((0.5,self.ny+0.5)) # have to do again?
 
 
 
@@ -394,15 +394,18 @@ class ZEA(object):
         self.proj = self.skyimage.projector()
         self.set_axes(axes)
 
+    # note the 1/2 pixel offset: WCS convention is that pixel centers are integers starting from 1.
+    # here we use 0 to nx, 0 to ny standard for image.
+
     def skydir(self, x, y):
-        " from pixel coordinates to sky "
-        return SkyDir(x, y, self.proj)
+        """ from pixel coordinates to sky """
+        return SkyDir(x+0.5, y+0.5, self.proj) 
 
     def pixel(self, sdir):
         """ return pixel coordinates for the skydir"""
         if self.galactic: return  self.proj.sph2pix(sdir.l(),sdir.b())
-        return  self.proj.sph2pix(sdir.ra(),sdir.dec())
-
+        x,y = self.proj.sph2pix(sdir.ra(),sdir.dec())
+        return  (x-0.5,y-0.5)
 
     def fill(self, skyfun):
         """ fill the image from a SkyFunction"""
@@ -417,8 +420,8 @@ class ZEA(object):
         """
         self.axes=axes if axes is not None else pyplot.gca()
         self.axes.set_aspect(1)
-        self.axes.set_xlim((0,self.nx))
-        self.axes.set_ylim((0,self.ny))
+        self.axes.set_xlim((0.5,self.nx+0.5))
+        self.axes.set_ylim((0.5,self.ny+0.5))
         self.axes.set_autoscale_on(False) 
         r =Rescale(self,self.nticks)
         r.apply(self.axes)
