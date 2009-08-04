@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Mon Aug  3 18:54:49 PDT 2009
+skymaps/python
+
+Modified Files:
+	image.py 
+Log Message:
+fix to adhere to convention that the center of a pixel is an integer
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-09-15-04, operation: add
 Package: skymaps
