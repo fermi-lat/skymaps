@@ -417,11 +417,12 @@ class ZEA(object):
     def set_axes(self, axes=None):
         """ configure the axes object
           +axes [None] if None, simply use gca()
+          (set coordinate scale offset by 0.5 from WCS standard)
         """
         self.axes=axes if axes is not None else pyplot.gca()
         self.axes.set_aspect(1)
-        self.axes.set_xlim((0.5,self.nx+0.5))
-        self.axes.set_ylim((0.5,self.ny+0.5))
+        self.axes.set_xlim((0.0,self.nx))
+        self.axes.set_ylim((0.0,self.ny))
         self.axes.set_autoscale_on(False) 
         r =Rescale(self,self.nticks)
         r.apply(self.axes)
