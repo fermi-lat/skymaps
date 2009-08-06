@@ -24,7 +24,7 @@ swigEnv.Append(CPPPATH = ['#/healpix/','#/healpix/src'])
 #swigEnv.Replace(SHLIBPREFIX = '_')
 #swigEnv.Replace(SHLIBSUFFIX = '.pyd')
 swigEnv.Append(RPATH = swigEnv['LIBDIR'])
-pySkymapsLib = swigEnv.LoadableModule('_skymaps','python/swig_setup.i')
+pySkymapsLib = swigEnv.SwigLibrary('_skymaps','python/swig_setup.i')
 
 progEnv.Tool('registerTargets',
              package = 'skymaps',
