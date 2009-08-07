@@ -2,6 +2,16 @@
 TAG
 Tag name: skymaps-01-23-06, operation: add
 Package: skymaps
+User: jrb  Fri Aug  7 11:23:10 2009
+Files:
+  skymaps/data/LivetimeCubeTemplate  1.1
+  skymaps/data/aeff_P6_v1_diff_front.fits  1.1
+
+    *
+------------------------------------------------------------
+TAG
+Tag name: skymaps-01-23-06, operation: add
+Package: skymaps
 User: jrb  Fri Aug  7 11:23:04 2009
 Files:
   skymaps/cmt/.cvsignore  1.1.1.1
