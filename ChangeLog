@@ -2,6 +2,43 @@
 TAG
 Tag name: skymaps-01-23-06, operation: add
 Package: skymaps
+User: jrb  Fri Aug  7 11:23:28 2009
+Files:
+  skymaps/skymaps/DiffuseFunction.h  1.3
+  skymaps/skymaps/Exposure.h  1.6
+  skymaps/skymaps/BinnedPhotonData.h  1.18
+  skymaps/skymaps/PsfSkySpectrum.h  1.1
+  skymaps/skymaps/SkySpectrum.h  1.4
+  skymaps/skymaps/PsfFunction.h  1.3
+  skymaps/skymaps/HealpixDiffuseFunc.h  1.4
+  skymaps/skymaps/GtiBase.h  1.1
+  skymaps/skymaps/ComplexSkySpectrum.h  1.1
+  skymaps/skymaps/CompositeSkySpectrum.h  1.2
+  skymaps/skymaps/PySkyFunction.h  1.2
+  skymaps/skymaps/Band.h  1.23
+  skymaps/skymaps/PsfSkyFunction.h  1.3
+  skymaps/skymaps/EffectiveArea.h  1.4
+  skymaps/skymaps/CompositeSkyFunction.h  1.1
+  skymaps/skymaps/PhotonMap.h  1.8
+  skymaps/skymaps/SkyIntegrator.h  1.2
+  skymaps/skymaps/LivetimeCube.h  1.8
+  skymaps/skymaps/BandBackground.h  1.1
+  skymaps/skymaps/Gti.h  1.1
+  skymaps/skymaps/IParams.h  1.9
+  skymaps/skymaps/SkyImage.h  1.7
+  skymaps/skymaps/IsotropicSpectrum.h  1.2
+  skymaps/skymaps/Background.h  1.9
+  skymaps/skymaps/Convolution.h  1.2
+  skymaps/skymaps/PhotonBinner.h  1.8
+  skymaps/skymaps/SmoothedSkySpectrum.h  1.1
+  skymaps/skymaps/IsotropicPowerLaw.h  1.1
+  skymaps/skymaps/SpectralFunction.h  1.4
+
+    *
+------------------------------------------------------------
+TAG
+Tag name: skymaps-01-23-06, operation: add
+Package: skymaps
 User: jrb  Fri Aug  7 11:23:22 2009
 Files:
   skymaps/python/swig_setup.i  1.2
