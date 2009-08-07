@@ -2,6 +2,15 @@
 TAG
 Tag name: skymaps-01-23-06, operation: add
 Package: skymaps
+User: jrb  Fri Aug  7 11:23:16 2009
+Files:
+  skymaps/doc/release.notes  1.71
+
+    *
+------------------------------------------------------------
+TAG
+Tag name: skymaps-01-23-06, operation: add
+Package: skymaps
 User: jrb  Fri Aug  7 11:23:10 2009
 Files:
   skymaps/data/LivetimeCubeTemplate  1.1
