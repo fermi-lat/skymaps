@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: kerrm  Mon Aug 10 11:34:13 PDT 2009
+skymaps/src
+
+Modified Files:
+	Band.cxx 
+Log Message:
+Set cache default to false!
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-09-15-03-gl2, operation: add
 Package: skymaps
