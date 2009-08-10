@@ -15,7 +15,7 @@ using healpix::Healpix;
 using astro::SkyDir;
 
 int Band::cache_pix_counts(0);
-bool Band::m_enable_cache(true);
+bool Band::m_enable_cache(false);
 bool Band::enable_cache(bool b) {
     bool t = m_enable_cache;
     m_enable_cache = b;
