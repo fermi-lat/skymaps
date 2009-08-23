@@ -87,7 +87,10 @@ size_t DiffuseFunction::layer(double e)const
 double DiffuseFunction::value(const astro::SkyDir& dir, double e)const
 {
     size_t l(layer(e)); 
-    if( l==m_energies.size()) return m_data.pixelValue(dir,l-1);
+    if( l==m_energies.size()) {
+        l -= 2; // extrapolate with a power law
+        // return m_data.pixelValue(dir,l-1); // extrapolate as a constant
+    }
 
     double e1(m_energies[l]), e2(m_energies[l+1]);
     double f1( m_data.pixelValue(dir,l) ), f2(m_data.pixelValue(dir,l+1) );
