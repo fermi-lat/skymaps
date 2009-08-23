@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: kerrm  Sun Aug 23 10:52:11 PDT 2009
+skymaps/src
+
+Modified Files:
+	DiffuseFunction.cxx 
+Log Message:
+Default behavior is now to extrapolate as a power law beyond highest energy layer.
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-15-01-02, operation: del
 Package: skymaps
