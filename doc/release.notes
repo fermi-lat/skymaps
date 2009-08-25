@@ -7,6 +7,7 @@ $Id$
  --------- -----   --- -----------------------------------------------------------------------
  * EOH *
 
+ skymaps-01-23-07 25-Aug-2009 burnett extend DiffuseFunction to high energies
  skymaps-01-23-06 07-Aug-2009    jrb Fix SConscript for Windows
  28-jul-09 v1r23p5 THB fix SkyImage and image.ZEA to conform to pixel indexing convention.
  28-jul-09 v1r23p3 THB remove some printout
