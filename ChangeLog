@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: jrb  Fri Aug 28 12:04:18 PDT 2009
+ScienceTools-scons/skymaps
+
+Modified Files:
+	SConscript 
+Log Message:
+Fix typo
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-23-07, operation: add
 Package: skymaps
