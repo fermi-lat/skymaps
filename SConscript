@@ -30,7 +30,7 @@ progEnv.Tool('registerTargets',
              package = 'skymaps',
              includes = listFiles(['skymaps/*.h']),
              libraryCxts = [[skymapsLib, libEnv]],
-             swigLibaryCxts = [[pySkymapsLib, swigEnv]],
+             swigLibraryCxts = [[pySkymapsLib, swigEnv]],
              testAppCxts = [[test_skymaps, progEnv]],
              python = ['python/skymaps.py']
              )
