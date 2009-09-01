@@ -351,8 +351,8 @@ class AIT(object):
         x1,y1 = 0.95*xmin + 0.05*xmax, 0.95*ymin+0.05*ymax
         sd = self.skydir(x1,y1)
         x2,y2 = self.pixel(SkyDir(sd.ra()-delta/math.cos(math.radians(sd.dec())), sd.dec())) 
-        self.axes.plot([x1,x2],[y1,y1], linestyle='-', color=color, lw=4)
-        self.axes.text( (x1+x2)/2, (y1+y2)/2+self.ny/200., text, ha='center', color=color)
+        self.axes.plot([x1,x2],[y1,y1], linestyle='-', color=color, lw=2)
+        self.axes.text( (x1+x2)/2, (y1+y2)/2+self.ny/200., text, ha='center', color=color, fontsize=10)
 
     def box(self, image, **kwargs):
         """ draw a box at the center, the outlines of the image """
@@ -524,7 +524,7 @@ class TSplot(object):
     Uses the ZEA class for display
 
     """
-    def __init__(self, tsmap, center, size, pixelsize=None, axes=None, nticks=4):
+    def __init__(self, tsmap, center, size, pixelsize=None, axes=None, nticks=4, fitsfile=''):
         """
         parameters:
         *tsmap*   a SkyFunction, that takes a SkyDir argument and returns a value
@@ -533,12 +533,13 @@ class TSplot(object):
         *pixelsize* [None] size (degrees) of a pixel: if not specified, will be size/10
         *axes* [None] Axes object to use: if None, use current
         *nticks* [4] Suggestion for labeling
+        *fitsfile*[''] 
         """
 
         self.tsmap = tsmap
         self.size=size
         if pixelsize is None: pixelsize=size/10. 
-        self.zea= ZEA(center, size, pixelsize, axes=axes, nticks=nticks)
+        self.zea= ZEA(center, size, pixelsize, axes=axes, nticks=nticks,fitsfile=fitsfile)
         print 'filling %d pixels...'% (size/pixelsize)**2
         self.zea.fill(tsmap)
         print 'converting...'
@@ -584,8 +585,10 @@ class TSplot(object):
         #print 'after reset', axes.get_xlim(), axes.get_ylim()
         if self.size< 0.03:
             self.zea.scale_bar(1/120.,  '30"', color='w')
+        elif self.size<1.0:
+            self.zea.scale_bar(0.1, "0.1 deg", color='w')
         else:
-            self.zea.scale_bar(1./60, "1'", color='w')
+            self.zea.scale_bar(1.0, "1 deg", color='w')
         self.zea.grid(color='gray')
 
     def overplot(self, quadfit, sigma):
@@ -604,7 +607,7 @@ class TSplot(object):
         axes.plot([x0],[y0], '+b')
         for r in self.clevels:
             axes.plot(r*xa+x0,r*ya+y0, '-.b');
-        axes.text(0.5, 0.93,'chisq=%5.2f'%quadfit.ellipse.chisq, color='w', fontsize=10,
+        axes.text(0.7, 0.07,'fit quality=%5.2f'%quadfit.ellipse.chisq, color='w', fontsize=10,
             transform = axes.transAxes)
 
     def cross(self, sdir, size, label=None,  fontsize=12, markersize=10,  **kwargs):
