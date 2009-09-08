@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: markusa  Tue Sep  8 11:00:52 PDT 2009
+skymaps/skymaps
+
+Modified Files:
+	IParams.h 
+Log Message:
+exporting effarea weights to the interface
+
+
+    *
+------------------------------------------------------------
 User: burnett  Tue Sep  1 06:56:46 PDT 2009
 skymaps/python
 
