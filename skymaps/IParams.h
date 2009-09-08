@@ -34,6 +34,12 @@ public:
         */
     static double gamma(double energy, int event_class);
 
+    /** @brief effaWeight returns effective area weight for event class
+        @param energy 
+        @param event_class 0=front, 1=back
+        */
+    static double effaWeight(double energy, int event_class);
+
     //sets front and back parameterization for sigma
     // s = (a[0]^2+a[2]*(E/100)^(a[1])+a[3]*(E/100)^(2*a[1]))^0.5
     static void set_fp(std::vector<double> params);
@@ -45,6 +51,10 @@ public:
     //with a bin for <100 MeV and one for >100GeV (15 in all)
     static void set_fgam(std::vector<double> gams);
     static void set_bgam(std::vector<double> gams);
+
+    //set front and back effective area weights
+    static void set_fwght(std::vector<double> wght);
+    static void set_bwght(std::vector<double> wght);
 
     //set energy bins
     static void set_elist(std::vector<double> elist);
@@ -80,6 +90,8 @@ private:
     static std::vector<double> s_bsig;
     static std::vector<double> s_fgam; //front tail parameterization
     static std::vector<double> s_bgam; //back tail parameterization
+    static std::vector<double> s_fwght; //front effective area weight
+    static std::vector<double> s_bwght; //back effective area weight
 
     static std::string s_CALDB;
     static std::string s_livetimefile;

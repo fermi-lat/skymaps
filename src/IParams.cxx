@@ -45,6 +45,8 @@ std::vector<double> IParams::s_fsig(fsig,fsig+15);
 std::vector<double> IParams::s_bsig(bsig,bsig+15);
 std::vector<double> IParams::s_fgam(fgam,fgam+15);
 std::vector<double> IParams::s_bgam(bgam,bgam+15);
+std::vector<double> IParams::s_fwght(0);
+std::vector<double> IParams::s_bwght(0);
 std::string         IParams::s_CALDB("");
 std::string         IParams::s_livetimefile("");
 bool IParams::s_init(false);
@@ -57,6 +59,8 @@ void IParams::set_fsig(std::vector<double> sigs) {s_fsig=sigs;}
 void IParams::set_bsig(std::vector<double> sigs) {s_bsig=sigs;}
 void IParams::set_fgam(std::vector<double> gams) {s_fgam=gams;}
 void IParams::set_bgam(std::vector<double> gams) {s_bgam=gams;}
+void IParams::set_fwght(std::vector<double> wght) {s_fwght=wght;}
+void IParams::set_bwght(std::vector<double> wght) {s_bwght=wght;}
 void IParams::set_CALDB(const std::string& dir) {s_CALDB=dir;}
 void IParams::set_livetimefile(const std::string& ltfile) {s_livetimefile = ltfile;}
 void IParams::set_skydir(const astro::SkyDir& dir) {s_dir = dir;}
@@ -177,6 +181,29 @@ double IParams::gamma(double energy, int event_class) {
     return gbar;
 }
 
+double IParams::effaWeight(double energy, int event_class){
+
+    //check to see if initialized, if not do it
+    //if(!s_init)  init();
+
+    const std::vector<double>& elisti (s_elist);
+
+    //find nearest energy bin
+    std::vector<double>::const_iterator itold=
+        std::lower_bound(elisti.begin(), elisti.end(), energy, std::less<double>());
+    int level = itold-elisti.begin()-1;
+    if (level==elisti.size()-1) level--;
+    if (energy <= s_elist[0]) { level = 0; } // Kerr - does power law extrapolation at low energies
+    double emin(s_elist[level]),emax(s_elist[level+1]);
+    emin>0?emin:emin=1;
+    double wmin(event_class==0?s_fwght[level]:s_bwght[level]),wmax(event_class==0?s_fwght[level+1]:s_bwght[level+1]);
+    
+    //weighting function
+    double m = (log(wmax)-log(wmin))/(log(emax)-log(emin));
+    double wbar = exp(m*(log(energy)-log(emax))+log(wmax));
+    return wbar*M_PI/180;
+}
+
 std::vector<double> IParams::params(int event_class) 
 {
     return event_class?s_bparams:s_fparams;
@@ -238,7 +265,7 @@ void IParams::init(const std::string& name, const std::string& clevel, const std
     const tip::Table& btable(*ptableb);
     tip::Table::ConstIterator itor = ftable.begin();
     std::vector<double> energy_lo,energy_hi,fsigmas,fgammas,bsigmas,bgammas,cost_lo,cost_hi;
-    std::vector<double> en,fs,fg,bs,bg;
+    std::vector<double> en,fs,fg,fw,bs,bg,bw;
 
     (*itor)["ENERG_LO"].get(energy_lo);
     (*itor)["ENERG_HI"].get(energy_hi);
@@ -294,12 +321,16 @@ void IParams::init(const std::string& name, const std::string& clevel, const std
         bs.push_back(s1);
         fg.push_back(g0);
         bg.push_back(g1);
+	fw.push_back(w0);
+	bw.push_back(w1);
     }
     //setup parameters
     set_fsig(fs);
     set_bsig(bs);
     set_fgam(fg);
     set_bgam(bg);
+    set_fwght(fw);
+    set_bwght(bw);
     set_elist(en);
 }
 
