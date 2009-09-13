@@ -402,9 +402,10 @@ class ZEA(object):
         return SkyDir(x+0.5, y+0.5, self.proj) 
 
     def pixel(self, sdir):
-        """ return pixel coordinates for the skydir"""
-        if self.galactic: return  self.proj.sph2pix(sdir.l(),sdir.b())
-        x,y = self.proj.sph2pix(sdir.ra(),sdir.dec())
+        """ return pixel coordinates for the skydir
+        """
+        x,y = self.proj.sph2pix(sdir.ra(),sdir.dec()) \
+            if not self.galactic else self.proj.sph2pix(sdir.l(),sdir.b())
         return  (x-0.5,y-0.5)
 
     def fill(self, skyfun):
@@ -465,6 +466,22 @@ class ZEA(object):
         self.axes.plot([x1,x2],[y1,y1], linestyle='-', color=color, lw=4)
         self.axes.text( (x1+x2)/2, (y1+y2)/2+self.ny/80., text, ha='center', color=color)
 
+    def colorbar(self, label=None, **kwargs):
+        """ 
+        draw a color bar using the pylab colorbar facility
+        note that the 'shrink' parameter needs to be adjusted if not a full figure
+        """
+        fig = self.axes.figure
+        if 'orientation' not in kwargs: kwargs['orientation']= 'vertical'
+        if 'pad' not in kwargs: kwargs['pad'] = 0.01
+        if 'ticks' not in kwargs: kwargs['ticks'] = ticker.MaxNLocator(4)
+        if 'fraction' not in kwargs: kwargs['fraction']=0.10
+        if 'shrink' not in kwargs:  kwargs['shrink'] = 1.0 
+        self.cb=fig.colorbar(self.cax, cmap=self.cmap, norm=self.norm, **kwargs)
+        if label is not None: self.cb.set_label(label)
+        return self.cb
+       
+
 
     def box(self, image, **kwargs):
         """ draw a box at the center, the outlines of the image
@@ -524,7 +541,7 @@ class TSplot(object):
     Uses the ZEA class for display
 
     """
-    def __init__(self, tsmap, center, size, pixelsize=None, axes=None, nticks=4, fitsfile=''):
+    def __init__(self, tsmap, center, size, pixelsize=None, axes=None, nticks=4, fitsfile='', **kwargs):
         """
         parameters:
         *tsmap*   a SkyFunction, that takes a SkyDir argument and returns a value
@@ -534,12 +551,13 @@ class TSplot(object):
         *axes* [None] Axes object to use: if None, use current
         *nticks* [4] Suggestion for labeling
         *fitsfile*[''] 
+        **kwargs  additional args for ZEA, like galactic
         """
 
         self.tsmap = tsmap
         self.size=size
         if pixelsize is None: pixelsize=size/10. 
-        self.zea= ZEA(center, size, pixelsize, axes=axes, nticks=nticks,fitsfile=fitsfile)
+        self.zea= ZEA(center, size, pixelsize, axes=axes, nticks=nticks,fitsfile=fitsfile, **kwargs)
         print 'filling %d pixels...'% (size/pixelsize)**2
         self.zea.fill(tsmap)
         print 'converting...'
