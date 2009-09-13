@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: burnett  Sun Sep 13 15:50:53 PDT 2009
+skymaps/python
+
+Modified Files:
+	image.py 
+Log Message:
+fix ZEA bug when in galactic mode
+add ZEA.colormap function
+    *
+------------------------------------------------------------
 User: markusa  Tue Sep  8 11:00:58 PDT 2009
 skymaps/src
 
