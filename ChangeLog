@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: kerrm  Fri Sep 18 12:24:31 PDT 2009
+skymaps/src
+
+Modified Files:
+	Exposure.cxx IParams.cxx 
+Log Message:
+Exposed "ExposureWeighter" (klugey) with the purpose of integrated over energy/cos(theta) to determine a weight for the PSF CALDB bins.  This is probably better off in EffectiveArea and Exposure classes, but for expediency...
+    *
+------------------------------------------------------------
+User: kerrm  Fri Sep 18 12:24:31 PDT 2009
 skymaps/skymaps
 
 Modified Files:
