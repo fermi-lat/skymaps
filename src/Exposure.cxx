@@ -68,6 +68,10 @@ public:
 using namespace skymaps;
 
 double Exposure::s_cutoff(0.4);
+void Exposure::set_cutoff(double cutoff) {
+    s_cutoff = cutoff;
+}
+
 int Exposure::s_n(4);
 void Exposure::set_simpson(int n){
     s_n=n;
@@ -75,6 +79,7 @@ void Exposure::set_simpson(int n){
         throw std::invalid_argument("Exposure--bad Simpsons rule count: n must be even, <20");
     }
 }
+
 
 Exposure::Exposure(const LivetimeCube& ltcube, const EffectiveArea & aeff)
 : m_ltcube(ltcube)

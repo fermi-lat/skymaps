@@ -59,6 +59,9 @@ public:
     /// @brief set the number of points used for Simpson's rule integration
     static void set_simpson(int n);
 
+    /// @brief set the cosine of the cutoff angle (default = 0.4 <=> 66.4 degrees)
+    static void set_cutoff(double cutoff);
+
 private:
     const skymaps::LivetimeCube& m_ltcube;
     const skymaps::EffectiveArea& m_aeff;

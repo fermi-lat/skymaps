@@ -66,65 +66,8 @@ void IParams::set_livetimefile(const std::string& ltfile) {s_livetimefile = ltfi
 void IParams::set_skydir(const astro::SkyDir& dir) {s_dir = dir;}
 
 
-class TopHat {
-public:
-    /**
-    @param c_lo lower cosine limit
-    @param c_hi upper cosine limit
-    */
-    TopHat( double c_lo, double c_hi ) : m_clo(c_lo) , m_chi(c_hi) {}
 
-    double operator()(double costh) const
-    {
-        return ( (costh > m_clo) && (costh <= m_chi) ) ? 1 : 0;
-    }
-    double m_clo, m_chi;
-};
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/** @class ExposureWeighter
-@helper class to provide proper weighting of PSF over effective area and/or livetime
 
-*/
-
-class ExposureWeighter {
-public:
-
-    ExposureWeighter(std::string& faeff_str, std::string& baeff_str, std::string& livetimefile) {
-        
-        m_faeff = new EffectiveArea("",faeff_str);
-        m_baeff = new EffectiveArea("",baeff_str);
-
-        if (livetimefile.empty()) {
-            m_uselt = false;
-        }
-        else {
-            m_uselt = true;
-            m_lt = new LivetimeCube(livetimefile);
-        }
-    }
-
-    ~ExposureWeighter() {
-        delete m_faeff;
-        delete m_baeff;
-        if (m_uselt) { delete m_lt; }
-    }
-
-    double operator()(double c_lo, double c_hi, double e, int event_class, astro::SkyDir& dir) {
-
-        double ae(event_class == 0 ? m_faeff->value(e, (c_hi+c_lo)/2.) : m_baeff->value(e, (c_hi+c_lo)/2.));
-        
-        if (m_uselt) {
-            TopHat fun(c_lo,c_hi);
-            return ae * (m_lt->bins(dir))(fun);
-        }
-        return ae;
-    }
-
-    EffectiveArea* m_faeff;
-    EffectiveArea* m_baeff;
-    LivetimeCube* m_lt;
-    bool m_uselt;
-};
 
 
 
@@ -296,8 +239,8 @@ void IParams::init(const std::string& name, const std::string& clevel, const std
         //iterate through cos-th bins
         for(unsigned int j(0);j<cost_lo.size();++j) {
             
-            double wf ( ew(cost_lo[j],cost_hi[j],enr,0,s_dir) );
-            double wb ( ew(cost_lo[j],cost_hi[j],enr,1,s_dir) );
+            double wf ( ew(cost_lo[j],cost_hi[j],energy_lo[i],energy_hi[i],0,s_dir) );
+            double wb ( ew(cost_lo[j],cost_hi[j],energy_lo[i],energy_hi[i],1,s_dir) );
 
             wf = wf > 0 ? wf : 1e-20; //guard against 0 effective area
             wb = wb > 0 ? wb : 1e-20;
