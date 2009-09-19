@@ -19,6 +19,8 @@ $Header$
 #include <sstream>
 #include <stdexcept>
 #include <errno.h> // to test result of std::remove()
+#include <memory>
+#include <cstdio>
 #include "fitsio.h"
 
 

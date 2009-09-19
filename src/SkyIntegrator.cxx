@@ -12,6 +12,7 @@ $Header$
 #include <deque>
 #include <iostream>
 #include <utility>
+#include <cstdlib>
 
 using namespace skymaps;
 using astro::SkyDir;

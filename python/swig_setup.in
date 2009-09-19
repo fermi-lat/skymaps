@@ -71,7 +71,7 @@
 %template(LongVector) std::vector<long>;
 %template(IntVector) std::vector<int>;
 
-%include $(GLAST_EXT)/CLHEP/1.9.2.2/include/CLHEP/Vector/ThreeVector.h
+%include $(CLHEPROOT)/include/CLHEP/Vector/ThreeVector.h
 namespace CLHEP {
  class HepRotation {
 public:
@@ -195,16 +195,27 @@ void delete_double2(double *d) {
 
 %include ../skymaps/Gti.h
 %extend skymaps::Gti{
-   double computeOntime(){return (*self).GtiBase::computeOntime(); } 
+   double computeOntime(){return (*self).GtiBase::computeOntime(); }
+   int getNumIntervals() const {return (*self).GtiBase::getNumIntervals();}
+   size_t __len__() {return self->getNumIntervals();}
    void insertInterval(double tstart, double tstop){ (*self).GtiBase::insertInterval(tstart, tstop); }
    void intersection(const skymaps::Gti& other){
      self->operator&=(other);
      }
      // note that the natural "union" is a C++ reserved word
    void combine(const skymaps::Gti& other){ self->operator|=(other);  }
-   
-}
+   skymaps::Gti * __getitem__(int i){
+      if( i == self->getNumIntervals() ) throw std::range_error("StopIteration");
+      if(i<0) i+=self->getNumIntervals();
+      if( i<0 || i > self->getNumIntervals() ) throw std::range_error("IndexError");
+      skymaps::GtiBase::ConstIterator it(self->begin());
+      for(int j(0); j!=i;++j,++it);
+      skymaps::Gti * new_gti = new skymaps::Gti(self->applyTimeRangeCut(it->first,it->second));
+      return new_gti;
 
+      }
+
+}
 
 %include ../skymaps/CompositeSkySpectrum.h
 

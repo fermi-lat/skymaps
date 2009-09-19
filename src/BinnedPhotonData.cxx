@@ -21,6 +21,7 @@ $Header$
 #include <stdexcept>
 #include <iomanip>
 #include <errno.h>
+#include <cstdio>
 
 using astro::SkyDir;
 using astro::Photon;
@@ -351,13 +352,13 @@ void BinnedPhotonData::write(const std::string & outputFile, bool clobber) const
     tip::IFileSvc::instance().appendTable(outputFile, band_table);
     tip::Table & table = *tip::IFileSvc::instance().editTable( outputFile, band_table);
 
-    table.appendField("NSIDE", "1J");
-    table.appendField("EVENT_CLASS", "1J");
+    table.appendField("NSIDE", "1V");
+    table.appendField("EVENT_CLASS", "1V");
     table.appendField("EMIN", "1D");
     table.appendField("EMAX", "1D");
     table.appendField("SIGMA", "1D");
     table.appendField("GAMMA", "1D");
-    table.appendField("COUNT", "1J"); // Number of pixels in this band
+    table.appendField("COUNT", "1V"); // Number of pixels in this band
     table.setNumRecords(size());
 
     // get iterators for the Table and the Band list
@@ -395,8 +396,8 @@ void BinnedPhotonData::write(const std::string & outputFile, bool clobber) const
     tip::IFileSvc::instance().appendTable(outputFile, pixel_table);
     tip::Table & table = *tip::IFileSvc::instance().editTable( outputFile, pixel_table);
 
-    table.appendField("INDEX", "1J"); // Healpix index for pixel
-    table.appendField("COUNT", "1J"); // Number of photons in this pixel
+    table.appendField("INDEX", "1V"); // Healpix index for pixel
+    table.appendField("COUNT", "1V"); // Number of photons in this pixel
     table.setNumRecords(total_pixels);
 
     // initialize iterator for the Table 

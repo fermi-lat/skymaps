@@ -94,7 +94,7 @@ public:
          ,double cosbinsize=1./healpix::CosineBinner::nbins()
          ,double quiet=false
           );
-  
+
     //! add a time interval at the given position
     virtual void fill(const astro::SkyDir& dirz, double deltat);
 
@@ -177,7 +177,6 @@ private:
     skymaps::Gti m_gti; ///< over-all Gti
     bool m_quiet;       ///< suppress output if set
 };
-
 
 } // namespace map_tools
 #endif
