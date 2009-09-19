@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: wallacee  Fri Sep 18 17:51:25 PDT 2009
+ScienceTools-scons/skymaps
+
+Modified Files:
+	SConscript 
+Log Message:
+Change to swig_setup.in to make python Gti objects subscriptable.
+Added include statements to a few files to get them to build with gcc4.3
+
+    *
+------------------------------------------------------------
 User: kerrm  Fri Sep 18 12:24:31 PDT 2009
 skymaps/src
 
