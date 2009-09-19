@@ -135,7 +135,9 @@ namespace skymaps {
         /// @access photon source ids
         void add_source(int source_id);
         std::vector<std::pair<int,int> > source()const{return m_source;}
-
+        
+        size_t density_cache_size() {return m_density_cache.size();}
+        
     private:
         PixelMap m_pixels; 
         int m_nside;
