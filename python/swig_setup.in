@@ -71,7 +71,7 @@
 %template(LongVector) std::vector<long>;
 %template(IntVector) std::vector<int>;
 
-%include $(CLHEPROOT)/include/CLHEP/Vector/ThreeVector.h
+%include $(CLHEPBASE)/include/CLHEP/Vector/ThreeVector.h
 namespace CLHEP {
  class HepRotation {
 public:
