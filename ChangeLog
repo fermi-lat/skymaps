@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Sun Sep 20 13:44:07 PDT 2009
+skymaps/python
+
+Modified Files:
+	swig_setup.in 
+Log Message:
+fix use of CMT-derived path
+    *
+------------------------------------------------------------
 User: wallacee  Fri Sep 18 17:51:26 PDT 2009
 ScienceTools-scons/skymaps/src/test
 
