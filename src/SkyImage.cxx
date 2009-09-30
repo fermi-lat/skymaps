@@ -160,7 +160,7 @@ SkyImage::SkyImage(const std::string& fits_file, const std::string& extension, b
 #if 0 // this seems not to interpret CAR properly
     m_wcs = new astro::SkyProj(fits_file,1);
 #else
-    m_wcs = new astro::SkyProj(fits_file, "");
+    m_wcs = new astro::SkyProj(fits_file, extension);
 #endif
     // finally, read in the image: assume it is float
     dynamic_cast<tip::TypedImage<float>*>(m_image)->get(m_imageData);
