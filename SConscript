@@ -4,7 +4,7 @@
 #
 # $Header$
 # Authors: T. Burnett <tburnett@u.washington.edu>, M.Roth <mar0@u.washington.edu>
-# Version: skymaps-01-23-07
+# Version: skymaps-01-23-08
 import os
 Import('baseEnv')
 Import('listFiles')
@@ -21,12 +21,7 @@ skymapsLib = libEnv.SharedLibrary('skymaps', listFiles(['src/*.cxx']))
 
 
 swigEnv.Tool('skymapsLib')
-swigEnv.Append(CPPPATH = ['#/healpix/','#/healpix/src'])
-#swigEnv.Replace(SHLIBPREFIX = '_')
-#swigEnv.Replace(SHLIBSUFFIX = '.pyd')
-swigEnv.Append(RPATH = [swigEnv['LIBDIR'],
-                        os.path.join(os.environ['CLHEPROOT'],'lib')])
-pySkymapsLib = swigEnv.LoadableModule('_skymaps','python/swig_setup.i')
+pySkymapsLib = swigEnv.SwigLibrary('_skymaps','python/swig_setup.i')
 
 progEnv.Tool('registerTargets',
              package = 'skymaps',
@@ -35,6 +30,6 @@ progEnv.Tool('registerTargets',
              swigLibraryCxts = [[pySkymapsLib, swigEnv]],
              testAppCxts = [[test_skymaps, progEnv]],
              data = ['data/LivetimeCubeTemplate'],
-             python = ['python/skymaps.py',pySkymapsLib]
+             python = ['python/skymaps.py']
              )
 
