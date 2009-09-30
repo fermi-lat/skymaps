@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: wallacee  Wed Sep 30 11:03:20 PDT 2009
+ScienceTools-scons/skymaps/src
+
+Modified Files:
+	SkyImage.cxx 
+Log Message:
+Edit ctor from existing file to pass the "extension" argument on to SkyProj,
+so that it can find the right header keywords if the image is not saved in "PRIMARY".
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-23-08, operation: add
 Package: skymaps
