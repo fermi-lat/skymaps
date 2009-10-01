@@ -1,5 +1,16 @@
 ------------------------------------------------------------
 User: mar0  Thu Oct  1 12:07:34 PDT 2009
+skymaps/src
+
+Modified Files:
+	IParams.cxx 
+Added Files:
+	ExposureWeighter.cxx 
+Log Message:
+Moved ExposureWeighter and nested class TopHat to a separate file
+    *
+------------------------------------------------------------
+User: mar0  Thu Oct  1 12:07:34 PDT 2009
 skymaps/skymaps
 
 Modified Files:
