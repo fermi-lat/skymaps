@@ -10,7 +10,7 @@ $Header$
 #include "healpix/HealPixel.h"
 #include "skymaps/PsfFunction.h"
 #include "skymaps/IParams.h"
-#include "src/base/alm_filter_tools.h"
+#include "healpix/base/alm_filter_tools.h"
 #include <map>
 
 #include <iostream>
