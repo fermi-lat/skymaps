@@ -19,6 +19,7 @@
 #include "skymaps/CompositeSkyFunction.h"
 #include "skymaps/PhotonMap.h"
 #include "skymaps/Exposure.h"
+#include "skymaps/ExposureWeighter.h"
 #include "skymaps/Convolution.h"
 #include "skymaps/PsfFunction.h"
 #include "skymaps/LivetimeCube.h"
