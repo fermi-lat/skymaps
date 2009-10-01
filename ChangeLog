@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: mar0  Thu Oct  1 12:07:34 PDT 2009
+skymaps/skymaps
+
+Modified Files:
+	IParams.h 
+Added Files:
+	ExposureWeighter.h 
+Log Message:
+Moved ExposureWeighter and nested class TopHat to a separate file
+    *
+------------------------------------------------------------
 User: wallacee  Wed Sep 30 11:03:20 PDT 2009
 ScienceTools-scons/skymaps/src
 
