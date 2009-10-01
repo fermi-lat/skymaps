@@ -1,5 +1,17 @@
 ------------------------------------------------------------
 User: jrb  Thu Oct  1 14:34:55 PDT 2009
+ScienceTools-scons/skymaps/src
+
+Modified Files:
+	Convolution.cxx 
+Log Message:
+Refer to healpix include in the proper way
+No longer need kludge to include path
+Ignore SCons build products in .cvsignore
+
+    *
+------------------------------------------------------------
+User: jrb  Thu Oct  1 14:34:55 PDT 2009
 ScienceTools-scons/skymaps
 
 Modified Files:
