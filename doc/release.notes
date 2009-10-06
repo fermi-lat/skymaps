@@ -7,6 +7,7 @@ $Id$
  --------- -----   --- -----------------------------------------------------------------------
  * EOH *
 
+ skymaps-01-23-10 06-Oct-2009 burnett fix SWIG for ExposureWeighter; SkyImage fix addPoint
  skymaps-01-23-09 01-Oct-2009    jrb update reference to healpix include file since it's moved from src/base to healpix/base
  skymaps-01-23-07 25-Aug-2009 burnett extend DiffuseFunction to high energies
  skymaps-01-23-06 07-Aug-2009    jrb Fix SConscript for Windows
