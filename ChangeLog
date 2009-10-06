@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Tue Oct  6 07:14:28 PDT 2009
+skymaps/src
+
+Modified Files:
+	SkyImage.cxx 
+Log Message:
+fix addPoint  1/2 pixel offset bug
+    *
+------------------------------------------------------------
 User: burnett  Tue Oct  6 07:13:08 PDT 2009
 skymaps/python
 
