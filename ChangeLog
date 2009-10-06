@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Tue Oct  6 07:13:08 PDT 2009
+skymaps/python
+
+Modified Files:
+	swig_setup.in 
+Log Message:
+expose ExposureWeighter
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-23-09, operation: add
 Package: skymaps
