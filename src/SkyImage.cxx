@@ -178,11 +178,11 @@ unsigned int SkyImage::setLayer(unsigned int newlayer)
 bool SkyImage::addPoint(const astro::SkyDir& dir, double delta, unsigned int layer)
 {
     std::pair<double,double> p= dir.project(*m_wcs);
-    // ignore if not in the image.
-    if( p.first<0 || p.first >= m_naxis1 || p.second<0 || p.second>=m_naxis2) return false;
+    // ignore if not in the image. (defined to be 0.5 to nx+0.5
+    if( p.first<0.5 || p.first >= m_naxis1+0.5 || p.second<0.5 || p.second>=m_naxis2+0.5) return false;
     unsigned int 
-        i = static_cast<unsigned int>(p.first),
-        j = static_cast<unsigned int>(p.second),
+        i = static_cast<unsigned int>(p.first+0.5)-1, //round to integer, remove 1-based offsets
+        j = static_cast<unsigned int>(p.second+0.5)-1,
         k = i+m_naxis1*(j + layer*m_naxis2);
     
     if(  k< m_pixelCount){
