@@ -266,7 +266,7 @@ void delete_double2(double *d) {
 %include ../skymaps/SkyIntegrator.h
 %include ../skymaps/ComplexSkySpectrum.h
 %include ../skymaps/SmoothedSkySpectrum.h
-
+%include ../skymaps/ExposureWeighter.h
 
 
 
