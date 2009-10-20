@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: glastrm  Tue Oct 20 08:15:11 PDT 2009
+skymaps
+
+Modified Files:
+	SConscript 
+Log Message:
+Added missing fits file to the data directory
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-23-10, operation: add
 Package: skymaps
