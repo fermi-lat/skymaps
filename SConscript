@@ -29,7 +29,7 @@ progEnv.Tool('registerTargets',
              libraryCxts = [[skymapsLib, libEnv]],
              swigLibraryCxts = [[pySkymapsLib, swigEnv]],
              testAppCxts = [[test_skymaps, progEnv]],
-             data = ['data/LivetimeCubeTemplate'],
+             data = ['data/LivetimeCubeTemplate', 'data/aeff_P6_v1_diff_front.fits'],
              python = ['python/skymaps.py']
              )
 
