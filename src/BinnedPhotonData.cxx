@@ -150,7 +150,7 @@ BinnedPhotonData::BinnedPhotonData(const std::string & inputFile,  const std::st
 
         for(tip::Table::ConstIterator itora = table.begin(); itora != table.end(); ++itora)
         {
-            int nside, event_class, count;
+            long nside, event_class, count;
             double emin, emax, sigma, gamma;
             (*itora)["NSIDE"].get(nside);
             (*itora)["EVENT_CLASS"].get(event_class);
@@ -352,13 +352,13 @@ void BinnedPhotonData::write(const std::string & outputFile, bool clobber) const
     tip::IFileSvc::instance().appendTable(outputFile, band_table);
     tip::Table & table = *tip::IFileSvc::instance().editTable( outputFile, band_table);
 
-    table.appendField("NSIDE", "1V");
-    table.appendField("EVENT_CLASS", "1V");
+    table.appendField("NSIDE", "1J");
+    table.appendField("EVENT_CLASS", "1J");
     table.appendField("EMIN", "1D");
     table.appendField("EMAX", "1D");
     table.appendField("SIGMA", "1D");
     table.appendField("GAMMA", "1D");
-    table.appendField("COUNT", "1V"); // Number of pixels in this band
+    table.appendField("COUNT", "1J"); // Number of pixels in this band
     table.setNumRecords(size());
 
     // get iterators for the Table and the Band list
