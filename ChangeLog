@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: wallacee  Wed Oct 21 13:04:35 PDT 2009
+ScienceTools-scons/skymaps/src
+
+Modified Files:
+	BinnedPhotonData.cxx 
+Log Message:
+Made data types consistent between writing out and reading in, to solve problem with front events being read as event type -2**31.
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-23-10, operation: mov
 Package: skymaps
