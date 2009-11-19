@@ -614,7 +614,7 @@ class TSplot(object):
         OVerplot contours from a fit to surface
         """
         axes = self.zea.axes
-        x,y = quadfit.ellipse.contour(2)
+        x,y = quadfit.ellipse.contour(quadfit.fit_radius)
         #sigma = quadfit.sigma #effective sigma from quad fit
         ra,dec = quadfit.ra, quadfit.dec
         pixelsize=self.zea.pixelsize #scale for plot
@@ -622,10 +622,10 @@ class TSplot(object):
         f=sigma/pixelsize #scale factor
         xa = f*np.array(x)
         ya = f*np.array(y)
-        axes.plot([x0],[y0], '+b')
+        axes.plot([x0],[y0], '+g')
         for r in self.clevels:
-            axes.plot(r*xa+x0,r*ya+y0, '-.b');
-        axes.text(0.7, 0.07,'fit quality=%5.2f'%quadfit.ellipse.chisq, color='w', fontsize=10,
+            axes.plot(r*xa+x0,r*ya+y0, '--g');
+        axes.text(0.7, 0.07,'fit quality=%.1f'%quadfit.quality(), color='g', fontsize=10,
             transform = axes.transAxes)
 
     def cross(self, sdir, size, label=None,  fontsize=12, markersize=10,  **kwargs):
