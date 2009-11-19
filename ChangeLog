@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Thu Nov 19 10:14:49 PST 2009
+skymaps/python
+
+Modified Files:
+	image.py 
+Log Message:
+TS map display code of quadratic fit adjusted for change in default radius, format fixed a little.
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-23-11, operation: add
 Package: skymaps
