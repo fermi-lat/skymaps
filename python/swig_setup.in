@@ -7,6 +7,8 @@
 #include "astro/EarthCoordinate.h"
 #include "astro/Photon.h"
 #include "astro/IGRField.h"
+#include "astro/JulianDate.h"
+#include "astro/SolarSystem.h"
 #include "healpix/Healpix.h"
 #include "healpix/HealPixel.h"
 #include "healpix/HealpixMap.h"
@@ -143,6 +145,9 @@ void delete_double2(double *d) {
 %include $(ASTROROOT)/astro/Photon.h
 %include $(ASTROROOT)/astro/IGRField.h
 
+%include $(ASTROROOT)/astro/JulianDate.h
+%include $(ASTROROOT)/astro/SolarSystem.h
+
 %include $(HEALPIXROOT)/healpix/Healpix.h
 %include $(HEALPIXROOT)/healpix/HealpixMap.h
 
@@ -252,6 +257,8 @@ void delete_double2(double *d) {
     }
 }
 
+%include ../skymaps/SpectralFunction.h
+
 
 %feature("kwargs");  // using keywords for these
 %include ../skymaps/IsotropicSpectrum.h
@@ -262,7 +269,6 @@ void delete_double2(double *d) {
 %include ../skymaps/IsotropicPowerLaw.h
 %include ../skymaps/IParams.h
 %include ../skymaps/BandBackground.h
-%include ../skymaps/SpectralFunction.h
 %include ../skymaps/SkyIntegrator.h
 %include ../skymaps/ComplexSkySpectrum.h
 %include ../skymaps/SmoothedSkySpectrum.h
