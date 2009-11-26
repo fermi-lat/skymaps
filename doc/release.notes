@@ -7,6 +7,7 @@ $Id$
  --------- -----   --- -----------------------------------------------------------------------
  * EOH *
 
+ skymaps-01-24-00 26-Nov-2009 burnett SWIG: expose astro::JulianDate, astro::SolarSystem
  skymaps-01-23-12 20-Nov-2009 burnett TS map tweak
  skymaps-01-23-11 11-Nov-2009 burnett fix event type in BinnedPhotonData
  skymaps-01-23-10 06-Oct-2009 burnett fix SWIG for ExposureWeighter; SkyImage fix addPoint
