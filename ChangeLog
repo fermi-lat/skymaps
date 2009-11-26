@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Thu Nov 26 10:00:57 PST 2009
+skymaps/python
+
+Modified Files:
+	swig_setup.in 
+Log Message:
+expose astro::JulianDate and astro::SolarSystem
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-01-23-12, operation: add
 Package: skymaps
