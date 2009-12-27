@@ -104,7 +104,17 @@ public:
       default: throw std::range_error("IndexError");
       }
    }
-   size_t __len__() {      return 3;       }
+   size_t __len__() { return 3; }
+// make it pickle   
+   %insert("python") %{
+def __getstate__(self):  return (self.ra(),self.dec())
+def __setstate__(self,tup):
+    self.this = _skymaps.new_SkyDir(tup[0],tup[1])
+    self.thisown=1
+def __str__(self):  return 'SkyDir(%.3f,%.3f)' % (self.ra(),self.dec())
+def __repr__(self): return self.__str__()
+
+%}
 }
 
 %inline{
@@ -139,6 +149,7 @@ void delete_double2(double *d) {
    float __getitem__(size_t i)            {return (*self)[i];}
    double __call__(const astro::SkyDir& d){return (*self)(d);}
    size_t __len__() {return self->size();}
+   void __setitem__(int i, double v){ (*self)[i] = v;}
 }  
 %include $(ASTROROOT)/astro/SkyProj.h
 %include $(ASTROROOT)/astro/SkyDir.h
