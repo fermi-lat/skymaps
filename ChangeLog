@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Sun Dec 27 07:43:20 PST 2009
+skymaps/python
+
+Modified Files:
+	swig_setup.in 
+Log Message:
+make SkyDir pickle, and implement __str__, __repr__ for interactive use
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-09-15-06, operation: add
 Package: skymaps
