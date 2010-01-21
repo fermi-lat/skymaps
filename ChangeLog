@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: kerrm  Wed Jan 20 17:30:16 PST 2010
+skymaps/src
+
+Modified Files:
+	BinnedPhotonData.cxx 
+Log Message:
+Added an addBand method to BinnedPhotonData.
+    *
+------------------------------------------------------------
+User: kerrm  Wed Jan 20 17:30:16 PST 2010
 skymaps/skymaps
 
 Modified Files:
