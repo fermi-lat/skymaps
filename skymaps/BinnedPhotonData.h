@@ -52,6 +52,9 @@ namespace skymaps {
         ///@brief add a photon to data base according to its energy, event class, and direction
         void addPhoton(const astro::Photon& gamma, int count=1);
 
+        ///@brief add a band to set of bands
+        void addBand(const astro::Photon& gamma);
+
         ///@brief add another BinnedPhotonData object
         /// The corresponding Band objects must be consistent
         void add(const BinnedPhotonData& other);
