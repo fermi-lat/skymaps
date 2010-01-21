@@ -180,9 +180,10 @@ BinnedPhotonData::BinnedPhotonData(const std::string & inputFile,  const std::st
         {
             for (int i = 0; i < *citor; ++i, ++itor) // for number of pixels stored for this band
             {
-                int index, count;
+                unsigned long index, count; // changed 20 Jan 2010 to allow '0' to be read in correctly
                 (*itor)["INDEX"].get(index);
                 (*itor)["COUNT"].get(count);
+
                 (*band_iterator).add(index,count);
                 m_photons += count;
                 ++pixels_loaded;
@@ -238,6 +239,23 @@ void BinnedPhotonData::addPhoton(const astro::Photon& gamma, int count)
 
     m_photons+= count;
 }
+
+void BinnedPhotonData::addBand(const astro::Photon &gamma) {
+
+    // create a emmpty band with this photon's properties
+    Band newband (m_binner(gamma));
+    int key(newband);
+
+    // is it already in our list?
+    iterator it=std::lower_bound(begin(), end(), key, std::less<int>());
+    int newkey(*it);
+
+    if( key!=(*it) ){
+        // no, create new entry and copy in the Band
+        it = insert(it, newband);
+    }
+}
+
 void BinnedPhotonData::add(const BinnedPhotonData& other)
 {
     iterator mit(begin());
