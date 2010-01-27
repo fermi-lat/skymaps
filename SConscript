@@ -4,7 +4,7 @@
 #
 # $Header$
 # Authors: T. Burnett <tburnett@u.washington.edu>, M.Roth <mar0@u.washington.edu>
-# Version: skymaps-01-24-01
+# Version: skymaps-02-00-00
 import os
 Import('baseEnv')
 Import('listFiles')
