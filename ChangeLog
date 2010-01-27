@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Tue Jan 26 16:53:24 PST 2010
+skymaps
+
+Modified Files:
+	SConscript 
+Log Message:
+modify swig processing
+    *
+------------------------------------------------------------
 User: wallacee  Tue Jan 26 13:03:59 PST 2010
 skymaps/python
 
