@@ -28,4 +28,9 @@ library skymaps \
 
 application test_skymaps -s=test $(source)
 
+macro swig_include "-I${skymaps_root}\
+ -I${astro_root}\
+ -I${healpix_root}\
+ -I${CLHEPBASE}/include"
+
 
