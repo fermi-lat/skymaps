@@ -21,7 +21,7 @@ skymapsLib = libEnv.SharedLibrary('skymaps', listFiles(['src/*.cxx']))
 
 
 swigEnv.Tool('skymapsLib')
-pySkymapsLib = swigEnv.SwigLibrary('_skymaps','python/swig_setup.i')
+pySkymapsLib = swigEnv.SwigLibrary('_skymaps','src/swig_setup.i')
 
 progEnv.Tool('registerTargets',
              package = 'skymaps',
