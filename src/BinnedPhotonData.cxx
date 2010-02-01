@@ -216,7 +216,12 @@ BinnedPhotonData::BinnedPhotonData(const std::string & inputFile,  const std::st
 
 void BinnedPhotonData::addPhoton(const astro::Photon& gamma, int count)
 {   
-    if(gamma.eventClass()>1) return;
+    if(gamma.eventClass()>1) return; //?
+
+    // check against Gti object, if set to something
+    if( ! m_gti.accept(gamma.time()) && m_gti.getNumIntervals()>0){
+        m_gti_reject += count; // keep track of how many fail
+    }
 
     // create a emmpty band with this photon's properties
     Band newband (m_binner(gamma));
