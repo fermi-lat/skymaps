@@ -231,6 +231,11 @@ void delete_double2(double *d) {
       return new_gti;
 
       }
+ %insert("python") %{
+def __str__(self):  return 'Gti: %d intervals from %d to %d, on time %.0f'% (self.getNumIntervals(), self.minValue(),self.maxValue(), self.computeOntime())
+def __repr__(self): return self.__str__()
+
+%}
 
 }
 
