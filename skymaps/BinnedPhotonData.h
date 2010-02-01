@@ -101,6 +101,7 @@ namespace skymaps {
 
         int photonCount()const{return m_photons;}
         int pixelCount()const{ return 0;} ///TODO
+        int gtiReject()const{return m_gti_reject;}
 
         /// @brief updates the PSF parameters to the current set used by IParams
         /// @param name overriden psf name
@@ -112,6 +113,7 @@ namespace skymaps {
         skymaps::PhotonBinner& m_binner; ///< object that handles binning
         skymaps::Gti m_gti;   ///< gti information associated with these data
         int m_photons;  ///< keep track of total number of photons in the database
+        int m_gti_reject;   ///< count gti rejectsions
 
     };
 
