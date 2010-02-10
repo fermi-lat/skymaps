@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Tue Feb  9 16:29:42 PST 2010
+skymaps
+
+Modified Files:
+	SConscript 
+Log Message:
+GoGui_auto-tag
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-02-01-00, operation: add
 Package: skymaps
