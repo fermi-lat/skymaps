@@ -15,10 +15,7 @@ swigEnv = baseEnv.Clone()
 progEnv.Tool('skymapsLib')
 test_skymaps = progEnv.Program('test_skymaps', listFiles(['src/test/*.cxx']))
 
-libEnv.Tool('skymapsLib', depsOnly = 1)
-#libEnv.Append(CPPPATH = ['#/healpix/','#/healpix/src'])
 skymapsLib = libEnv.SharedLibrary('skymaps', listFiles(['src/*.cxx']))
-
 
 swigEnv.Tool('skymapsLib')
 pySkymapsLib = swigEnv.SwigLibrary('_skymaps','src/swig_setup.i')
