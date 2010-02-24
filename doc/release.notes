@@ -7,6 +7,7 @@ $Id$
  --------- -----   --- -----------------------------------------------------------------------
  * EOH *
 
+ skymaps-02-01-04 24-Feb-2010    jrb fix linking for mac
  skymaps-02-01-03 24-Feb-2010    jrb fix linking for mac
  skymaps-02-01-02 22-Feb-2010    jrb correct use of xxLib for libEnv
  skymaps-02-01-01 09-Feb-2010 burnett fix SConscript
