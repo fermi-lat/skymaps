@@ -12,8 +12,7 @@ progEnv = baseEnv.Clone()
 libEnv = baseEnv.Clone()
 swigEnv = baseEnv.Clone()
 
-if baseEnv['PLATFORM'] == "win32":
-    libEnv.Tool('skymapsLib', depsOnly = 1)
+libEnv.Tool('addLinkDeps', package='skymaps', toBuild='shared')
 
 progEnv.Tool('skymapsLib')
 test_skymaps = progEnv.Program('test_skymaps', listFiles(['src/test/*.cxx']))
