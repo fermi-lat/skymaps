@@ -263,9 +263,19 @@ void BinnedPhotonData::addBand(const astro::Photon &gamma) {
 
 void BinnedPhotonData::add(const BinnedPhotonData& other)
 {
-    iterator mit(begin());
-    for(const_iterator oit( other.begin()); oit!=other.end(); ++oit,++mit){
-        mit->add(*oit);
+    //Loop over bands in bpd to be added
+    for(const_iterator oit( other.begin()); oit!=other.end(); ++oit){
+	int key(*oit);
+	// is it in our list?
+	iterator it=std::lower_bound(begin(),end(),key,std::less<int>());
+	if(key==(*it)){
+	    //yup, add them
+	    (*it).add(*oit);
+	}
+	else{
+	    // no, insert it
+	    it = insert(it,*oit);
+	}
     }
     addgti(other.gti());
     m_photons += other.m_photons;
