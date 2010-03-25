@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Wed Mar 24 21:39:22 PDT 2010
+skymaps/src
+
+Modified Files:
+	swig_setup.i 
+Log Message:
+tweak to return objects
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-02-01-07, operation: add
 Package: skymaps
