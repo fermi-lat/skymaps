@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Wed Mar 24 20:43:31 PDT 2010
+skymaps/src
+
+Modified Files:
+	swig_setup.i 
+Log Message:
+add support for setting CLHEP::HepRotaition, and access to astro::GPS
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-02-01-05, operation: add
 Package: skymaps
