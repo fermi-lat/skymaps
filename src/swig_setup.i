@@ -149,12 +149,17 @@ void delete_double2(double *d) {
       }
    }
    size_t __len__() {return 9;}
-   void set(const CLHEP::Hep3Vector& colx, CLHEP::Hep3Vector& coly, CLHEP::Hep3Vector& colz){
+   CLHEP::HepRotation* set(const CLHEP::Hep3Vector& colx, CLHEP::Hep3Vector& coly, CLHEP::Hep3Vector& colz){
        self->set(colx, coly, colz);
+       return self;
    }
-   void setXYZ(double x, double y, double z){
+    CLHEP::HepRotation* setXYZ(double x, double y, double z){
        (*self) =  CLHEP::HepRotationX(x) * CLHEP::HepRotationY(y) * CLHEP::HepRotationZ(z);
+       return self;
    }
+   CLHEP::HepRotation inverse(){
+      return self->inverse();
+      }
 %insert("python") %{
 def __str__(self):  return ('HepRotation:'+ 3* ('\n\t'+3*'%9.5f')) % tuple([self[i] for i in range(9)])
 %}
