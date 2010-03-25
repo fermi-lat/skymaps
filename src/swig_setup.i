@@ -9,6 +9,8 @@
 #include "astro/IGRField.h"
 #include "astro/JulianDate.h"
 #include "astro/SolarSystem.h"
+#include "astro/GPS.h"
+
 #include "healpix/Healpix.h"
 #include "healpix/HealPixel.h"
 #include "healpix/HealpixMap.h"
@@ -43,6 +45,10 @@
 #include "skymaps/PsfSkySpectrum.h"
 
 #include "CLHEP/Vector/Rotation.h"
+#include "CLHEP/Vector/RotationX.h"
+#include "CLHEP/Vector/RotationY.h"
+#include "CLHEP/Vector/RotationZ.h"
+
 #include "CLHEP/Vector/EulerAngles.h"
 
 #include "CLHEP/Vector/ThreeVector.h"
@@ -143,6 +149,16 @@ void delete_double2(double *d) {
       }
    }
    size_t __len__() {return 9;}
+   void set(const CLHEP::Hep3Vector& colx, CLHEP::Hep3Vector& coly, CLHEP::Hep3Vector& colz){
+       self->set(colx, coly, colz);
+   }
+   void setXYZ(double x, double y, double z){
+       (*self) =  CLHEP::HepRotationX(x) * CLHEP::HepRotationY(y) * CLHEP::HepRotationZ(z);
+   }
+%insert("python") %{
+def __str__(self):  return ('HepRotation:'+ 3* ('\n\t'+3*'%9.5f')) % tuple([self[i] for i in range(9)])
+%}
+
 }
 
 %extend healpix::HealpixMap{
@@ -158,6 +174,7 @@ void delete_double2(double *d) {
 
 %include astro/JulianDate.h
 %include astro/SolarSystem.h
+%include astro/GPS.h
 
 %include healpix/Healpix.h
 %include healpix/HealpixMap.h
