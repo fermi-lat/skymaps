@@ -270,6 +270,15 @@ double WeightedSkyDirList::operator()(const astro::SkyDir& sdir)const
         if( m_band.index(*it) == index) return (*it).weight(); 
     }
     return 0;
-
 }
+
+void WeightedSkyDirList::arclength(const astro::SkyDir& sdir, std::vector<double>& output)const
+{
+    output.clear();
+    const_iterator it = this->begin();
+    for (; it!=this->end(); it++) {
+        output.push_back( sdir.difference(*it) );
+    }
+}
+
 
