@@ -182,6 +182,9 @@ namespace skymaps {
         /// @brief implement SkyFunction: return weight, or zero
         double operator()(const astro::SkyDir& sdir)const;
 
+        /// @brief calculate the arclength between a SkyDir and the elements of the list
+        void arclength(const astro::SkyDir& sdir,std::vector<double>& output)const;
+
         /// @brief total pixels in list, including empties
         int total_pix()const {return m_pix;}
         int counts()const {return m_counts;}
