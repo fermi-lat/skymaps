@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: kerrm  Fri Apr  9 10:48:07 PDT 2010
+skymaps/skymaps
+
+Modified Files:
+	Band.h 
+Log Message:
+Added an arclength method to WeightedSkyDirList.  This takes as argument a SkyDir and a reference to a vector of doubles.  It allows a quick computation of the distance between the SkyDir and the elements of the WeightedSkyDirList.  (This is done in setting up an ROIAnalysis object, and in localizing point sources, so the speed up here should help with those applications.)
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-09-16-01, operation: add
 Package: skymaps
