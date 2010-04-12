@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: wallacee  Mon Apr 12 11:12:42 PDT 2010
+skymaps/src
+
+Modified Files:
+	LivetimeCube.cxx 
+Log Message:
+Include a line to have the ctor read in the gti from a saved file.
+
+    *
+------------------------------------------------------------
 User: kerrm  Fri Apr  9 10:48:08 PDT 2010
 skymaps/src
 
