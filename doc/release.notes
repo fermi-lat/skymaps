@@ -7,6 +7,7 @@ $Id$
  --------- -----   --- -----------------------------------------------------------------------
  * EOH *
 
+ skymaps-02-03-00 12-Apr-2010 burnett implement computation of distances to the list of sdirs in a Band
  skymaps-02-02-00 24-Mar-2010 burnett added new factory interface code
  skymaps-02-01-07 24-Mar-2010 burnett SWIG additions for HepRotation and GPS
  skymaps-02-01-06 24-Mar-2010 burnett SWIG additions for HepRotation and GPS
