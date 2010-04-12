@@ -79,6 +79,7 @@ LivetimeCube::LivetimeCube
     if( !inputfile.empty() ) {
         static std::string tablename("EXPOSURE");
         setData( HealpixArrayIO::instance().read(inputfile, tablename));
+	m_gti = skymaps::Gti(inputfile,"GTI");
         return;
     }
     unsigned int cosbins = static_cast<unsigned int>(1./cosbinsize);
