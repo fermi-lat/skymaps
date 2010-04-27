@@ -7,6 +7,7 @@ $Id$
  --------- -----   --- -----------------------------------------------------------------------
  * EOH *
 
+ skymaps-02-04-00 27-Apr-2010 burnett new PySkySpectrum
  skymaps-02-03-01 15-Apr-2010 burnett just to see if old-style tags still work
  skymaps-02-03-00 12-Apr-2010 burnett implement computation of distances to the list of sdirs in a Band
  skymaps-02-02-00 24-Mar-2010 burnett added new factory interface code
