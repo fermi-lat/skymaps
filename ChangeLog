@@ -1,5 +1,16 @@
 ------------------------------------------------------------
 User: lande  Mon Apr 26 19:20:33 PDT 2010
+ScienceTools-scons/skymaps/src
+
+Modified Files:
+	swig_setup.i 
+Added Files:
+	PySkySpectrum.cxx 
+Log Message:
+Adding a class PySkySpectrum which is analogous to PySkyFunction.
+    *
+------------------------------------------------------------
+User: lande  Mon Apr 26 19:20:33 PDT 2010
 ScienceTools-scons/skymaps/skymaps
 
 Added Files:
