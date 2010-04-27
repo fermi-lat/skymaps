@@ -17,6 +17,7 @@
 
 #include "skymaps/SkyImage.h"
 
+#include "skymaps/SkySpectrum.h"
 #include "skymaps/BinnedPhotonData.h"
 #include "skymaps/DiffuseFunction.h"
 #include "skymaps/CompositeSkySpectrum.h"
@@ -28,6 +29,7 @@
 #include "skymaps/PsfFunction.h"
 #include "skymaps/LivetimeCube.h"
 #include "skymaps/PySkyFunction.h"
+#include "skymaps/PySkySpectrum.h"
 #include "skymaps/Gti.h"
 #include "skymaps/EffectiveArea.h"
 #include "skymaps/Background.h"
@@ -211,7 +213,9 @@ def __str__(self):  return ('HepRotation:'+ 3* ('\n\t'+3*'%9.5f')) % tuple([self
 %include skymaps/PsfFunction.h
 %include skymaps/PsfSkyFunction.h
 
+%include skymaps/SkySpectrum.h
 %include skymaps/PySkyFunction.h
+%include skymaps/PySkySpectrum.h
 %include skymaps/Background.h
 %include skymaps/Band.h
 %include skymaps/SmoothedSkySpectrum.h
