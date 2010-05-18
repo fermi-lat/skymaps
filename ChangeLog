@@ -2,6 +2,15 @@
 TAG
 Tag name: skymaps-02-04-01, operation: add
 Package: skymaps
+User: burnett  Tue May 18 05:45:13 2010
+Files:
+  skymaps/python/.cvsignore  1.1
+
+    *
+------------------------------------------------------------
+TAG
+Tag name: skymaps-02-04-01, operation: add
+Package: skymaps
 User: burnett  Tue May 18 05:45:07 2010
 Files:
   skymaps/doc/release.notes  1.92
