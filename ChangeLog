@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Tue May 18 05:28:48 PDT 2010
+ScienceTools-scons/skymaps/skymaps
+
+Modified Files:
+	Band.h SkyIntegrator.h 
+Log Message:
+move static code into implementation file
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-02-04-00, operation: add
 Package: skymaps
