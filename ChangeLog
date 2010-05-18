@@ -2,6 +2,16 @@
 TAG
 Tag name: skymaps-02-04-01, operation: add
 Package: skymaps
+User: burnett  Tue May 18 05:44:54 2010
+Files:
+  skymaps/cmt/.cvsignore  1.1.1.1
+  skymaps/cmt/requirements  1.75
+
+    *
+------------------------------------------------------------
+TAG
+Tag name: skymaps-02-04-01, operation: add
+Package: skymaps
 User: burnett  Tue May 18 05:44:47 2010
 Files:
   skymaps/.cvsignore  1.2
