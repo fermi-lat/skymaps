@@ -1,4 +1,16 @@
 ------------------------------------------------------------
+TAG
+Tag name: skymaps-02-04-01, operation: add
+Package: skymaps
+User: burnett  Tue May 18 05:44:47 2010
+Files:
+  skymaps/.cvsignore  1.2
+  skymaps/ChangeLog  1.868
+  skymaps/SConscript  1.94
+  skymaps/skymapsLib.py  1.7
+
+    *
+------------------------------------------------------------
 User: burnett  Tue May 18 05:44:40 PDT 2010
 skymaps/doc
 
