@@ -2,6 +2,48 @@
 TAG
 Tag name: skymaps-02-04-01, operation: add
 Package: skymaps
+User: burnett  Tue May 18 05:45:27 2010
+Files:
+  skymaps/src/SkyIntegrator.cxx  1.5
+  skymaps/src/ExposureWeighter.cxx  1.1
+  skymaps/src/BandBackground.cxx  1.1
+  skymaps/src/Background.cxx  1.9
+  skymaps/src/IsotropicSpectrum.cxx  1.2
+  skymaps/src/PsfFunction.cxx  1.3
+  skymaps/src/PySkySpectrum.cxx  1.1
+  skymaps/src/Band.cxx  1.25
+  skymaps/src/Exposure.cxx  1.6
+  skymaps/src/DiffuseFunction.cxx  1.8
+  skymaps/src/IParams.cxx  1.19
+  skymaps/src/EffectiveArea.cxx  1.6
+  skymaps/src/SkyImage.cxx  1.17
+  skymaps/src/PsfSkySpectrum.cxx  1.1
+  skymaps/src/CompositeSkyFunction.cxx  1.1
+  skymaps/src/GtiBase.cxx  1.1
+  skymaps/src/PySkyFunction.cxx  1.3
+  skymaps/src/Gti.cxx  1.2
+  skymaps/src/swig_setup.i  1.6
+  skymaps/src/CompositeSkySpectrum.cxx  1.2
+  skymaps/src/SpectralFunction.cxx  1.6
+  skymaps/src/PsfSkyFunction.cxx  1.2
+  skymaps/src/mainpage.h  1.2
+  skymaps/src/PhotonBinner.cxx  1.14
+  skymaps/src/HealpixDiffuseFunc.cxx  1.2
+  skymaps/src/ComplexSkySpectrum.cxx  1.1
+  skymaps/src/BinnedPhotonData.cxx  1.32
+  skymaps/src/LivetimeCube.cxx  1.12
+  skymaps/src/IsotropicPowerLaw.cxx  1.2
+  skymaps/src/Convolution.cxx  1.7
+  skymaps/src/SkySpectrum.cxx  1.4
+  skymaps/src/PhotonMap.cxx  1.11
+  skymaps/src/SmoothedSkySpectrum.cxx  1.1
+  skymaps/src/test/test_main.cxx  1.29
+
+    *
+------------------------------------------------------------
+TAG
+Tag name: skymaps-02-04-01, operation: add
+Package: skymaps
 User: burnett  Tue May 18 05:45:20 2010
 Files:
   skymaps/skymaps/DiffuseFunction.h  1.3
