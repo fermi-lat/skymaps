@@ -114,7 +114,7 @@ namespace skymaps {
         double gamma2()const{return m_gamma2;}
         double frac2() const { return m_frac2;}
 
-        static int cache_pix() {return cache_pix_counts;}
+        static int cache_pix();// {return Band::cache_pix_counts;}
         static bool enable_cache(bool b);
   
         void setSigma(double s){m_sigma=s;}
