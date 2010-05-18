@@ -52,10 +52,10 @@ public:
     static double pix_int(const astro::SkyFunction& func, const astro::SkyDir& pix_center, int nside);
     static double level_pix_int(const astro::SkyFunction& func, const astro::SkyDir& pix_center, int level);
     
-    static void set_simpson(int n){s_n=n;} //for future SkySpectrum integration
-    static void set_verbose(bool q=true){verbose=q;}
-    static void set_tolerance(float tol){tolerance=tol;}
-    static void set_adaptive(bool q=true){adaptive=q;}
+    static void set_simpson(int n);//{s_n=n;} //for future SkySpectrum integration
+    static void set_verbose(bool q=true); //{verbose=q;}
+    static void set_tolerance(float tol); //{tolerance=tol;}
+    static void set_adaptive(bool q=true); //{adaptive=q;}
 
 private:
     static int s_n;

@@ -22,6 +22,11 @@ int   SkyIntegrator::s_n(20); // make sufficient to integrate over a broad energ
 float SkyIntegrator::tolerance(0.05); // default 5% tolerance when testing for convergence
 bool  SkyIntegrator::adaptive(false); // use pixel-based adaptive integration
 
+void SkyIntegrator::set_simpson(int n){s_n=n;} //for future SkySpectrum integration
+void SkyIntegrator::set_verbose(bool q){verbose=q;}
+void SkyIntegrator::set_tolerance(float tol){tolerance=tol;}
+void SkyIntegrator::set_adaptive(bool q){adaptive=q;}
+
 
 double SkyIntegrator::ap_int(const astro::SkyFunction& func, const astro::SkyDir& center, float radius) {
     return 3.141592654*radius*radius*average(func,center,radius);
