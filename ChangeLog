@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Tue May 18 05:28:48 PDT 2010
+ScienceTools-scons/skymaps/src
+
+Modified Files:
+	Band.cxx SkyIntegrator.cxx 
+Log Message:
+move static code into implementation file
+    *
+------------------------------------------------------------
+User: burnett  Tue May 18 05:28:48 PDT 2010
 ScienceTools-scons/skymaps/skymaps
 
 Modified Files:
