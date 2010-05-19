@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: kerrm  Tue May 18 23:38:35 PDT 2010
+skymaps/skymaps
+
+Modified Files:
+	Background.h 
+Log Message:
+Added grid_value function.  Should probably move it into SWIG interface.
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-02-04-01, operation: add
 Package: skymaps
