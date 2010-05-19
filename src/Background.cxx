@@ -30,10 +30,10 @@ using namespace skymaps;
 
 int Background::s_n(4);
 void Background::set_simpson(int n){
-    s_n=n;
-    if( s_n<2 || (s_n&2) !=0 || s_n>20){
-        throw std::invalid_argument("Background--bad Simpsons rule count: n must be even, <20");
+    if( n<2 || (n&1) !=0 || n>20){
+        throw std::invalid_argument("Background--bad Simpsons rule count: n must be even, <=20");
     }
+    s_n=n;
 }
 
 Background::Background(const skymaps::SkySpectrum& diffuse, double fixedexposure)
@@ -176,4 +176,15 @@ std::vector<double> Background::wsdl_vector_value(skymaps::WeightedSkyDirList& d
         rvals.push_back(this->operator()(*it) );
     }
     return rvals;
+}
+
+void Background::grid_values(std::vector<double>& rvals, const std::vector<double>& lons, const std::vector<double>&lats, const astro::SkyDir::CoordSystem coordsys) const
+{
+    rvals.clear();
+    rvals.reserve(lons.size()*lats.size());
+    for (std::vector<double>::const_iterator it_lon = lons.begin(); it_lon != lons.end(); ++it_lon){
+        for (std::vector<double>::const_iterator it_lat = lats.begin(); it_lat != lats.end(); ++it_lat){
+            rvals.push_back(this->operator ()(astro::SkyDir((*it_lon),(*it_lat),coordsys)));
+        }
+    }
 }
