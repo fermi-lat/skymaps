@@ -107,6 +107,8 @@ public:
 
     std::vector<double> wsdl_vector_value (skymaps::WeightedSkyDirList & wsdl) const;
 
+    void grid_values(std::vector<double>& rvals, const std::vector<double>& lons, const std::vector<double>&lats, const astro::SkyDir::CoordSystem coordsys) const;
+
 private:
     const skymaps::SkySpectrum* m_diffuse;
     typedef std::vector<const skymaps::SkySpectrum*> SpectrumVector;
