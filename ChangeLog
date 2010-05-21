@@ -1,4 +1,16 @@
 ------------------------------------------------------------
+User: wallacee  Thu May 20 17:56:41 PDT 2010
+skymaps/skymaps
+
+Modified Files:
+	LivetimeCube.h EffectiveArea.h Exposure.h 
+Log Message:
+Added implementation of livetime-fraction-dependent efficiency correction,
+mimicking the implementation in irfInterface (using extra table in aeff caldb
+files).
+
+    *
+------------------------------------------------------------
 User: kerrm  Tue May 18 23:38:51 PDT 2010
 skymaps/src
 
