@@ -37,7 +37,7 @@ class BasicLivetime {
 public:
     BasicLivetime(S sky):m_sky(sky), m_total(0){}
 
-    virtual ~BasicLivetime(){}
+    virtual ~BasicLivetime(){} 
 
     template<class F>
         double operator()(const astro::SkyDir& dir, const F& fun)const
@@ -83,6 +83,7 @@ public:
     //! @param zcut [-1]  zenith angle cut angle
     //! @param pixelsize (deg) [1] Approximate pixel size, in degrees
     //! @param cosbinsize bin size in the cos(theta) binner
+    //! @param weighted [false] Compute weighted exposure
     //! Note that all parameters have defaults to allow keyword args in Python interface
     
     LivetimeCube(
@@ -93,6 +94,7 @@ public:
          ,double pixelsize=1. 
          ,double cosbinsize=1./healpix::CosineBinner::nbins()
          ,double quiet=false
+         ,bool   weighted=false
           );
 
     //! add a time interval at the given position
@@ -176,6 +178,7 @@ private:
 
     skymaps::Gti m_gti; ///< over-all Gti
     bool m_quiet;       ///< suppress output if set
+    bool m_weighted;    ///< weight by livetime fraction if set
 };
 
 } // namespace map_tools

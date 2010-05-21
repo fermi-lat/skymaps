@@ -200,6 +200,10 @@ public:
                              std::vector<float> & values,
                              size_t nrow=0);
 
+   int convType() const {
+      return m_conversionType;
+   }
+
 protected:
 
    /// Disable copy assignment operator.
@@ -222,6 +226,8 @@ private:
 
    float m_maxValue;
 
+   int m_conversionType; //keep track of front and back for efficiency parameters - EEW
+
 };
 
 EffectiveArea::FitsTable::FitsTable(const std::string & filename,
@@ -231,7 +237,10 @@ EffectiveArea::FitsTable::FitsTable(const std::string & filename,
 
    const tip::Table * table(tip::IFileSvc::instance().readTable(filename, 
                                                                 extname));
-
+   std::string conv;
+   table->getHeader()["DETNAM"].get(conv);
+   if (conv == "FRONT") {m_conversionType=0;}
+   else{ m_conversionType=1;}
    std::vector<float> elo, ehi;
    getVectorData(table, "ENERG_LO", elo, nrow);
    getVectorData(table, "ENERG_HI", ehi, nrow);
@@ -327,9 +336,51 @@ void EffectiveArea::FitsTable::getVectorData(const tip::Table * table,
 }
 
 
+/** 
+ * @class EfficiencyParameter
+ *
+ * @brief "Meta-parameter" that is used in the parameterization of
+ * the loss of efficiency due to accidental coincidences.  This is
+ * a functor that implements the piecewise linear fits to the
+ * parameters in the expression $\xi = p_0 log10(E/MeV) + p_1$
+ * where $\xi$ is the ratio of effective areas for the livetime
+ * fraction-dependent case to the livetime-averaged value.
+ * Copied wholesale from irfs/latResponse/src/EfficiencyFactor.h
+ */
+class EffectiveArea::EfficiencyParameter {
+public:
+    EfficiencyParameter(){}
+    EfficiencyParameter(const std::vector<double> & pars); 
+    double operator()(double logE) const;
+private:
+    double m_a0;
+    double m_b0;
+    double m_a1;
+    double m_logEb1;
+    double m_a2;
+    double m_logEb2;
+};
+
+EffectiveArea::EfficiencyParameter::EfficiencyParameter(const std::vector<double>& pars)
+: m_a0(pars.at(0))
+,m_b0(pars.at(1))
+,m_a1(pars.at(2))
+,m_logEb1(pars.at(3))
+,m_a2(pars.at(4))
+,m_logEb2(pars.at(5)){}
+
+double EffectiveArea::EfficiencyParameter::operator()(double logE)const{
+    if (logE < m_logEb1) {
+        return m_a0*logE + m_b0;
+    }
+    double b1 = (m_a0 - m_a1)*m_logEb1 + m_b0;
+    if (logE < m_logEb2) {
+        return m_a1*logE + b1; 
+    }
+    double b2 = (m_a1 - m_a2)*m_logEb2 + b1; 
+    return m_a2*logE + b2; 
+}
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
 
 
 std::string EffectiveArea::s_CALDB;
@@ -365,6 +416,38 @@ EffectiveArea::EffectiveArea(std::string irfname, std::string filename)
     }catch(const std::exception& e){
         std::cerr << "EffectiveArea: could not open " << filename<< "["<<table_name <<"]" << std::endl;
         throw;
+    }
+    try{
+        const std::string par_table_name("EFFICIENCY_PARS");
+        const tip::Table * efficiency_params = tip::IFileSvc::instance().readTable(filename, "EFFICIENCY_PARAMS");
+        long nrows;
+        efficiency_params->getHeader()["NAXIS2"].get(nrows);
+        bool all_zeros(true);
+        int convType = m_aeffTable->convType(); 
+        std::vector< std::vector<double> > parVectors;
+        for (size_t i(convType*2); i < static_cast<unsigned long>(nrows+2*(convType-1)); i++) {
+            std::vector<float> fltValues;
+            FitsTable::getVectorData(efficiency_params, par_table_name, fltValues, i); 
+            for (size_t j(0); j < fltValues.size(); j++) {
+                if (fltValues.at(j) != 0) {
+                    all_zeros = false;
+                }
+            }
+            std::vector<double> values(fltValues.size(), 0); 
+            std::copy(fltValues.begin(), fltValues.end(), values.begin());
+            parVectors.push_back(values);
+         }   
+         if (!all_zeros){
+             m_p0 = new EfficiencyParameter(parVectors.at(0));
+             m_p1 = new EfficiencyParameter(parVectors.at(1));
+             m_haveEfficiencyPars = true;
+         }
+         else{
+             m_haveEfficiencyPars = false;
+         };
+    }catch(const std::exception& e){
+        std::cerr << "EffectiveArea: could not open " << filename << "[EFFICIENCY_PARAMS]"<<std::endl;
+        m_haveEfficiencyPars = false;
     }
 
 }
@@ -404,3 +487,17 @@ double EffectiveArea::value(double energy, double costheta)const
 }
 
 
+std::pair<double,double> EffectiveArea::getLivetimeFactors(double energy )const{
+    
+    std::pair<double,double> factors;
+    if (!m_haveEfficiencyPars){
+        factors.first = 1;
+        factors.second = 0;
+        return factors;
+    }
+    double logE(std::log10(energy));
+
+    factors.first = (*m_p1)(logE);
+    factors.second = (*m_p0)(logE);
+    return factors;
+} 
