@@ -34,6 +34,10 @@ public:
     */
     Exposure(const skymaps::LivetimeCube& ltcube, 
         const skymaps::EffectiveArea & aeff);
+    
+    Exposure(const skymaps::LivetimeCube& ltcube,
+             const skymaps::LivetimeCube& weighted_ltcube,
+             const skymaps::EffectiveArea & aeff);
 
     virtual ~Exposure();
 
@@ -65,6 +69,8 @@ public:
 private:
     const skymaps::LivetimeCube& m_ltcube;
     const skymaps::EffectiveArea& m_aeff;
+    const skymaps::LivetimeCube& m_weighted_ltcube;
+    bool m_weighted;
 
     static double s_cutoff;
     static int s_n;

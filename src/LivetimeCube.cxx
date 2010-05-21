@@ -63,6 +63,7 @@ LivetimeCube::LivetimeCube
          ,double cosbinsize
          //,int    phibins
          ,double quiet
+         ,bool   weighted
          )
 : SkyLivetimeCube(
     SkyBinner(Healpix(
@@ -75,11 +76,15 @@ LivetimeCube::LivetimeCube
 , m_cone_angle(cone_angle)
 , m_dir(dir)
 , m_quiet(quiet)
+, m_weighted(weighted)
 {
     if( !inputfile.empty() ) {
-        static std::string tablename("EXPOSURE");
+        //static std::string tablename("EXPOSURE");
+        static std::string tablename;
+        if(m_weighted) tablename="WEIGHTED_EXPOSURE";
+        else tablename = "EXPOSURE";
         setData( HealpixArrayIO::instance().read(inputfile, tablename));
-	m_gti = skymaps::Gti(inputfile,"GTI");
+        m_gti = skymaps::Gti(inputfile,"GTI");
         return;
     }
     unsigned int cosbins = static_cast<unsigned int>(1./cosbinsize);
@@ -226,6 +231,10 @@ bool LivetimeCube::processEntry(const tip::ConstTableRecord & row, const skymaps
     row["start"].get(start);
     row["stop"].get(stop);
     double deltat = livetime; 
+    double weight = 1;
+    if(m_weighted){
+        weight = livetime/(stop-start);
+    } 
     double fraction(1); 
     bool  done(false);
     if( gti.getNumIntervals()>0 ) {
@@ -263,10 +272,10 @@ bool LivetimeCube::processEntry(const tip::ConstTableRecord & row, const skymaps
 
             // and finally to longitude, latitude in zenith frame
             azimuth +=90; if(azimuth>360)azimuth-=360;
-            fill(SkyDir(azimuth, theta-90), deltat * fraction);
+            fill(SkyDir(azimuth, theta-90), deltat * fraction * weight);
 
         }else{
-            fill_zenith(scz, scx,  zenith, deltat* fraction);
+            fill_zenith(scz, scx,  zenith, deltat* fraction * weight);
         }
     }
     return done; 

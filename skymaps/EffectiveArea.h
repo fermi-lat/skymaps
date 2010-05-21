@@ -48,7 +48,10 @@ namespace skymaps {
         ///@param e energy in MeV
         ///@param costh cosine of theta
         double operator()(double energy=1000, double costh=1.0)const{return value(energy,costh);}
-
+        
+        ///@brief return livetime fraction dependent efficiency factors -  added 5/19/2010 EEW
+        ///@param e energy in MeV
+        std::pair<double,double> getLivetimeFactors(double energy)const;
         static void set_CALDB(std::string CALDB);
 
         static bool enable_cache(bool value=true);
@@ -59,7 +62,13 @@ namespace skymaps {
         FitsTable * m_aeffTable;
         static std::string s_CALDB;
         static bool s_cache_enabled;
+        class EfficiencyParameter;
+        
+        EfficiencyParameter * m_p0;
+        EfficiencyParameter * m_p1; 
+        bool m_haveEfficiencyPars;
 
+        
         /// @class private class to hash a key for lookup
         class CacheKey{
         public:
