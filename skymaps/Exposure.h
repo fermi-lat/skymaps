@@ -70,7 +70,6 @@ private:
     const skymaps::LivetimeCube& m_ltcube;
     const skymaps::EffectiveArea& m_aeff;
     const skymaps::LivetimeCube* m_weighted_ltcube;
-    bool m_weighted;
 
     static double s_cutoff;
     static int s_n;
