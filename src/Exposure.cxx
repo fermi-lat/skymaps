@@ -89,7 +89,7 @@ Exposure::Exposure(const LivetimeCube& ltcube, const EffectiveArea & aeff)
 
 Exposure::Exposure(const LivetimeCube& ltcube, const LivetimeCube& weighted_ltcube, const EffectiveArea & aeff)
 : m_ltcube(ltcube)
-, m_weighted_ltcube(weighted_ltcube)
+, m_weighted_ltcube(&weighted_ltcube)
 , m_aeff(aeff)
 , m_weighted(true)
 {}
@@ -103,7 +103,7 @@ double Exposure::value(const astro::SkyDir& dir, double energy)const
     const healpix::CosineBinner& bins = m_ltcube.bins(dir);
     double val(  bins(fun) );
     if (m_weighted){
-        const healpix::CosineBinner& weighted_bins = m_weighted_ltcube.bins(dir);
+        const healpix::CosineBinner& weighted_bins = m_weighted_ltcube->bins(dir);
         std::pair<double,double> factors(m_aeff.getLivetimeFactors(energy));
         double weighted_val( weighted_bins(fun) );
         return (factors.first*val + factors.second*weighted_val);
@@ -136,7 +136,7 @@ double Exposure::diff_value(const astro::SkyDir& dir, double e, double costh) co
     double ae( m_aeff.value(e,costh) );
     double lt( const_cast<skymaps::LivetimeCube&>(m_ltcube).value(dir,costh) );
     if (m_weighted) {
-        double ltw( const_cast<skymaps::LivetimeCube&>(m_weighted_ltcube).value(dir,costh) );
+        double ltw( const_cast<skymaps::LivetimeCube&>(*m_weighted_ltcube).value(dir,costh) );
 	std::pair<double,double> factors(m_aeff.getLivetimeFactors(e));
         return ae * (lt*factors.first+ ltw*factors.second);
     }
