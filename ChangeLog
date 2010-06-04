@@ -1,5 +1,15 @@
 ------------------------------------------------------------
 User: wallacee  Fri Jun  4 15:39:42 PDT 2010
+skymaps/src
+
+Modified Files:
+	Exposure.cxx 
+Log Message:
+Minor change to the implementation of the previous change (changing m_weighted_ltcube to a pointer).
+
+    *
+------------------------------------------------------------
+User: wallacee  Fri Jun  4 15:39:42 PDT 2010
 skymaps/skymaps
 
 Modified Files:
