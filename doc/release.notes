@@ -7,6 +7,7 @@ $Id$
  --------- -----   --- -----------------------------------------------------------------------
  * EOH *
 
+ skymaps-02-06-00 07-Jun-2010 burnett just to trigger RM
  skymaps-02-05-00 04-Jun-2010 burnett Eric's code to implement efficiency
  skymaps-02-04-01 18-May-2010 burnett move static code into implementation file
  skymaps-02-04-00 27-Apr-2010 burnett new PySkySpectrum
