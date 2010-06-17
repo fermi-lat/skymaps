@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: kerrm  Thu Jun 17 09:54:51 PDT 2010
+skymaps/src
+
+Modified Files:
+	Background.cxx 
+Log Message:
+Added two methods to Background to support evaluating functions on rotated grids.
+    *
+------------------------------------------------------------
+User: kerrm  Thu Jun 17 09:54:51 PDT 2010
 skymaps/skymaps
 
 Modified Files:
