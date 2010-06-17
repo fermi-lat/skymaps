@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: kerrm  Thu Jun 17 09:54:51 PDT 2010
+skymaps/skymaps
+
+Modified Files:
+	Background.h 
+Log Message:
+Added two methods to Background to support evaluating functions on rotated grids.
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-09-17-00, operation: add
 Package: skymaps
