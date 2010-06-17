@@ -107,6 +107,16 @@ public:
 
     std::vector<double> wsdl_vector_value (skymaps::WeightedSkyDirList & wsdl) const;
 
+    /// @brief get the rotated lons and lats for a list of positions
+    static void rot_grid (std::vector<double>& rlons, std::vector<double>& rlats,
+        const std::vector<double>& lons, const std::vector<double>&lats, 
+        const astro::SkyDir& roi_center);
+
+    /// @brief fill a grid on the rotated grid of lons and lats
+    static void val_grid (std::vector<double>& rvals,
+        const std::vector<double>& lons, const std::vector<double>&lats, 
+        const astro::SkyDir& roi_center, const astro::SkyFunction& myfunc);
+
     void grid_values(std::vector<double>& rvals, const std::vector<double>& lons, const std::vector<double>&lats, const astro::SkyDir::CoordSystem coordsys) const;
 
 private:
