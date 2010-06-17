@@ -14,6 +14,7 @@ $Header$
 #include "skymaps/IsotropicPowerLaw.h"
 #include "skymaps/LivetimeCube.h"
 #include "skymaps/Exposure.h"
+#include "CLHEP/Vector/ThreeVector.h"
 
 
 #include <stdexcept>
@@ -178,6 +179,47 @@ std::vector<double> Background::wsdl_vector_value(skymaps::WeightedSkyDirList& d
     return rvals;
 }
 
+// This will rotate a grid of lons/lats from the ROI frame to the
+// flat grid frame on the equator.  (Presumably the lons/lats
+// are in the ROI.)  They are in the Galactic coordinate system.
+void Background::rot_grid (std::vector<double>& rlons, std::vector<double>& rlats,
+                           const std::vector<double>& lons, const std::vector<double>&lats, 
+                           const astro::SkyDir& roi_center)
+{
+    rlons.clear(); rlats.clear();
+    rlons.reserve(lons.size()); rlats.reserve(lats.size());
+    astro::SkyDir rot_axis = astro::SkyDir(roi_center.l()+90,0);
+    Hep3Vector rot_axisv(rot_axis.dir());
+    astro::SkyDir sd;
+    double rot_extent = roi_center.b()*(M_PI/180);
+    for (int i=0; i < lons.size(); ++i) {
+        sd = astro::SkyDir(lons[i],lats[i]);
+        sd().rotate(rot_extent,rot_axisv);
+        rlons.push_back(sd.ra());
+        rlats.push_back(sd.dec());
+    }
+}
+
+// This will take the flat grid at the equator, rotate it to the
+// ROI frame, and evaluate a SkyFunction over it.
+void Background::val_grid (std::vector<double>& rvals,
+                           const std::vector<double>& lons, const std::vector<double>&lats, 
+                           const astro::SkyDir& roi_center, const astro::SkyFunction& myfunc)
+{
+    rvals.clear();
+    rvals.reserve(lons.size()*lats.size());
+    astro::SkyDir rot_axis = astro::SkyDir(roi_center.l()-90,0);
+    Hep3Vector rot_axisv(rot_axis.dir());
+    astro::SkyDir sd;
+    double rot_extent = roi_center.b()*(M_PI/180);
+    for (std::vector<double>::const_iterator it_lon = lons.begin(); it_lon != lons.end(); ++it_lon){
+        for (std::vector<double>::const_iterator it_lat = lats.begin(); it_lat != lats.end(); ++it_lat){
+            sd = astro::SkyDir(*it_lon,*it_lat);
+            sd().rotate(rot_extent,rot_axisv);
+            rvals.push_back(myfunc(astro::SkyDir(sd.ra(),sd.dec(),astro::SkyDir::GALACTIC)));
+        }
+    }
+}
 void Background::grid_values(std::vector<double>& rvals, const std::vector<double>& lons, const std::vector<double>&lats, const astro::SkyDir::CoordSystem coordsys) const
 {
     rvals.clear();
