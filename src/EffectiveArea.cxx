@@ -446,7 +446,7 @@ EffectiveArea::EffectiveArea(std::string irfname, std::string filename)
              m_haveEfficiencyPars = false;
          };
     }catch(const std::exception& e){
-        std::cerr << "EffectiveArea: could not open " << filename << "[EFFICIENCY_PARAMS]"<<std::endl;
+        //std::cerr << "EffectiveArea: could not open " << filename << "[EFFICIENCY_PARAMS]"<<std::endl;
         m_haveEfficiencyPars = false;
     }
 
