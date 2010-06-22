@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: kerrm  Tue Jun 22 10:12:25 PDT 2010
+skymaps/skymaps
+
+Modified Files:
+	IsotropicSpectrum.h 
+Log Message:
+Added an accessor method to get the filename used for IsotropicSpectrum.
+    *
+------------------------------------------------------------
 User: burnett  Sun Jun 20 17:15:01 PDT 2010
 skymaps/src
 
