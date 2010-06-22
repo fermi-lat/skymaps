@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: kerrm  Tue Jun 22 10:12:25 PDT 2010
+skymaps/src
+
+Modified Files:
+	IsotropicSpectrum.cxx 
+Log Message:
+Added an accessor method to get the filename used for IsotropicSpectrum.
+    *
+------------------------------------------------------------
+User: kerrm  Tue Jun 22 10:12:25 PDT 2010
 skymaps/skymaps
 
 Modified Files:
