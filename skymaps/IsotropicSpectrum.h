@@ -40,7 +40,7 @@ public:
     ///@brief integral for the energy limits, in the given direction
     virtual double integral(const astro::SkyDir& dir, double a, double b)const;
 
-
+    std::string name()const{return m_name;}
 
 private:
 
@@ -48,6 +48,7 @@ private:
     std::vector<double> m_energies;
     std::vector<double> m_data;
     double m_emax, m_emin;
+    std::string m_name;
 
 };
 } // namespace skymaps
