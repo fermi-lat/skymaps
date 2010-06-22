@@ -13,6 +13,7 @@ using namespace skymaps;
 
 
 IsotropicSpectrum::IsotropicSpectrum(const std::string& filename)
+:m_name(filename)
 {
     setName("isotropic:"+filename);
     std::ifstream input_file(filename.c_str());
