@@ -41,12 +41,23 @@ namespace skymaps {
         * @param bins  number of bins
         */
         PhotonBinner(double emin, double ratio, int bins);
+
+        /**@brief ctor user specified bins and nside to be used
+        * @param edges left edges in MeV (note 1 TeV is always rightmost)
+        * @param f_nside Healpix nside parameter for each energy band, front
+        * @param b_nside Healpix nside parameter for each energy band, back
+        */
+        PhotonBinner(const std::vector<double>&edges, const std::vector<int>&f_nside, const std::vector<int>&b_nside);
+
         virtual ~PhotonBinner(){};
         ///@brief bin a photon by returning an appropriate Band object
         virtual skymaps::Band operator()(const astro::Photon& photon)const;
            
         static void set_max_nside(int new_nside);
         static int  get_max_nside();
+
+        static void set_min_nside(int new_nside);
+        static int  get_min_nside();
 
         static void set_sigma_scale(double sigscale);
         static double get_sigma_scale();
@@ -56,14 +67,18 @@ namespace skymaps {
         */
         void setupbins();
         double m_bins_per_decade;
+        bool m_user_nside;
         
         std::vector<double> m_bins;           //the energy of each left bin edge
         std::vector<int> m_binlevelmap;       //the mapping between energy bins and healpix levels
+        std::vector<int> m_fnside;           // nside parameters for front events
+        std::vector<int> m_bnside;           // nside parameters for back events
         static std::vector<double> s_fenergy; //the mapping between energy and healpix levels for front events
         static std::vector<double> s_benergy; //the mapping between energy and healpix levels for back events
         static std::vector<double> s_sigma_level;
         static std::vector<double> s_gamma_level;
         static int max_nside;
+        static int min_nside;
         static double m_sigma_scale;
     };
 }
