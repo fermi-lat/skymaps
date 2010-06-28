@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: kerrm  Mon Jun 28 13:30:34 PDT 2010
+skymaps/skymaps
+
+Modified Files:
+	PhotonBinner.h 
+Log Message:
+Modified a PhotonBinner constructor to take three vectors: energy band edges, the nside parameter for front-converting events, and the nside-parameter for back-converting events.  This allows the binning to be determined elsewhere, in particular in a Python module.
+    *
+------------------------------------------------------------
 User: kerrm  Tue Jun 22 10:12:25 PDT 2010
 skymaps/src
 
