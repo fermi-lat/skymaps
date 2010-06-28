@@ -48,6 +48,11 @@ std::vector<double> PhotonBinner::s_benergy(back_list,  back_list+sizeof(back_li
 std::vector<double> PhotonBinner::s_gamma_level(gamma_list,gamma_list+14);
 std::vector<double> PhotonBinner::s_sigma_level(sigma_list,sigma_list+14);
 
+//minimum nside (default 1 is base Healpix pixelization)
+int PhotonBinner::min_nside(1);
+void PhotonBinner::set_min_nside(int new_nside){min_nside = new_nside;}
+int PhotonBinner::get_min_nside(){return min_nside;}
+
 //maximum nside (default 8192 set by 32 bit limit)
 int PhotonBinner::max_nside(8192);
 void PhotonBinner::set_max_nside(int new_nside){max_nside = new_nside;}
@@ -59,8 +64,10 @@ double PhotonBinner::m_sigma_scale(2*M_PI/3);
 void PhotonBinner::set_sigma_scale(double sigscale){m_sigma_scale = sigscale;}
 double PhotonBinner::get_sigma_scale(){return m_sigma_scale;}
 
+
 PhotonBinner::PhotonBinner(double bins_per_decade)
 : m_bins_per_decade(bins_per_decade)
+, m_user_nside(false)
 {
 
     double eratio( 2.35);
@@ -78,16 +85,36 @@ PhotonBinner::PhotonBinner(double bins_per_decade)
 }
 
 PhotonBinner::PhotonBinner(const std::vector<double>& bins)
+: m_bins_per_decade(1)
+, m_user_nside(false)
 {
     // surround the user list with 30 and 1e6 to catch under and overflows
     m_bins.push_back(30);
     std::copy(bins.begin(), bins.end(), std::back_insert_iterator<std::vector<double> >(m_bins));
-    m_bins.push_back(1e6);
-    m_bins_per_decade = 1; //MTK kluge
+    m_bins.push_back(infinite);
     setupbins();
 }
 
+PhotonBinner::PhotonBinner(const std::vector<double>&edges, const std::vector<int>&f_nside, const std::vector<int>&b_nside)
+: m_user_nside(true)
+{
+    std::copy(edges.begin(), edges.end(), std::back_insert_iterator<std::vector<double> >(m_bins));
+    std::copy(f_nside.begin(), f_nside.end(), std::back_insert_iterator<std::vector<int> >(m_fnside));
+    std::copy(b_nside.begin(), b_nside.end(), std::back_insert_iterator<std::vector<int> >(m_bnside));
+    if (m_bins.front() > 0) {
+        m_bins.insert(m_bins.begin(),0);
+        m_fnside.insert(m_fnside.begin(),min_nside);
+        m_bnside.insert(m_bnside.begin(),min_nside);
+    }
+    if (m_bins.back() < infinite) {
+        m_bins.push_back(infinite);
+        m_fnside.push_back(max_nside);
+        m_bnside.push_back(max_nside);
+    }
+}
+
 PhotonBinner::PhotonBinner(double emin, double ratio, int bins)
+: m_user_nside(false)
 {
     double curfact = 1.;
     for(int i(0);i<bins;++i) {
@@ -97,6 +124,7 @@ PhotonBinner::PhotonBinner(double emin, double ratio, int bins)
     setupbins();
 }
 
+
 skymaps::Band PhotonBinner::operator()(const astro::Photon& p)const
 {
     double energy ( p.energy() );
@@ -105,6 +133,11 @@ skymaps::Band PhotonBinner::operator()(const astro::Photon& p)const
     int event_class (  p.eventClass() );
     if( event_class<0 || event_class>15) event_class=0; // should not happen?
 
+    if (m_user_nside) {
+        std::vector<double>::const_iterator it = std::lower_bound(m_bins.begin(), m_bins.end(), energy, std::less<double>());
+        int nside(event_class==0?m_fnside[it - m_bins.begin() -1]:m_bnside[it - m_bins.begin() -1]);
+        return Band(nside,event_class,*(it-1),*(it),0,0);
+    }
     // setup for old-style levels, with sigma and gamma for the given energy
     const std::vector<double>& elist ( event_class<=0? s_fenergy : s_benergy );
 
@@ -120,24 +153,16 @@ skymaps::Band PhotonBinner::operator()(const astro::Photon& p)const
     if( m_bins_per_decade>0){
         // no, new binning
         bool high(ehigh==1e6); 
-        double oldebar(sqrt(elow*ehigh));
         it= std::lower_bound(m_bins.begin(), m_bins.end(), energy, std::less<double>());
         elow = *(it-1); ehigh = *(it);
         double ebar(sqrt(elow*ehigh));
 
-        // get old parameters for this energy
-        std::vector<double>::const_iterator itold=
-            std::lower_bound(elist.begin(), elist.end(), ebar, std::less<double>());
-        level = itold-elist.begin()-1;
-
-        //  kluge, from Marshall's fits
+        //  set sigma/gamma from CALDB; nside inversion prop to sigma
         sigma = IParams::sigma(ebar,event_class);
         gamma = IParams::gamma(ebar,event_class);
-        //nside = (2*M_PI/(3*sigma));
         nside = m_sigma_scale/sigma;
-        //nside=nside>8192?8192:nside;
         nside=nside>max_nside?max_nside:nside;
-        nside=nside<1?1:nside;
+        nside=nside<min_nside?min_nside:nside;
     }
     return  Band(nside, event_class, elow, ehigh, sigma, gamma);
 }
