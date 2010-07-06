@@ -15,6 +15,7 @@ $Header$
 #include "skymaps/LivetimeCube.h"
 #include "skymaps/Exposure.h"
 #include "CLHEP/Vector/ThreeVector.h"
+#include "healpix/Healpix.h"
 
 
 #include <stdexcept>
@@ -41,7 +42,10 @@ Background::Background(const skymaps::SkySpectrum& diffuse, double fixedexposure
 : m_diffuse(&diffuse)
 , m_event_type(0)
 , m_fixedexposure(fixedexposure)
+, m_energy(1000)
+, m_exposure_map(0)
 {
+    set_skyfun(m_event_type,m_energy);
 }
 
 
@@ -49,26 +53,35 @@ Background::Background(const skymaps::SkySpectrum& diffuse,
                        const skymaps::SkySpectrum& exposuremap)
 : m_diffuse(&diffuse)
 , m_event_type(0)
+, m_energy(1000)
+, m_exposure_map(0)
 {
     m_exposures.push_back(&exposuremap);
+    set_skyfun(m_event_type,m_energy);
 }
 
 Background::Background(const skymaps::SkySpectrum& diffuse, 
                        std::vector<const skymaps::SkySpectrum*> exposure_list)
 : m_diffuse(&diffuse)
 , m_event_type(0)
+, m_energy(1000)
+, m_exposure_map(0)
 {
     std::copy(exposure_list.begin(), exposure_list.end(), 
         std::back_insert_iterator<SpectrumVector>(m_exposures) );
+    set_skyfun(m_event_type,m_energy);
 }
 Background::Background(const skymaps::SkySpectrum& diffuse, 
                        const skymaps::SkySpectrum& front, 
                        const skymaps::SkySpectrum& back)
 : m_diffuse(&diffuse)
 , m_event_type(0)
+, m_energy(1000)
+, m_exposure_map(0)
 {
     m_exposures.push_back(&front);
     m_exposures.push_back(&back);
+    set_skyfun(m_event_type,m_energy);
 }
 
 Background::Background(const std::string& irfname, const std::string& livetimefile,
@@ -98,11 +111,18 @@ Background::Background(const std::string& irfname, const std::string& livetimefi
     m_diffuse = m_total_diffuse;
     m_exposures.push_back(m_front);
     m_exposures.push_back(m_back);
+    m_energy = 1000;
+    m_exposure_map = 0;
+    set_skyfun(m_event_type,m_energy);
 }
 
 
 Background::~Background()
-{}
+{
+    if (m_exposure_map != 0) {
+        delete m_exposure_map;
+    }
+}
 
 void Background::set_event_class(int n) const
 {
@@ -113,10 +133,14 @@ void Background::set_event_class(int n) const
         n=0;
 #endif
     }
-    m_event_type = n; // ok, since mutable
+    set_skyfun(n,m_energy); // make new cache
 
 }
 
+void Background::setEnergy(double e)const
+{
+    set_skyfun(m_event_type,e); // make new cache
+}
 
 double Background::value(const astro::SkyDir& dir, double e)const
 {
@@ -129,11 +153,29 @@ double Background::value(const astro::SkyDir& dir, double e)const
     return val;
 }
 
+double Background::operator ()(const astro::SkyDir& dir)const
+{
+    return (*m_diffuse)(dir,m_energy)*(*m_exposure_map)(dir);
+}
+
+void Background::set_skyfun(int conversion_type,double energy) const
+{
+    m_energy = energy;
+    m_event_type = conversion_type;
+    if (m_exposure_map != 0) {
+        delete m_exposure_map;
+    }
+    const skymaps::Exposure& my_exp = reinterpret_cast<const skymaps::Exposure&> (*(m_exposures[m_event_type]));
+    m_exposure_map = new skymaps::CacheExposureMap(my_exp,m_energy);
+}
+
 double Background::band_value(const astro::SkyDir& dir, const skymaps::Band& band)const
 {
     set_event_class(band.event_class());
     return integral(dir, band.emin(), band.emax());
 }
+
+
 
 
 ///@brief integral for the energy limits, in the given direction

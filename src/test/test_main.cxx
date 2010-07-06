@@ -9,6 +9,8 @@ $Header$
 #include "skymaps/BinnedPhotonData.h"
 #include "skymaps/PhotonBinner.h"
 #include "skymaps/PsfSkyFunction.h"
+#include "skymaps/IsotropicPowerLaw.h"
+#include "skymaps/Background.h"
 
 #include "skymaps/LivetimeCube.h"
 #include "skymaps/EffectiveArea.h"
@@ -41,7 +43,44 @@ using namespace skymaps;
 int main(int , char** )
 {
 
+
     int rc(0);
+#if 0
+    // excercise new PhotonBinner
+    try{
+        double myens[] = {100,250,750,1500,3500};
+        int fmynsides[] = {80,120,200,300,500};
+        int bmynsides[] = {40,60,100,150,250};
+        std::vector<double> e1 (myens, myens + sizeof(myens) / sizeof(double) );
+        std::vector<int> f1 (fmynsides, fmynsides + sizeof(fmynsides) / sizeof(int) );
+        std::vector<int> b1 (bmynsides, bmynsides + sizeof(bmynsides) / sizeof(int) );
+        PhotonBinner binner(e1,f1,b1);
+        PhotonBinner binner2(4);
+        BinnedPhotonData* bpd= new BinnedPhotonData(binner);
+        bpd->addPhoton(Photon(SkyDir(0,0),50, 0, 0));
+        bpd->addPhoton(Photon(SkyDir(0,0),150, 0, 0));
+        bpd->addPhoton(Photon(SkyDir(3,0),150, 0, 0));
+        bpd->addPhoton(Photon(SkyDir(0,0),300, 0, 0));
+        bpd->addPhoton(Photon(SkyDir(0,0),600, 0, 0));
+        bpd->addPhoton(Photon(SkyDir(0,0),1000, 0, 0));
+        bpd->addPhoton(Photon(SkyDir(0,0),2000, 0, 0));
+        bpd->addPhoton(Photon(SkyDir(0,0),4000, 0, 0));
+        bpd->addPhoton(Photon(SkyDir(0,0),10000, 0, 0));
+        bpd->addPhoton(Photon(SkyDir(0,0),20000, 0, 0));
+        bpd->addPhoton(Photon(SkyDir(0,0),100000, 0, 0));
+        // a few back guys
+        bpd->addPhoton(Photon(SkyDir(0,0),150, 0, 1));
+        bpd->addPhoton(Photon(SkyDir(0,0),300, 0, 1));
+        bpd->addPhoton(Photon(SkyDir(0,0),1000, 0, 1));
+        bpd->addPhoton(Photon(SkyDir(0,0),100000, 0, 1));
+        bpd->addPhoton(Photon(SkyDir(0,0),2000, 0, 1));
+        bpd->addPhoton(Photon(SkyDir(0,0),3000, 0, 1));
+        bpd->info();
+    }catch(...){
+        std::cout << "some problem with this PhotonBinner \n";
+    }
+#endif
+
     try{
 #if 1
         {
@@ -88,6 +127,41 @@ int main(int , char** )
             for( float ra(0); ra< 90; ra+=10.){
                 std::cout<<  ra <<"\t "<< exp2(astro::SkyDir(0,ra)) << std::endl;
             }
+
+            // exercise CacheExposureMap
+            astro::SkyDir& sd1 = astro::SkyDir(0,0);
+            astro::SkyDir& sd2 = astro::SkyDir(0,2);
+            double en(200);
+            CacheExposureMap* cem;
+            cem = new CacheExposureMap(exp,en);
+            std::cout << "Testing CacheExposureMap..." << std::endl;
+            std::cout << exp.value(sd1,en) << "    " << (*cem)(sd1) << std::endl;
+            std::cout << exp.value(sd2,en) << "    " << (*cem)(sd2) << std::endl;
+            std::cout << exp.value(sd1,en) << "    " << (*cem)(sd1) << std::endl;
+            delete cem;
+            std::cout << exp.value(sd1,en) << "    " << exp.value(sd2,en) << std::endl;
+            en = 1000;
+            cem = new CacheExposureMap(exp,en);
+            std::cout << "Testing CacheExposureMap..." << std::endl;
+            std::cout << exp.value(sd1,en) << "    " << (*cem)(sd1) << std::endl;
+            std::cout << exp.value(sd2,en) << "    " << (*cem)(sd2) << std::endl;
+            std::cout << exp.value(sd1,en) << "    " << (*cem)(sd1) << std::endl;
+            delete cem;
+            std::cout << exp.value(sd1,en) << "    " << exp.value(sd2,en) << std::endl;
+
+            // exercise Background with caching
+            IsotropicPowerLaw& ipl = IsotropicPowerLaw();
+            Background& bg = Background(ipl,reinterpret_cast<SkySpectrum&>(exp),reinterpret_cast<SkySpectrum&>(exp));
+            en = 800;
+            std::cout << "Testing Background with caching" << std::endl;
+            bg.set_skyfun(0,en);
+            std::cout << bg.value(sd1,en) << "    " << bg(sd1) << std::endl;
+            std::cout << bg.value(sd2,en) << "    " << bg(sd2) << std::endl;
+            bg.set_skyfun(1,en);
+            std::cout << bg.value(sd1,en) << "    " << bg(sd1) << std::endl;
+            std::cout << bg.value(sd2,en) << "    " << bg(sd2) << std::endl;
+
+            
 
             // use this Exposure object to test SpectralFunction
             std::vector<double> pars; pars.push_back(-11); pars.push_back(2.0);

@@ -275,14 +275,6 @@ def __repr__(self): return self.__str__()
     }
 }
 
-%extend skymaps::Background{
-
-    void setEnergy(double e)
-    {
-        self->setEnergy(e);
-    }
-}
-
 %extend skymaps::SmoothedSkySpectrum{
     void setEnergy(double e)
     {

@@ -21,6 +21,7 @@ namespace skymaps {
     class IsotropicPowerLaw;
     class CompositeSkySpectrum;
     class Exposure;
+    class CacheExposureMap;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 /** @class Background
@@ -92,10 +93,20 @@ public:
     /// The integral is evaluated with extended Simpson's rule, in the log space.
     virtual double integral(const astro::SkyDir& dir, double a, double b)const;
 
+    ///@brief implement a SkyFunction-like interface
+    double operator() (const astro::SkyDir& dir)const;
+
+    ///@brief set parameters for SkyFunction-like interface
+    void set_skyfun(int conversion_type, double energy)const;
+
     ///@brief set the event type (index into the exposures arrray) to use
     /// If not valid, silently use fixed or first entry
     /// note that this sets the event type, which is mutable
     void set_event_class(int n)const;
+
+    ///#brief set the energy for the SkyFunction interface
+    // Here for backwards compatibility
+    void setEnergy(double e)const;
 
     ///@brief number of exposure objects
     int exposures()const{ return m_exposures.size();}
@@ -126,6 +137,7 @@ private:
     mutable int m_event_type;
     double m_fixedexposure; ///< fixed exposure to use if not a map
     static int s_n; ///< simpsons rule 
+    mutable double m_energy;
 
     // new implementation
     const EffectiveArea* m_aeff_front;
@@ -135,7 +147,10 @@ private:
     const Exposure* m_back;
     const DiffuseFunction* m_galaxy;
     const IsotropicPowerLaw* m_isotropic;
-    CompositeSkySpectrum* m_total_diffuse; 
+    CompositeSkySpectrum* m_total_diffuse;
+
+    // cache stuff
+    mutable CacheExposureMap* m_exposure_map;
     
 };
 
