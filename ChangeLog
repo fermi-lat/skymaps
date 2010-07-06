@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: kerrm  Mon Jul  5 18:39:54 PDT 2010
+skymaps/src
+
+Modified Files:
+	EffectiveArea.cxx 
+Log Message:
+Made cache key space a little more generous to account for very fine energy binnings.
+    *
+------------------------------------------------------------
 User: kerrm  Mon Jun 28 13:30:36 PDT 2010
 skymaps/src
 
