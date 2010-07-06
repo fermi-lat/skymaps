@@ -458,7 +458,7 @@ EffectiveArea::~EffectiveArea()
 }
 
 EffectiveArea::CacheKey::CacheKey(double logenergy, double costheta)
-                : m_key( static_cast<unsigned int>(logenergy*100)*100 
+                : m_key( static_cast<unsigned int>(logenergy*10000) 
                 + static_cast<unsigned int>(costheta*100.)  )
             {}
 
