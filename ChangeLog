@@ -1,4 +1,21 @@
 ------------------------------------------------------------
+User: kerrm  Mon Jul  5 18:42:48 PDT 2010
+skymaps/src/test
+
+Modified Files:
+	test_main.cxx 
+Log Message:
+Added a new class CacheExposureMap for caching exposure values at a given energy and conversion type.
+
+A new method in Exposure to expose the underlying HEALPix binning for the Livetimecube.
+
+Support in Background for using the CacheExposureMap via its SkyFunction interface.
+
+Removed setEnergy from the SWIG extension to Background since it is now implemented in the C++ code.
+
+Added some test code to test_main
+    *
+------------------------------------------------------------
 User: kerrm  Mon Jul  5 18:42:47 PDT 2010
 skymaps/src
 
