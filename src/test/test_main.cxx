@@ -129,8 +129,8 @@ int main(int , char** )
             }
 
             // exercise CacheExposureMap
-            astro::SkyDir& sd1 = astro::SkyDir(0,0);
-            astro::SkyDir& sd2 = astro::SkyDir(0,2);
+            astro::SkyDir sd1 = astro::SkyDir(0,0);
+            astro::SkyDir sd2 = astro::SkyDir(0,2);
             double en(200);
             CacheExposureMap* cem;
             cem = new CacheExposureMap(exp,en);
@@ -150,8 +150,8 @@ int main(int , char** )
             std::cout << exp.value(sd1,en) << "    " << exp.value(sd2,en) << std::endl;
 
             // exercise Background with caching
-            IsotropicPowerLaw& ipl = IsotropicPowerLaw();
-            Background& bg = Background(ipl,reinterpret_cast<SkySpectrum&>(exp),reinterpret_cast<SkySpectrum&>(exp));
+            IsotropicPowerLaw ipl = IsotropicPowerLaw();
+            Background bg = Background(ipl,reinterpret_cast<SkySpectrum&>(exp),reinterpret_cast<SkySpectrum&>(exp));
             en = 800;
             std::cout << "Testing Background with caching" << std::endl;
             bg.set_skyfun(0,en);
