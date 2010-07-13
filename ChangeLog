@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: mar0  Tue Jul 13 12:59:18 PDT 2010
+skymaps/src
+
+Modified Files:
+	LivetimeCube.cxx 
+Log Message:
+Fixed implementation of value() method to do correct costheta weighting
+    *
+------------------------------------------------------------
 User: lande  Tue Jul  6 15:14:51 PDT 2010
 ScienceTools-scons/skymaps/src/test
 
