@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: lande  Tue Jul 13 18:13:19 PDT 2010
+ScienceTools-scons/skymaps/skymaps
+
+Modified Files:
+	SkyImage.h 
+Log Message:
+Fixing a typo in the documentation.
+    *
+------------------------------------------------------------
 User: mar0  Tue Jul 13 12:59:18 PDT 2010
 skymaps/src
 
