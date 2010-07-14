@@ -45,7 +45,7 @@ public:
     /** @brief create an image, using the projection
         @param center coords of image center
         @param outputFile FITS file to write the image to. If null, do not setup
-        @param pixel_size [0.5] degree size of indivitual pixel
+        @param pixel_size [0.5] degree size of individual pixel
         @param fov [20] (degrees) size of field of view, square if <90, full sky if>90
         @param layers [1] number of layers to allocate
         @param ptype ["ZEA"] projection type.
