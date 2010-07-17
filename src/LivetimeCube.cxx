@@ -79,12 +79,9 @@ LivetimeCube::LivetimeCube
 , m_weighted(weighted)
 {
     if( !inputfile.empty() ) {
-        //static std::string tablename("EXPOSURE");
-        static std::string tablename;
-        if(m_weighted) tablename="WEIGHTED_EXPOSURE";
-        else tablename = "EXPOSURE";
-        setData( HealpixArrayIO::instance().read(inputfile, tablename));
+        std::string tablename(m_weighted ? "WEIGHTED_EXPOSURE" : "EXPOSURE");
         m_gti = skymaps::Gti(inputfile,"GTI");
+        setData( HealpixArrayIO::instance().read(inputfile, tablename));
         return;
     }
     unsigned int cosbins = static_cast<unsigned int>(1./cosbinsize);
@@ -297,22 +294,25 @@ void LivetimeCube::load(std::string scfile, const skymaps::Gti & gti, std::strin
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //                  create FITS file
-void LivetimeCube::write(const std::string& outputfile, const std::string& tablename)const
+void LivetimeCube::write(const std::string& outputfile, const std::string& tablename,bool clobber)const
 {
     std::string dataPath = 
         facilities::commonUtilities::getDataPath("skymaps");
     std::string templateFile = 
         facilities::commonUtilities::joinPath(dataPath, "LivetimeCubeTemplate");
     tip::IFileSvc & fileSvc(tip::IFileSvc::instance());
-    fileSvc.createFile(outputfile, templateFile);
-    writeFilename(outputfile);
+
+    if(clobber || !fileSvc.fileExists(outputfile)){
+        fileSvc.createFile(outputfile, templateFile);
+        writeFilename(outputfile);
+    }
 #if 1 // TODO
-    healpix::HealpixArrayIO::instance().write(data(), outputfile, tablename);
+    healpix::HealpixArrayIO::instance().write(data(), outputfile, tablename,clobber);
 #endif
 #if 0 // doesn't work?
     writeCosbins(outputfile);
 #endif
-
+    //Should check for consistency with existing GTI
     m_gti.writeExtension(outputfile);
 
 }
