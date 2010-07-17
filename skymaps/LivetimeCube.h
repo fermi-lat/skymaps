@@ -101,7 +101,7 @@ public:
     virtual void fill(const astro::SkyDir& dirz, double deltat);
 
     //! write out to a file.
-    void write(const std::string& outputfile, const std::string& tablename="EXPOSURE")const;
+    void write(const std::string& outputfile, const std::string& tablename="EXPOSURE",bool clobber=true)const;
 
     //! load a set of history intervals from a FITS S/C file (FT2)
     void load(std::string scfile, const skymaps::Gti & gti= skymaps::Gti(), std::string tablename="SC_DATA");
