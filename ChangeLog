@@ -1,5 +1,17 @@
 ------------------------------------------------------------
 User: wallacee  Fri Jul 16 19:32:51 PDT 2010
+skymaps/src
+
+Modified Files:
+	LivetimeCube.cxx 
+Log Message:
+Modified LivetimeCube to allow it to write EXPOSURE and WEIGHTED_EXPOSURE 
+headers to the same file.  Modified uw.like.pixeldata to take advantage of this, 
+and to fix a few bugs related get_data.
+
+    *
+------------------------------------------------------------
+User: wallacee  Fri Jul 16 19:32:51 PDT 2010
 skymaps/skymaps
 
 Modified Files:
