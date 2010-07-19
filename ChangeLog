@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: mar0  Sun Jul 18 20:12:28 PDT 2010
+skymaps/skymaps
+
+Modified Files:
+	BinnedPhotonData.h 
+Log Message:
+Added smarter GTI traversal for ordered ft1 files in BinnedPhotonData
+    *
+------------------------------------------------------------
 User: wallacee  Fri Jul 16 19:32:51 PDT 2010
 skymaps/src
 
