@@ -38,17 +38,26 @@ BinnedPhotonData::BinnedPhotonData(int bins_per_decade)
 : default_binner(bins_per_decade)
 , m_binner(default_binner)
 , m_photons(0)
+, m_it(Gti().begin())
+, m_itstyle(true)
+, m_ltime(0.)
 {}
 
 BinnedPhotonData::BinnedPhotonData(skymaps::PhotonBinner& binner)
 : m_binner(binner)
 , m_photons(0)
+, m_it(Gti().begin())
+, m_itstyle(true)
+, m_ltime(0.)
 {}
 
 
 BinnedPhotonData::BinnedPhotonData(const std::string & inputFile,  const std::string band_table)
 : m_binner(default_binner) // should change, or make flexible
 , m_photons(0)
+, m_it(Gti().begin())
+, m_itstyle(true)
+, m_ltime(0.)
 {
     const tip::Table * ptable(0);
     try{
@@ -218,9 +227,24 @@ void BinnedPhotonData::addPhoton(const astro::Photon& gamma, int count)
 {   
     if(gamma.eventClass()>1) return; //?
 
-    // check against Gti object, if set to something
-    if( ! m_gti.accept(gamma.time()) && m_gti.getNumIntervals()>0){
-        m_gti_reject += count; // keep track of how many fail
+    if(m_photons==0) m_ltime = gamma.time();
+    if(gamma.time()<m_ltime) m_itstyle = false;  //change GTI behavior if events are chronologically out of order
+    if(m_gti.getNumIntervals()>0) {              //any GTI intervals?
+        if(m_itstyle) {                          //smart GTI style (follow events chronologically)
+            while(gamma.time()>m_it->second && m_it!=m_gti.end()) {
+                ++m_it; //find current GTI interval
+            }
+            if(gamma.time()<m_it->first)  {
+                m_gti_reject += count; // keep track of how many fail
+                return;
+            }
+        }
+        else {
+            if(! m_gti.accept(gamma.time())) {
+                m_gti_reject += count; // keep track of how many fail
+                return;
+            }
+        }
     }
 
     // create a emmpty band with this photon's properties
@@ -465,6 +489,7 @@ void BinnedPhotonData::writegti(const std::string & outputFile) const
 void BinnedPhotonData::addgti(const skymaps::Gti& other)
 {
     m_gti |= other;
+    m_it = m_gti.begin();
 }
 
 void BinnedPhotonData::operator+=(const skymaps::BinnedPhotonData& other) {
