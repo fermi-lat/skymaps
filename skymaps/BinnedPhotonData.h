@@ -114,6 +114,9 @@ namespace skymaps {
         skymaps::Gti m_gti;   ///< gti information associated with these data
         int m_photons;  ///< keep track of total number of photons in the database
         int m_gti_reject;   ///< count gti rejectsions
+        int m_ltime;   ///< keep of track of current event time
+        bool m_itstyle;  ///< iteration style of GTI: true=iterated false=accept()
+        skymaps::Gti::ConstIterator m_it; ///< GTI iterator
 
     };
 
