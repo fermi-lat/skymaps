@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: kerrm  Wed Jul 21 14:29:57 PDT 2010
+skymaps/skymaps
+
+Added Files:
+	PythonPsf.h 
+Log Message:
+Header file for new class to do some of the heavy-lifting for the pointlike PSF.
+    *
+------------------------------------------------------------
 User: mar0  Sun Jul 18 20:12:29 PDT 2010
 skymaps/src
 
