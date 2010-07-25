@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: kerrm  Sat Jul 24 21:48:35 PDT 2010
+skymaps/src
+
+Modified Files:
+	EffectiveArea.cxx 
+Log Message:
+Introduced a bug into the cache when expanding the cache key space.  This should fix the bug and yield the desired increased key space.
+    *
+------------------------------------------------------------
 User: kerrm  Wed Jul 21 14:31:10 PDT 2010
 skymaps/src
 
