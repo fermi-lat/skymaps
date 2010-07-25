@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: kerrm  Sat Jul 24 21:50:57 PDT 2010
+skymaps/src
+
+Modified Files:
+	ExposureWeighter.cxx 
+Log Message:
+Tweaked the 2D integral code.
+    *
+------------------------------------------------------------
 User: kerrm  Sat Jul 24 21:48:35 PDT 2010
 skymaps/src
 
