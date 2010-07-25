@@ -39,14 +39,14 @@ double ExposureWeighter::operator()(double c_lo, double c_hi, double e_lo, doubl
         eratio( exp(estep) ),
         ec(2.),
         e(e_lo),
-        ae(0);
+        ae(0),
+        scale(estep*cstep/9);
 
-    double loop_result,c,cc;
+    double loop_result(0);
 
     if (m_uselt) {
         for( int i = 0; i < 9; ++i) {
-            c  = c_lo;
-            cc = 2.;
+            double c(c_lo),cc(2.);
             loop_result = aeff->value(e,c)* m_lt->value(dir,c);
             for ( int j = 1; j < 4; ++j) { 
                 c += cstep;
@@ -63,12 +63,11 @@ double ExposureWeighter::operator()(double c_lo, double c_hi, double e_lo, doubl
             }
             e *= eratio;
         }
-        ae *= (cstep*estep/9);
+        ae *= scale;
     }
     else {
         for( int i = 0; i < 9; ++i) {
-            c  = c_lo;
-            cc = 2.;
+            double c(c_lo),cc(2.);
             loop_result = aeff->value(e,c);
             for ( int j = 1; j < 4; ++j) { 
                 c += cstep;
@@ -85,7 +84,7 @@ double ExposureWeighter::operator()(double c_lo, double c_hi, double e_lo, doubl
             }
             e *= eratio;
         }
-        ae *= (cstep*estep/9);
+        ae *= scale;
     }
     return ae;
     //double ae(event_class == 0 ? m_faeff->value(e, (c_hi+c_lo)/2.) : m_baeff->value(e, (c_hi+c_lo)/2.));
