@@ -255,7 +255,7 @@ void BinnedPhotonData::addPhoton(const astro::Photon& gamma, int count)
     iterator it=std::lower_bound(begin(), end(), key, std::less<int>());
     int newkey(*it);
 
-    if( key!=(*it) ){
+    if( key!=(*it) || empty() ){
         // no, create new entry and copy in the Band
         it = insert(it, newband);
     }
@@ -493,12 +493,7 @@ void BinnedPhotonData::addgti(const skymaps::Gti& other)
 }
 
 void BinnedPhotonData::operator+=(const skymaps::BinnedPhotonData& other) {
-#if 0 //TODO rewrite this
-    for(const_iterator it=other.begin();it!=other.end();++it){
-        addPixel(it->first,it->second);
-    }
-#endif
-    addgti(other.gti());
+    add(other);
 }
 
 void BinnedPhotonData::updateIrfs(const std::string& name, const std::string& clevel) {
