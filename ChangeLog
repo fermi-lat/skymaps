@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: wallacee  Mon Jul 26 13:12:53 PDT 2010
+skymaps/src
+
+Modified Files:
+	BinnedPhotonData.cxx 
+Log Message:
+Add a check for empty list of bands in BinnedPhotonData::addPhoton to
+prevent intermittent segfaults.
+
+    *
+------------------------------------------------------------
 User: kerrm  Sat Jul 24 21:50:57 PDT 2010
 skymaps/src
 
