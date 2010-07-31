@@ -99,7 +99,7 @@ void SpectralFunction::setup()
         ++i;
     }
            
-    int n(defaults[i].npar);
+    unsigned int n(defaults[i].npar);
     m_index = i;
     
     if( m_pars.empty() ){

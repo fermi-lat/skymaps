@@ -102,7 +102,7 @@ public:
     ///@brief set the event type (index into the exposures arrray) to use
     /// If not valid, silently use fixed or first entry
     /// note that this sets the event type, which is mutable
-    void set_event_class(int n)const;
+    void set_event_class(unsigned int n)const;
 
     ///#brief set the energy for the SkyFunction interface
     // Here for backwards compatibility

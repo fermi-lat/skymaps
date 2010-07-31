@@ -124,7 +124,7 @@ Background::~Background()
     }
 }
 
-void Background::set_event_class(int n) const
+void Background::set_event_class(unsigned int n) const
 {
     if( n>= m_exposures.size() ){
 #if 0 // need a way to declare that is OK
@@ -205,7 +205,7 @@ std::string Background::name()const
     if( m_exposures.empty() ){
         text <<", Fixed:  "<< m_fixedexposure;
     }else{
-        for( int i(0); i<m_exposures.size(); ++i){
+        for(unsigned int i(0); i<m_exposures.size(); ++i){
             text << ", eventtype=" << i << ": " << m_exposures[i]->name();
         }
     }
@@ -234,7 +234,7 @@ void Background::rot_grid (std::vector<double>& rlons, std::vector<double>& rlat
     Hep3Vector rot_axisv(rot_axis.dir());
     astro::SkyDir sd;
     double rot_extent = roi_center.b()*(M_PI/180);
-    for (int i=0; i < lons.size(); ++i) {
+    for (unsigned int i=0; i < lons.size(); ++i) {
         sd = astro::SkyDir(lons[i],lats[i]);
         sd().rotate(rot_extent,rot_axisv);
         rlons.push_back(sd.ra());

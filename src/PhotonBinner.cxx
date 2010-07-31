@@ -49,14 +49,14 @@ std::vector<double> PhotonBinner::s_gamma_level(gamma_list,gamma_list+14);
 std::vector<double> PhotonBinner::s_sigma_level(sigma_list,sigma_list+14);
 
 //minimum nside (default 1 is base Healpix pixelization)
-int PhotonBinner::min_nside(1);
-void PhotonBinner::set_min_nside(int new_nside){min_nside = new_nside;}
-int PhotonBinner::get_min_nside(){return min_nside;}
+unsigned int PhotonBinner::min_nside(1);
+void PhotonBinner::set_min_nside(unsigned int new_nside){min_nside = new_nside;}
+unsigned int PhotonBinner::get_min_nside(){return min_nside;}
 
 //maximum nside (default 8192 set by 32 bit limit)
-int PhotonBinner::max_nside(8192);
-void PhotonBinner::set_max_nside(int new_nside){max_nside = new_nside;}
-int PhotonBinner::get_max_nside(){return max_nside;}
+unsigned int PhotonBinner::max_nside(8192);
+void PhotonBinner::set_max_nside(unsigned int new_nside){max_nside = new_nside;}
+unsigned int PhotonBinner::get_max_nside(){return max_nside;}
 
 //sigma scale - constant factor by which to multiply 1/sigma to get nside
 //default value gives a pixel side of about sigma/2

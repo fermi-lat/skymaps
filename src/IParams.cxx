@@ -281,7 +281,7 @@ void IParams::init(const std::string& name, const std::string& clevel, const std
 
 void IParams::print_parameters() {
     std::cout << "Energy     F_sig    B_sig    F_gam    B_gam" << std::endl;
-    for (int j(0); j < s_elist.size(); ++j) {
+    for (unsigned int j(0); j < s_elist.size(); ++j) {
         std::cout << s_elist[j] << "    " << s_fsig[j] << "    " << s_bsig[j] << "    " << s_fgam[j] << "    " << s_bgam[j] << std::endl;
     }
 }

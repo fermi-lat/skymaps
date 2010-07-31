@@ -36,7 +36,7 @@ public:
         double r2(0);
         for (int i(0); i < 10; ++i) {
             r2 = fv.back()-fv.front();
-            int nsimps(m_ns0*pow(2,i+1));
+            int nsimps(m_ns0*pow(2.,i+1));
             double w( (b-a)/nsimps ), w2(2*w),x(a+w);
             fv.reserve(nsimps);
             for (int j(0); j < nsimps/2; ++j) {

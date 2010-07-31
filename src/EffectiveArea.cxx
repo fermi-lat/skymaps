@@ -413,7 +413,7 @@ EffectiveArea::EffectiveArea(std::string irfname, std::string filename)
     try{
         //const tip::Table * table = tip::IFileSvc::instance().readTable(infile, table_name, "");
         m_aeffTable = new FitsTable(filename, table_name, "EFFAREA" );
-    }catch(const std::exception& e){
+    }catch(const std::exception& ){
         std::cerr << "EffectiveArea: could not open " << filename<< "["<<table_name <<"]" << std::endl;
         throw;
     }
@@ -445,7 +445,7 @@ EffectiveArea::EffectiveArea(std::string irfname, std::string filename)
          else{
              m_haveEfficiencyPars = false;
          };
-    }catch(const std::exception& e){
+    }catch(const std::exception& ){
         //std::cerr << "EffectiveArea: could not open " << filename << "[EFFICIENCY_PARAMS]"<<std::endl;
         m_haveEfficiencyPars = false;
     }
