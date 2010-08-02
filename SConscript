@@ -10,25 +10,35 @@ Import('baseEnv')
 Import('listFiles')
 progEnv = baseEnv.Clone()
 libEnv = baseEnv.Clone()
+package= 'skymaps'
+libname = package+'Lib'
+testname = 'test_'+package
+
+libEnv.Tool('addLinkDeps', package=package, toBuild='shared')
+
+progEnv.Tool(libname)
+testapp = progEnv.Program(testname, listFiles(['src/test/*.cxx']))
+
+lib = libEnv.SharedLibrary(package, listFiles(['src/*.cxx']))
+if baseEnv['PLATFORM']=='win32':
+    # Add a post-build step to embed the manifest using mt.exe
+    # The number at the end of the line indicates the file type (1: EXE; 2:DLL).
+    libEnv.AddPostAction(lib, 'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;2')
+
+# SWIG
 swigEnv = baseEnv.Clone()
-
-libEnv.Tool('addLinkDeps', package='skymaps', toBuild='shared')
-
-progEnv.Tool('skymapsLib')
-test_skymaps = progEnv.Program('test_skymaps', listFiles(['src/test/*.cxx']))
-
-skymapsLib = libEnv.SharedLibrary('skymaps', listFiles(['src/*.cxx']))
-
-swigEnv.Tool('skymapsLib')
-pySkymapsLib = swigEnv.SwigLibrary('_skymaps','src/swig_setup.i')
+swigEnv.Tool(libname)
+pyLib = swigEnv.SwigLibrary('_'+package,'src/swig_setup.i')
+if baseEnv['PLATFORM']=='win32':
+    libEnv.AddPostAction(pyLib, 'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;2')
 
 progEnv.Tool('registerTargets',
-             package = 'skymaps',
-             includes = listFiles(['skymaps/*.h']),
-             libraryCxts = [[skymapsLib, libEnv]],
-             swigLibraryCxts = [[pySkymapsLib, swigEnv]],
-             testAppCxts = [[test_skymaps, progEnv]],
+             package = package,
+             includes = listFiles([package+'/*.h']),
+             libraryCxts = [[lib, libEnv]],
+             testAppCxts = [[testapp, progEnv]],
              data = ['data/LivetimeCubeTemplate', 'data/aeff_P6_v1_diff_front.fits'],
+             swigLibraryCxts = [[pyLib, swigEnv]],
              python = ['src/skymaps.py']
              )
 
