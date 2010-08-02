@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Mon Aug  2 08:15:54 PDT 2010
+ScienceTools-scons/skymaps
+
+Modified Files:
+	SConscript 
+Log Message:
+refactor a bit, add win32
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-02-06-01, operation: add
 Package: skymaps
