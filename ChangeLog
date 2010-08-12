@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: mar0  Thu Aug 12 12:13:17 PDT 2010
+skymaps/src
+
+Modified Files:
+	Background.cxx 
+Log Message:
+Added functionality to Background class to use an isotropic file, and fixed a segmentation fault in one of the constructors.
+    *
+------------------------------------------------------------
+User: mar0  Thu Aug 12 12:13:17 PDT 2010
 skymaps/skymaps
 
 Modified Files:
