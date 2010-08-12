@@ -11,7 +11,7 @@ $Header$
 #include "skymaps/CompositeSkySpectrum.h"
 #include "skymaps/BinnedPhotonData.h"
 #include "skymaps/EffectiveArea.h"
-#include "skymaps/IsotropicPowerLaw.h"
+#include "skymaps/IsotropicSpectrum.h"
 #include "skymaps/LivetimeCube.h"
 #include "skymaps/Exposure.h"
 #include "CLHEP/Vector/ThreeVector.h"
@@ -86,7 +86,7 @@ Background::Background(const skymaps::SkySpectrum& diffuse,
 
 Background::Background(const std::string& irfname, const std::string& livetimefile,
         const std::string& galactic, 
-        std::pair<double,double> isotropic)
+        const std::string& isotropic)
 {
     m_aeff_front= new EffectiveArea(irfname+"_front");
     m_aeff_back = new EffectiveArea(irfname+"_back");
@@ -95,7 +95,7 @@ Background::Background(const std::string& irfname, const std::string& livetimefi
     m_back =      new Exposure(*m_ltcube, *m_aeff_back);
 
     m_galaxy    = new DiffuseFunction(galactic);
-    m_isotropic=  new IsotropicPowerLaw(isotropic.first, isotropic.second);
+    m_isotropic=  new IsotropicSpectrum(isotropic);
     m_total_diffuse = new CompositeSkySpectrum(m_galaxy, 1.0);
     m_total_diffuse->add(m_isotropic, 1.0);
 
@@ -105,13 +105,14 @@ Background::Background(const std::string& irfname, const std::string& livetimefi
                              << ", back="<<(*m_aeff_back)(1000.)<<")"
         << "\n\tlivetime:  " << livetimefile
         << "\n\tgalactic:  " << galactic
-        << "\n\tisotropic: " << isotropic.first << ", "<< isotropic.second
+        << "\n\tisotropic: " << isotropic
         << std::endl;
 
     m_diffuse = m_total_diffuse;
     m_exposures.push_back(m_front);
     m_exposures.push_back(m_back);
     m_energy = 1000;
+    m_event_type=0;
     m_exposure_map = 0;
     set_skyfun(m_event_type,m_energy);
 }
