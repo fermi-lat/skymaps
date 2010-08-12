@@ -18,7 +18,7 @@ namespace skymaps {
     class DiffuseFunction;
     class EffectiveArea;
     class LivetimeCube;
-    class IsotropicPowerLaw;
+    class IsotropicSpectrum;
     class CompositeSkySpectrum;
     class Exposure;
     class CacheExposureMap;
@@ -74,7 +74,7 @@ public:
     Background(const std::string& irfname, 
         const std::string& livetimefile,
         const std::string& galactic, 
-        std::pair<double,double> isotropic=std::make_pair(1.5e-5,2.2));
+        const std::string& isotropic);
 
     ~Background();
 
@@ -146,7 +146,7 @@ private:
     const Exposure* m_front;
     const Exposure* m_back;
     const DiffuseFunction* m_galaxy;
-    const IsotropicPowerLaw* m_isotropic;
+    const IsotropicSpectrum* m_isotropic;
     CompositeSkySpectrum* m_total_diffuse;
 
     // cache stuff
