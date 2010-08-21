@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include "skymaps/PythonPsf.h"
 #include "healpix/Healpix.h"
 
