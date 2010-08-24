@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: kerrm  Tue Aug 24 11:13:09 PDT 2010
+skymaps/skymaps
+
+Added Files:
+	PythonUtilities.h 
+Log Message:
+PythonUtilities, class for collecting routines interfacing Python with specific C++ tasks.
+    *
+------------------------------------------------------------
 User: wallacee  Fri Aug 20 19:04:11 PDT 2010
 skymaps/src
 
