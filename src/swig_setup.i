@@ -1,5 +1,42 @@
 %module(docstring="Interface to skymaps") skymaps
+
+%init %{
+    import_array();
+%}
+
+//%typemap(in) std::vector<double>& {
+//    PyObject* c = $input;
+//    if (!PyArray_ISCONTIGUOUS(c)) throw 20;
+//    double* data((double*)PyArray_DATA(c));
+//    int size(PyArray_DIM(c,0));
+//    std::vector<double>* myvec(new std::vector<double>(data,data+size));
+//    std::cout << "I am HERE!" << std::endl;
+//    $1 = myvec;
+//}
+//%typemap(freearg) std::vector<double>& {
+//    delete $1;
+//}
+
+%typemap(in) (double* rvals,int rvals_size) {
+    PyObject* c = $input;
+    if (!PyArray_ISCONTIGUOUS(c)) throw 20;
+    $1 = (double *) PyArray_DATA(c);
+    $2 = int(PyArray_DIM(c,0));
+}
+
+%typemap(in) (double* lons,int lons_size,double* lats, int lats_size) {
+    PyObject* c1 = $input;
+    PyObject* c2 = $input;
+    if (!PyArray_ISCONTIGUOUS(c1)) throw 20;
+    if (!PyArray_ISCONTIGUOUS(c2)) throw 20;
+    $1 = (double *) PyArray_DATA(c1);
+    $2 = int(PyArray_DIM(c1,0));
+    $3 = (double *) PyArray_DATA(c2);
+    $4 = int(PyArray_DIM(c2,0));
+}
+
 %{
+#define SWIG_FILE_WITH_INIT
 #include <stdexcept>
 #include <vector>
 #include <utility>
@@ -16,7 +53,6 @@
 #include "healpix/HealpixMap.h"
 
 #include "skymaps/SkyImage.h"
-
 #include "skymaps/SkySpectrum.h"
 #include "skymaps/BinnedPhotonData.h"
 #include "skymaps/DiffuseFunction.h"
@@ -45,15 +81,17 @@
 #include "skymaps/ComplexSkySpectrum.h"
 #include "skymaps/SmoothedSkySpectrum.h"
 #include "skymaps/PsfSkySpectrum.h"
+#include "skymaps/PythonUtilities.h"
+#include "skymaps/PythonPsf.h"
 
 #include "CLHEP/Vector/Rotation.h"
 #include "CLHEP/Vector/RotationX.h"
 #include "CLHEP/Vector/RotationY.h"
 #include "CLHEP/Vector/RotationZ.h"
-
 #include "CLHEP/Vector/EulerAngles.h"
-
 #include "CLHEP/Vector/ThreeVector.h"
+
+#include "numpy/arrayobject.h"
 
 %}
 %include stl.i
@@ -81,6 +119,7 @@
 %template(FloatVector) std::vector<float>;
 %template(LongVector) std::vector<long>;
 %template(IntVector) std::vector<int>;
+%template(SkyDirVector) std::vector<astro::SkyDir>;
 
 %include CLHEP/Vector/ThreeVector.h
 namespace CLHEP {
@@ -220,6 +259,8 @@ def __str__(self):  return ('HepRotation:'+ 3* ('\n\t'+3*'%9.5f')) % tuple([self
 %include skymaps/Band.h
 %include skymaps/SmoothedSkySpectrum.h
 %include skymaps/PsfSkySpectrum.h
+%include skymaps/PythonUtilities.h
+%include skymaps/PythonPsf.h
 
 %extend skymaps::WeightedSkyDirList{
 // provide access to the WeightedSKyDir objects as an array
