@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: kerrm  Tue Aug 24 11:13:57 PDT 2010
+skymaps/src
+
+Modified Files:
+	swig_setup.i 
+Log Message:
+Modified routines to allow direct passing of arrays.
+    *
+------------------------------------------------------------
 User: kerrm  Tue Aug 24 11:13:09 PDT 2010
 skymaps/skymaps
 
