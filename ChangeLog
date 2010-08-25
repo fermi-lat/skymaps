@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: wallacee  Tue Aug 24 19:29:08 PDT 2010
+skymaps
+
+Modified Files:
+	SConscript 
+Log Message:
+Add a kludge to get the numpy header into the include path.  Needs to be 
+made safe for versioning, but should serve as an example until then.
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-02-07-00, operation: add
 Package: skymaps
