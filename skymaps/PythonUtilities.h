@@ -34,6 +34,12 @@ public:
     static void rot_grid (double *rvals, int rvals_size,
                           const std::vector<astro::SkyDir> sdirs,
                           const astro::SkyDir& roi_center);
+    
+    // Return the arclength (in radians) between the SkyDirs in sdirs
+    // and the SkyDir specified by roi_center
+    static void arclength(double *rvals, int rvals_size,
+                          const std::vector<astro::SkyDir> sdirs,
+                          const astro::SkyDir& roi_center);
 };
 
 }

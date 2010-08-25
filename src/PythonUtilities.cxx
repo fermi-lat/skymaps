@@ -37,5 +37,15 @@ void PythonUtilities::rot_grid(double *rvals, int rvals_size,
     }
 }
 
+void PythonUtilities::arclength(double *rvals, int rvals_size,
+                          const std::vector<astro::SkyDir> sdirs,
+                          const astro::SkyDir& roi_center)
+{
+    if (rvals_size != sdirs.size()) throw 20;
+    for (std::vector<astro::SkyDir>::const_iterator it(sdirs.begin()); it != sdirs.end(); ++it) {
+        *rvals++ = roi_center.difference(*it);
+    }
+}
+
 }
 
