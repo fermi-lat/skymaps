@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Mon Aug 30 08:18:15 PDT 2010
+skymaps/src
+
+Modified Files:
+	PythonUtilities.cxx swig_setup.i 
+Log Message:
+fix path to numpy, silence some warnings
+    *
+------------------------------------------------------------
+User: burnett  Mon Aug 30 08:18:15 PDT 2010
 skymaps/cmt
 
 Modified Files:
