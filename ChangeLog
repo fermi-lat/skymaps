@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Mon Aug 30 08:18:15 PDT 2010
+skymaps/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+fix path to numpy, silence some warnings
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-09-18-02, operation: add
 Package: skymaps
