@@ -1,7 +1,8 @@
 #include "skymaps/PythonUtilities.h"
 
 #include "CLHEP/Vector/ThreeVector.h"
-
+#include <stdexcept>
+#include <assert.h>
 namespace skymaps {
 
 void PythonUtilities::val_grid (double* rvals, int rvals_size,
@@ -25,7 +26,7 @@ void PythonUtilities::rot_grid(double *rvals, int rvals_size,
                           const std::vector<astro::SkyDir> sdirs,
                           const astro::SkyDir& roi_center)
 {
-    if (rvals_size != sdirs.size()*2) throw 20;
+    assert(rvals_size == sdirs.size()*2); 
     astro::SkyDir rot_axis(astro::SkyDir(roi_center.l()+90,0));
     Hep3Vector rot_axisv(rot_axis.dir());
     double rot_extent = roi_center.b()*(M_PI/180);
