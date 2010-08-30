@@ -7,6 +7,7 @@ $Id$
  --------- -----   --- -----------------------------------------------------------------------
  * EOH *
 
+ skymaps-02-07-01 30-Aug-2010 burnett fix include path for windows, silence some warnings
  skymaps-02-07-00 24-Aug-2010 burnett new Python-related support, PSF implementation
  skymaps-02-06-02 02-Aug-2010 burnett scons/win32 fix
  skymaps-02-06-01 31-Jul-2010 burnett corrections to fix vc90 warnigns
