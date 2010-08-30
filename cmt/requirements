@@ -22,7 +22,10 @@ private
 use embed_python * 
 
 macro source "*.cxx" WIN32 "*.cxx *.h *.py"
-macro_append use_includes " /I $(python_PATH)/Lib/site-packages/numpy/core/include" 
+
+# for numpy
+macro_append use_includes " $(ppcmd) $(python_PATH)/Lib/site-packages/numpy/core/include" 
+
 library skymaps \
  -s=../skymaps $(source) \
  -s=../src $(source) \
