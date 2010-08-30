@@ -19,7 +19,7 @@
 
 %typemap(in) (double* rvals,int rvals_size) {
     PyObject* c = $input;
-    if (!PyArray_ISCONTIGUOUS(c)) throw 20;
+    assert (PyArray_ISCONTIGUOUS(c));
     $1 = (double *) PyArray_DATA(c);
     $2 = int(PyArray_DIM(c,0));
 }
@@ -27,8 +27,8 @@
 %typemap(in) (double* lons,int lons_size,double* lats, int lats_size) {
     PyObject* c1 = $input;
     PyObject* c2 = $input;
-    if (!PyArray_ISCONTIGUOUS(c1)) throw 20;
-    if (!PyArray_ISCONTIGUOUS(c2)) throw 20;
+    assert(PyArray_ISCONTIGUOUS(c1));
+    assert(PyArray_ISCONTIGUOUS(c2));
     $1 = (double *) PyArray_DATA(c1);
     $2 = int(PyArray_DIM(c1,0));
     $3 = (double *) PyArray_DATA(c2);
@@ -40,6 +40,7 @@
 #include <stdexcept>
 #include <vector>
 #include <utility>
+#include <assert.h>
 
 #include "astro/EarthCoordinate.h"
 #include "astro/Photon.h"
@@ -334,12 +335,12 @@ def __repr__(self): return self.__str__()
 
 %include skymaps/SpectralFunction.h
 
+%include skymaps/Exposure.h
 
 %feature("kwargs");  // using keywords for these
 %include skymaps/IsotropicSpectrum.h
 %include skymaps/DiffuseFunction.h
 %include skymaps/LivetimeCube.h
-%include skymaps/Exposure.h
 %include skymaps/EffectiveArea.h
 %include skymaps/IsotropicPowerLaw.h
 %include skymaps/IParams.h
