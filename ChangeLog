@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Wed Sep  1 11:52:24 PDT 2010
+skymaps/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+change Lib to lib, for windows/unix compatibility
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-02-07-02, operation: add
 Package: skymaps
