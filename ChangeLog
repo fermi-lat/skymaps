@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Wed Sep  1 14:54:42 PDT 2010
+skymaps/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+oops, realize that linux needs extra folder, wired in since symbol is not available
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-02-07-03, operation: add
 Package: skymaps
