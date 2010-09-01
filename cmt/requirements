@@ -23,9 +23,12 @@ use embed_python *
 
 macro source "*.cxx" WIN32 "*.cxx *.h *.py"
 
-# for numpy
-# Note that it is "Lib" in windows, but "lib" on linux. So lib should work for both
-macro_append use_includes " $(ppcmd) $(python_PATH)/lib/site-packages/numpy/core/include" 
+# for numpy - note have to assume python 2.6 for non-windows
+macro_append use_includes\
+              '-I"$(python_PATH)/lib/python2.6/site-packages/numpy/core/include"'\ 
+	Win32 '/I"$(python_PATH)/lib/site-packages/numpy/core/include"' 
+                          
+
 
 library skymaps \
  -s=../skymaps $(source) \
