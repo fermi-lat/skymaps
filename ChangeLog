@@ -1,4 +1,16 @@
 ------------------------------------------------------------
+User: wallacee  Tue Sep  7 16:14:22 PDT 2010
+skymaps/src
+
+Modified Files:
+	swig_setup.i 
+Log Message:
+Remove duplicate includes in skymaps and pointlike SWIG interfaces, to
+avoid bugs related to multiple wrappers of SWIG objects (such as PySwigIterator),
+and make the appropriate changes to python import statements.
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-02-07-04, operation: add
 Package: skymaps
