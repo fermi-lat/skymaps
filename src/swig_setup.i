@@ -4,19 +4,6 @@
     import_array();
 %}
 
-//%typemap(in) std::vector<double>& {
-//    PyObject* c = $input;
-//    if (!PyArray_ISCONTIGUOUS(c)) throw 20;
-//    double* data((double*)PyArray_DATA(c));
-//    int size(PyArray_DIM(c,0));
-//    std::vector<double>* myvec(new std::vector<double>(data,data+size));
-//    std::cout << "I am HERE!" << std::endl;
-//    $1 = myvec;
-//}
-//%typemap(freearg) std::vector<double>& {
-//    delete $1;
-//}
-
 %typemap(in) (double* rvals,int rvals_size) {
     PyObject* c = $input;
     assert (PyArray_ISCONTIGUOUS(c));
@@ -42,6 +29,7 @@
 #include <utility>
 #include <assert.h>
 
+#include "astro/SkyDir.h"
 #include "astro/EarthCoordinate.h"
 #include "astro/Photon.h"
 #include "astro/IGRField.h"
@@ -113,13 +101,6 @@
 
 
 %include std_vector.i
-%include std_pair.i
-%template(DoublePair) std::pair<double, double>;
-%template(StringVector) std::vector<std::string>;
-%template(DoubleVector) std::vector<double>;
-%template(FloatVector) std::vector<float>;
-%template(LongVector) std::vector<long>;
-%template(IntVector) std::vector<int>;
 %template(SkyDirVector) std::vector<astro::SkyDir>;
 
 %include CLHEP/Vector/ThreeVector.h
