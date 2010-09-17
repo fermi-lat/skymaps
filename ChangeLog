@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: wallacee  Fri Sep 17 12:21:44 PDT 2010
+skymaps/src
+
+Modified Files:
+	swig_setup.i 
+Log Message:
+Add a wrapper for std::vector<double> back into skymaps to deal with a problem
+with pypsf. Need to figure out what caused the problem to begin with.
+
+    *
+------------------------------------------------------------
 User: wallacee  Tue Sep  7 16:14:22 PDT 2010
 skymaps/src
 
