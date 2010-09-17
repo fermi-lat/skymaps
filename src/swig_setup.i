@@ -101,6 +101,7 @@
 
 
 %include std_vector.i
+%template(svd) std::vector<double>;
 %template(SkyDirVector) std::vector<astro::SkyDir>;
 
 %include CLHEP/Vector/ThreeVector.h
