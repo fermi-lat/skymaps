@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: lande  Wed Oct 13 00:18:57 PDT 2010
+ScienceTools-scons/skymaps/src
+
+Modified Files:
+	swig_setup.i 
+Log Message:
+Hopefully, this fixes the swig::stop_iteration error caused by wraping the same objects in multiple places
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-09-18-05, operation: add
 Package: skymaps
