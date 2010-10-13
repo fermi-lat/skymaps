@@ -1,5 +1,7 @@
 %module(docstring="Interface to skymaps") skymaps
 
+#define PySwigIterator skymaps_PySwigIterator
+
 %init %{
     import_array();
 %}
