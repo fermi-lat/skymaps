@@ -8,6 +8,7 @@ $Id$
  * EOH *
 
  skymaps-02-08-00 17-Nov-2010  lande Adding fixe for swig::stop_iteration
+ skymaps-02-08-00 17-Nov-2010  lande Adding fixe for swig::stop_iteration
  skymaps-02-07-05 05-Oct-2010 wallace tagged by hmk, to catch patch to SConscript
  skymaps-02-07-04 01-Sep-2010 burnett fix include path for windows/linux consistency
  skymaps-02-07-03 01-Sep-2010 burnett fix include path for windows/linux consistency
