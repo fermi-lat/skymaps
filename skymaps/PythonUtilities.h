@@ -40,6 +40,12 @@ public:
     static void arclength(double *rvals, int rvals_size,
                           const std::vector<astro::SkyDir> sdirs,
                           const astro::SkyDir& roi_center);
+
+    // Get a column of floats from a FITS file
+    static void get_float_col(double *rvals, int rvals_size,
+                              const std::string file_name,
+                              const std::string table_name,
+                              const std::string col_name);
 };
 
 }
