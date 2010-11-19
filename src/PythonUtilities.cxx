@@ -3,6 +3,10 @@
 #include "CLHEP/Vector/ThreeVector.h"
 #include <stdexcept>
 #include <assert.h>
+//#include "timeSystem/GlastTimeHandler.h"
+#include "tip/IFileSvc.h"
+#include "tip/Table.h"
+
 namespace skymaps {
 
 void PythonUtilities::val_grid (double* rvals, int rvals_size,
@@ -48,5 +52,16 @@ void PythonUtilities::arclength(double *rvals, int rvals_size,
     }
 }
 
+void PythonUtilities::get_float_col(double *rvals, int rvals_size,const std::string file_name,
+                                    const std::string table_name, const std::string col_name)
+{
+    const tip::Table * table = tip::IFileSvc::instance().readTable(file_name, table_name, "");
+    tip::Table::ConstIterator itend(table->end());
+    for(tip::Table::ConstIterator it(table->begin()); it != itend; ++ it) {
+        (*it)[col_name].get(*rvals);
+        rvals++;
+    }
+    delete table;
 }
 
+}
