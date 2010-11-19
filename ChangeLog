@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: kerrm  Fri Nov 19 13:48:04 PST 2010
+skymaps/skymaps
+
+Modified Files:
+	PythonUtilities.h 
+Log Message:
+Include a new routine to read a (double) column from a FITS file.
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-02-08-00, operation: add
 Package: skymaps
