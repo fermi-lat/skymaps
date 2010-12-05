@@ -1,4 +1,25 @@
 ------------------------------------------------------------
+User: lande  Sun Dec  5 01:46:17 PST 2010
+ScienceTools-scons/skymaps/src
+
+Modified Files:
+	Background.cxx Band.cxx PsfSkyFunction.cxx PythonPsf.cxx 
+	PythonUtilities.cxx SkyImage.cxx swig_setup.i 
+Added Files:
+	WeightedSkyDir.cxx 
+Log Message:
+Moving all the WeightedSkyDir to a new file. 
+
+Making WeightedSkyDirList derive from a base class (named BaseWeightedSkyDirList for backwards compatability) which can be initialized in the absence of a Band object.
+
+Adding a function to SkyImage for getting a represented of the image as a BaseWeightedSkyDirList and setting
+all of the values in a SkyImage from a BaseWeightedSkyDirList
+
+Adding convenience functions to PythonUtilities for getting and setting the weights of a WeightedSkyDirList
+
+
+    *
+------------------------------------------------------------
 User: kerrm  Fri Nov 19 13:48:30 PST 2010
 skymaps/src
 
