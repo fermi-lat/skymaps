@@ -9,6 +9,8 @@
 #define skymaps_PythonUtilities_h
 
 #include <vector>
+#include "skymaps/WeightedSkyDir.h"
+
 #include "astro/SkyDir.h"
 #include "astro/SkyFunction.h"
 
@@ -46,6 +48,12 @@ public:
                               const std::string file_name,
                               const std::string table_name,
                               const std::string col_name);
+
+    static void get_wsdl_weights(double *rvals, int rvals_size,
+                                 const skymaps::BaseWeightedSkyDirList& wsdl);
+
+    static void set_wsdl_weights(const std::vector<double>& weights,
+                                 skymaps::BaseWeightedSkyDirList& wsdl);
 };
 
 }

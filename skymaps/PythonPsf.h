@@ -10,7 +10,7 @@
 
 #include <vector>
 #include "astro/SkyDir.h"
-#include "skymaps/Band.h"
+#include "skymaps/WeightedSkyDir.h"
 
 namespace skymaps {
 
@@ -42,7 +42,7 @@ public:
     
     void array_val(double* rvals, int rvals_size);
     void wsdl_val(double* rvals, int rvals_size,
-                  astro::SkyDir& src_pos, skymaps::WeightedSkyDirList& data_pos);
+                  astro::SkyDir& src_pos, skymaps::BaseWeightedSkyDirList& data_pos);
 
     static void set_density(bool dens);
     static bool get_density();

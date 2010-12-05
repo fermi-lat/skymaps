@@ -11,6 +11,7 @@
 #define skymaps_SKYIMAGE_H
 
 #include "skymaps/SkySpectrum.h"
+#include "skymaps/WeightedSkyDir.h"
 #include "astro/SkyDir.h"
 
 #include <string>
@@ -145,6 +146,11 @@ public:
     int naxis2()const{return m_naxis2;}
 
     const std::vector<float>& image()const{return m_imageData;}
+
+    /** @brief Returns a vector of SkyDirs for all the valid pixels in the image.
+     */
+    skymaps::BaseWeightedSkyDirList* get_wsdl(unsigned int layer=0);
+    void set_wsdl(const skymaps::BaseWeightedSkyDirList& wsdl);
 
     /** @brief create new FITS file with different projection, or portion
         @param center coords of image center
