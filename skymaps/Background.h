@@ -9,6 +9,7 @@ $Header$
 
 #include "skymaps/SkySpectrum.h"
 #include "skymaps/Band.h"
+#include "skymaps/WeightedSkyDir.h"
 #include <vector>
 #include <algorithm> // for pair, make_pair
 

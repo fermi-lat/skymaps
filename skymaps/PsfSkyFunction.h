@@ -9,7 +9,7 @@ $Header$
 #include "astro/SkyDir.h"
 #include "astro/SkyFunction.h"
 #include "skymaps/PsfFunction.h"
-#include "skymaps/Band.h"
+#include "skymaps/WeightedSkyDir.h"
 
 #include <vector>
 
