@@ -5,6 +5,7 @@ $Header$
 */
 
 #include "skymaps/PsfSkyFunction.h"
+#include "skymaps/WeightedSkyDir.h"
 #include "healpix/Healpix.h"
 #include "healpix/HealPixel.h"
 

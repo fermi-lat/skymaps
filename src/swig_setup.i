@@ -242,18 +242,19 @@ def __str__(self):  return ('HepRotation:'+ 3* ('\n\t'+3*'%9.5f')) % tuple([self
 %include skymaps/PySkySpectrum.h
 %include skymaps/Background.h
 %include skymaps/Band.h
+%include skymaps/WeightedSkyDir.h
 %include skymaps/SmoothedSkySpectrum.h
 %include skymaps/PsfSkySpectrum.h
 %include skymaps/PythonUtilities.h
 %include skymaps/PythonPsf.h
 
-%extend skymaps::WeightedSkyDirList{
+%extend skymaps::BaseWeightedSkyDirList{
 // provide access to the WeightedSKyDir objects as an array
    skymaps::WeightedSkyDir * __getitem__(size_t i){ 
       if( i == (*self).size() ) throw std::range_error("StopIteration");
       if( i<0 || i > self->size() ) throw std::range_error("IndexError");
       return &(*self)[i];
-      //skymaps::WeightedSkyDirList::iterator it= self->begin();
+      //skymaps::BaseWeightedSkyDirList::iterator it= self->begin();
       //for(int j(0); j!=i; ++j, ++it);
       //return &(*it); // note address of
    }

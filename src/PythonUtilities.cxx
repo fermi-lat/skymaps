@@ -1,4 +1,5 @@
 #include "skymaps/PythonUtilities.h"
+#include "skymaps/WeightedSkyDir.h"
 
 #include "CLHEP/Vector/ThreeVector.h"
 #include <stdexcept>
@@ -62,6 +63,23 @@ void PythonUtilities::get_float_col(double *rvals, int rvals_size,const std::str
         rvals++;
     }
     delete table;
+}
+
+void PythonUtilities::get_wsdl_weights(double *rvals, int rvals_size,
+                                       const BaseWeightedSkyDirList& wsdl) {
+  assert(rvals_size=wsdl.size());
+  for (BaseWeightedSkyDirList::const_iterator it = wsdl.begin(); it != wsdl.end(); ++it) {
+        *rvals++ = it->weight();
+  }
+}
+
+void PythonUtilities::set_wsdl_weights(const std::vector<double>& weights,
+                                       BaseWeightedSkyDirList& wsdl) {
+  assert(weights.size() == wsdl.size()); 
+  std::vector<double>::const_iterator wt = weights.begin();
+  for (BaseWeightedSkyDirList::iterator wsd = wsdl.begin(); wsd != wsdl.end(); ++wsd) {
+    wsd->set_weight(*wt++);
+  }
 }
 
 }

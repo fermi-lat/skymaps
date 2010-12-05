@@ -5,6 +5,7 @@ $Header$
 */
 
 #include "skymaps/SkyImage.h"
+#include "skymaps/WeightedSkyDir.h"
 #include "astro/SkyProj.h"
 
 #include "tip/IFileSvc.h"
@@ -417,6 +418,37 @@ unsigned int SkyImage::pixel_index(const astro::SkyDir& pos, int layer) const
     return k;
     */
 }
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+BaseWeightedSkyDirList* SkyImage::get_wsdl(unsigned int layer)
+{
+    checkLayer(layer);
+    int offset = m_naxis1* m_naxis2 * layer;
+
+    BaseWeightedSkyDirList* rvals=new BaseWeightedSkyDirList();
+
+    for( size_t k = 0; k< (unsigned int)(m_naxis1)*(m_naxis2); ++k){
+        double 
+            x = static_cast<int>(k%m_naxis1)+0 + m_ax1_offset, // wcs is 1-indexed
+            y = static_cast<int>(k/m_naxis1)+0 + m_ax2_offset;
+        if( m_wcs->testpix2sph(x,y)==0) {
+            astro::SkyDir* dir = new astro::SkyDir(x,y, *m_wcs);
+            float layer_val = m_imageData[offset + k];
+            rvals->push_back(*new skymaps::WeightedSkyDir(*dir,layer_val));
+        }
+    }
+    return rvals;
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+void SkyImage::set_wsdl(const BaseWeightedSkyDirList& wsdl)
+{
+  for (BaseWeightedSkyDirList::const_iterator it = wsdl.begin(); it != wsdl.end(); ++it) {
+    this->operator[](*it)=(float)it->weight();
+  }
+}
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void SkyImage::reimage( const astro::SkyDir& center,
                         const std::string& outputFile, 
