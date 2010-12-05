@@ -6,6 +6,7 @@ $Header$
 
 #include "skymaps/Background.h"
 #include "skymaps/Band.h"
+#include "skymaps/WeightedSkyDir.h"
 
 #include "skymaps/DiffuseFunction.h"
 #include "skymaps/CompositeSkySpectrum.h"

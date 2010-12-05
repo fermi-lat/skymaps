@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include "skymaps/PythonPsf.h"
+#include "skymaps/WeightedSkyDir.h"
 #include "healpix/Healpix.h"
 
 namespace {
@@ -238,8 +239,8 @@ void PythonPsf::array_val(double* rvals, int rvals_size) {
 }
 
 void PythonPsf::wsdl_val(double* rvals, int rvals_size,
-              astro::SkyDir& src_pos, skymaps::WeightedSkyDirList& data_pos) {
-    std::vector<WeightedSkyDir>::iterator wsdl_it(data_pos.begin());
+              astro::SkyDir& src_pos, skymaps::BaseWeightedSkyDirList& data_pos) {
+    skymaps::BaseWeightedSkyDirList::iterator wsdl_it(data_pos.begin());
     for (double* ptr(rvals); ptr < rvals + rvals_size; ++ptr) {
         *ptr = operator()(src_pos.difference(*wsdl_it++));
     }
