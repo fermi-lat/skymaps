@@ -4,7 +4,7 @@
 #include "CLHEP/Vector/ThreeVector.h"
 #include <stdexcept>
 #include <assert.h>
-#include <cstdlib.h>
+#include <cstdlib>
 #include <string.h>
 #include "tip/IFileSvc.h"
 #include "tip/Table.h"
