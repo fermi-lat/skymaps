@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: kerrm  Wed Dec  8 15:16:48 PST 2010
+skymaps/skymaps
+
+Modified Files:
+	PythonUtilities.h 
+Log Message:
+Added some functions to PythonUtilities.
+    *
+------------------------------------------------------------
 User: lande  Sun Dec  5 01:46:55 PST 2010
 ScienceTools-scons/skymaps/skymaps
 
