@@ -49,11 +49,26 @@ public:
                               const std::string table_name,
                               const std::string col_name);
 
+    // convert barycentered times to topocentric (at LAT) MET
+    // input should be TDB in MJD units
+    // tolerance is in (s)
+    static void tdb2met(double *rvals, int rvals_size,
+                        double ra, double dec,
+                        const std::string sc_file,
+                        double tol);
+
+    // convert MET (topocentric TT) to barycentered times
+    // input should be MET in s; output is in TDB in s referenced to MET origin
+    static void met2tdb(double *rvals, int rvals_size,
+                        double ra, double dec,
+                        const std::string sc_file);
+
     static void get_wsdl_weights(double *rvals, int rvals_size,
                                  const skymaps::BaseWeightedSkyDirList& wsdl);
 
     static void set_wsdl_weights(const std::vector<double>& weights,
                                  skymaps::BaseWeightedSkyDirList& wsdl);
+
 };
 
 }
