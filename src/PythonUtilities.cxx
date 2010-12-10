@@ -12,7 +12,6 @@
 #include "timeSystem/AbsoluteTime.h"
 #include "timeSystem/Duration.h"
 #include "timeSystem/ElapsedTime.h"
-#include "timeSystem/SourcePosition.h"
 #include "timeSystem/BaryTimeComputer.h"
 extern "C" {
 double *glastscorbit (char *, double, int *) ;       /* GLAST-specific */
@@ -104,8 +103,7 @@ void PythonUtilities::tdb2met(double *rvals, int rvals_size,
                 //if (error==0) throw 20; // don't know error code
                 }
                 std::vector<double> spos(sc_position,sc_position+3);
-                timeSystem::SourcePosition position(ra,dec);
-                tbc.computeBaryTime(position,spos,guess);
+                tbc.computeBaryTime(ra,dec,spos,guess);
                 double ddiff(original.computeElapsedTime("TDB",guess).getDuration("Sec"));
                 if (abs(ddiff) < tol) {
                     rvals[i] = (new_time-met_offset)*86400;
@@ -136,8 +134,7 @@ void PythonUtilities::met2tdb(double *rvals, int rvals_size,
         timeSystem::AbsoluteTime at_met("TT",int(met_mjd),(met_mjd-int(met_mjd))*86400);
         double* sc_position = glastscorbit(ft2_name,rvals[i],&error);
         std::vector<double> spos(sc_position,sc_position+3);
-        timeSystem::SourcePosition position(ra,dec);
-        tbc.computeBaryTime(position,spos,at_met);
+        tbc.computeBaryTime(ra,dec,spos,at_met);
         rvals[i] = at_met.computeElapsedTime("TDB",glast_tdb_origin).getDuration("Sec");
     }
     delete[] ft2_name;
