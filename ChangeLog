@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: burnett  Sat Dec 11 10:26:52 PST 2010
+skymaps/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+add timeSystem. 
+Build is now fragile since this introduce dependency on rootCintPolicy, which, depending on order of packages, will override SwigModule and prevent swig build step.
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-02-10-01, operation: add
 Package: skymaps
