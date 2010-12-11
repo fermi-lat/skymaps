@@ -9,7 +9,6 @@ author  T. Burnett <tburnett@u.washington.edu>
 use astro *
 use healpix *
 use st_facilities *
-use ROOT v* IExternal
 
 # SWIG interface
 use SwigModule *
@@ -17,9 +16,14 @@ apply_pattern python_module
 
 # instead of python_module
 #apply_pattern shared_library
-private
 
-use embed_python * 
+use ROOT v* IExternal
+
+private
+use timeSystem * 
+
+use embed_python *
+
 
 macro source "*.cxx" WIN32 "*.cxx *.h *.py"
 
