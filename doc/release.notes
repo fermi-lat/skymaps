@@ -7,6 +7,7 @@ $Id$
  --------- -----   --- -----------------------------------------------------------------------
  * EOH *
 
+ skymaps-02-10-03 11-Dec-2010  lande Adding non-square image creation to SkyImage
  skymaps-02-10-02 11-Dec-2010 burnett Add CMT use for timeSystem
  skymaps-02-10-01 10-Dec-2010 burnett Add CMT use for timeSystem
  skymaps-02-10-00 08-Dec-2010  lande Moving WeightedSkyDir stuff to a new file. Adding a new base class for WSDL. Adding new WSDL get/set functions to SkyImage and PythonUtilties. Adding Matthew's new timing code to PythonUtilities.
