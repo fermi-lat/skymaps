@@ -52,6 +52,7 @@ public:
         @param ptype ["ZEA"] projection type.
         @param galactic [false] use galactic or equatorial coords
         @param earth [false] looking at Earth: reverse x axis
+        @param fov2 [-1] (degrees) Specify only to create non square SkyImages. If so, size in other dimensions.
 
         Note that if the outputFile is empty, which is useful to get the the transformation, most methods are not valid
         until setupImage() is called with a filename.
@@ -61,7 +62,8 @@ public:
                    double pixel_size=0.5, double fov=20, int layers=1
                    ,const std::string& ptype="ZEA"
                    ,bool galactic=false
-                   ,bool earth=false);
+                   ,bool earth=false
+                   ,double fov2=-1);
     
     /**
         @brief add a count to the map, using current SkyDir projection

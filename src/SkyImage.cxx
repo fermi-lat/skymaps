@@ -53,7 +53,8 @@ SkyImage::SkyImage(const astro::SkyDir& center,
                    const std::string& outputFile, 
                    double pixel_size, double fov, int layers, 
                    const std::string& ptype,
-                   bool galactic, bool earth)
+                   bool galactic, bool earth,
+                   double fov2)
 : m_naxis3(layers)  
 , m_image(0)
 , m_save(false)
@@ -82,8 +83,8 @@ SkyImage::SkyImage(const astro::SkyDir& center,
                 +ptype +" does not have default image size");
         }
     }else{
-
-        m_naxis1=m_naxis2 = static_cast<int>(fov/pixel_size + 0.5);
+        m_naxis1=static_cast<int>(fov/pixel_size + 0.5);
+        m_naxis2=fov2<0?m_naxis1:static_cast<int>(fov2/pixel_size + 0.5);
     }
 
     double crval[2] = { galactic?center.l():center.ra(),galactic? center.b(): center.dec()};
