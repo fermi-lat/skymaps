@@ -1,5 +1,5 @@
 %module(docstring="Interface to skymaps") skymaps
-
+// $Header$
 #define PySwigIterator skymaps_PySwigIterator
 
 %init %{
@@ -105,6 +105,11 @@
 %include std_vector.i
 %template(svd) std::vector<double>;
 %template(SkyDirVector) std::vector<astro::SkyDir>;
+
+// this is needed by astro::SkyProj to implemenent the return from pix2sph etc.
+%template(DoublePair) std::pair<double, double>;
+// needed by skymaps::SkyImage to represent the contents
+%template(FloatVector) std::vector<float>;
 
 %include CLHEP/Vector/ThreeVector.h
 namespace CLHEP {
@@ -334,10 +339,4 @@ def __repr__(self): return self.__str__()
 %include skymaps/ComplexSkySpectrum.h
 %include skymaps/SmoothedSkySpectrum.h
 %include skymaps/ExposureWeighter.h
-
-
-
-
-
-
 
