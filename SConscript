@@ -20,10 +20,6 @@ progEnv.Tool(libname)
 testapp = progEnv.Program(testname, listFiles(['src/test/*.cxx']))
 
 lib = libEnv.SharedLibrary(package, listFiles(['src/*.cxx']))
-if baseEnv['PLATFORM']=='win32':
-    # Add a post-build step to embed the manifest using mt.exe
-    # The number at the end of the line indicates the file type (1: EXE; 2:DLL).
-    libEnv.AddPostAction(lib, 'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;2')
 
 # SWIG
 swigEnv = baseEnv.Clone()
@@ -33,8 +29,6 @@ numpy_path = os.path.join(numpy.__path__[0],'core','include')
 swigEnv.AppendUnique(CPPPATH=numpy_path)
 swigEnv.Tool(libname)
 pyLib = swigEnv.SwigLibrary('_'+package,'src/swig_setup.i')
-if baseEnv['PLATFORM']=='win32':
-    libEnv.AddPostAction(pyLib, 'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;2')
 
 progEnv.Tool('registerTargets',
              package = package,
