@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: jrb  Mon Feb 21 22:28:06 PST 2011
+ScienceTools-scons/skymaps
+
+Modified Files:
+	SConscript 
+Log Message:
+find numpy include path via new construction variable, pythonSitePath
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-09-21-00, operation: add
 Package: skymaps
