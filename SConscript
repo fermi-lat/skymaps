@@ -24,8 +24,7 @@ lib = libEnv.SharedLibrary(package, listFiles(['src/*.cxx']))
 # SWIG
 swigEnv = baseEnv.Clone()
 #Get the path for the numpy includes
-import numpy
-numpy_path = os.path.join(numpy.__path__[0],'core','include')
+numpy_path = os.path.join(baseEnv['pythonSitePath'], 'numpy', 'core', 'include')
 swigEnv.AppendUnique(CPPPATH=numpy_path)
 swigEnv.Tool(libname)
 pyLib = swigEnv.SwigLibrary('_'+package,'src/swig_setup.i')
