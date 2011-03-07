@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: kerrm  Sun Mar  6 17:15:51 PST 2011
+skymaps/skymaps
+
+Modified Files:
+	PythonUtilities.h 
+Log Message:
+Added a method for geocentering a vector of photon times.
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-02-10-04, operation: add
 Package: skymaps
