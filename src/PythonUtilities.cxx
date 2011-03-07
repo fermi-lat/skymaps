@@ -140,6 +140,27 @@ void PythonUtilities::met2tdb(double *rvals, int rvals_size,
     delete[] ft2_name;
 }
 
+void PythonUtilities::met2geo(double *rvals, int rvals_size,
+                        double ra, double dec,
+                        const std::string sc_file) {
+    const timeSystem::BaryTimeComputer & tbc = timeSystem::BaryTimeComputer::getComputer("JPL DE405");
+    char *ft2_name;
+    ft2_name = new char[sc_file.size()+1];
+    strcpy(ft2_name,sc_file.c_str());
+    int error(0);
+    double met_offset(51910+64.184/86400);
+    timeSystem::AbsoluteTime glast_geo_origin("TT",51910,64.184);
+    for (int i=0; i<rvals_size; i++) {
+        double met_mjd(rvals[i]/86400.+met_offset);
+        timeSystem::AbsoluteTime at_met("TT",int(met_mjd),(met_mjd-int(met_mjd))*86400);
+        double* sc_position = glastscorbit(ft2_name,rvals[i],&error);
+        std::vector<double> spos(sc_position,sc_position+3);
+        tbc.computeGeoTime(ra,dec,spos,at_met);
+        rvals[i] = at_met.computeElapsedTime("TT",glast_geo_origin).getDuration("Sec");
+    }
+    delete[] ft2_name;
+}
+
 void PythonUtilities::get_wsdl_weights(double *rvals, int rvals_size,
                                        const BaseWeightedSkyDirList& wsdl) {
   assert(rvals_size=wsdl.size());
