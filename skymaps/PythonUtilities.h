@@ -63,6 +63,12 @@ public:
                         double ra, double dec,
                         const std::string sc_file);
 
+    // convert MET (topocentric TT) to geocentric TT
+    // input should be MET in s; output is in TT@geocenter referenced to MET origin
+    static void met2geo(double *rvals, int rvals_size,
+                        double ra, double dec,
+                        const std::string sc_file);
+
     static void get_wsdl_weights(double *rvals, int rvals_size,
                                  const skymaps::BaseWeightedSkyDirList& wsdl);
 
