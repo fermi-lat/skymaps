@@ -42,6 +42,8 @@ public:
     ///@brief integral for the energy limits, in the given direction
     virtual double integral(const astro::SkyDir& dir, double a, double b)const;
 
+    double flux()const{return m_flux;}
+    double index()const{return m_index;}
 
 
 private:
