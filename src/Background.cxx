@@ -233,7 +233,7 @@ void Background::rot_grid (std::vector<double>& rlons, std::vector<double>& rlat
     rlons.clear(); rlats.clear();
     rlons.reserve(lons.size()); rlats.reserve(lats.size());
     astro::SkyDir rot_axis = astro::SkyDir(roi_center.l()+90,0);
-    Hep3Vector rot_axisv(rot_axis.dir());
+    CLHEP::Hep3Vector rot_axisv(rot_axis.dir());
     astro::SkyDir sd;
     double rot_extent = roi_center.b()*(M_PI/180);
     for (unsigned int i=0; i < lons.size(); ++i) {
@@ -253,7 +253,7 @@ void Background::val_grid (std::vector<double>& rvals,
     rvals.clear();
     rvals.reserve(lons.size()*lats.size());
     astro::SkyDir rot_axis = astro::SkyDir(roi_center.l()-90,0);
-    Hep3Vector rot_axisv(rot_axis.dir());
+    CLHEP::Hep3Vector rot_axisv(rot_axis.dir());
     astro::SkyDir sd;
     double rot_extent = roi_center.b()*(M_PI/180);
     for (std::vector<double>::const_iterator it_lon = lons.begin(); it_lon != lons.end(); ++it_lon){

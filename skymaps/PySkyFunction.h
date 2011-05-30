@@ -32,7 +32,7 @@ namespace skymaps {
     which may convert it back to a SkyDir thus:
 
         def __call__(self, v):
-           return self.exposure(SkyDir(Hep3Vector(v[0],v[1],v[2])), [self.energy])
+           return self.exposure(SkyDir(CLHEP::Hep3Vector(v[0],v[1],v[2])), [self.energy])
 
 
     */
