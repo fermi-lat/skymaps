@@ -28,7 +28,7 @@ PySkySpectrum::PySkySpectrum(PyObject* value,PyObject * integral)
 double PySkySpectrum::value(const astro::SkyDir& dir, double e)const
 {
     // setup the argument: a list with components
-    Hep3Vector vdir( dir());
+    CLHEP::Hep3Vector vdir( dir());
     PyObject* list = PyList_New(3);
     PyList_SetItem( list, 0, PyFloat_FromDouble(vdir[0]) );
     PyList_SetItem( list, 1, PyFloat_FromDouble(vdir[1]) );
@@ -56,7 +56,7 @@ double PySkySpectrum::value(const astro::SkyDir& dir, double e)const
 double PySkySpectrum::integral(const astro::SkyDir& dir, double a, double b)const
 {
     // setup the argument: a list with components
-    Hep3Vector vdir( dir());
+    CLHEP::Hep3Vector vdir( dir());
     PyObject* list = PyList_New(3);
     PyList_SetItem( list, 0, PyFloat_FromDouble(vdir[0]) );
     PyList_SetItem( list, 1, PyFloat_FromDouble(vdir[1]) );

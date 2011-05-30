@@ -257,9 +257,9 @@ bool LivetimeCube::processEntry(const tip::ConstTableRecord & row, const skymaps
             double theta = scz.difference(zenith); 
             if( fabs(theta)<1e-8) theta=0;
 
-            static Hep3Vector north_pole(0,0,1);
-            Hep3Vector east_dir( north_pole.cross(zenith()).unit() ); // east is perp to north_pole and zenith
-            Hep3Vector north_dir( zenith().cross(east_dir));
+            static CLHEP::Hep3Vector north_pole(0,0,1);
+            CLHEP::Hep3Vector east_dir( north_pole.cross(zenith()).unit() ); // east is perp to north_pole and zenith
+            CLHEP::Hep3Vector north_dir( zenith().cross(east_dir));
 
             double azimuth=atan2( scz().dot(east_dir), scz().dot(north_dir) ); // z is north, heading.
             if( azimuth <0) azimuth += 2*M_PI; // to 0-360 deg.
