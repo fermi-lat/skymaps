@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: lande  Fri Jun 17 18:46:26 PDT 2011
+ScienceTools-scons/skymaps/src
+
+Modified Files:
+	swig_setup.i 
+Added Files:
+	IsotropicConstant.cxx 
+Log Message:
+Adding new object IsotropicConstant
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-02-10-07, operation: add
 Package: skymaps
