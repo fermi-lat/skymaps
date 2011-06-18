@@ -61,6 +61,7 @@
 #include "skymaps/EffectiveArea.h"
 #include "skymaps/Background.h"
 #include "skymaps/IsotropicPowerLaw.h"
+#include "skymaps/IsotropicConstant.h"
 #include "skymaps/PhotonBinner.h"
 #include "skymaps/IParams.h"
 #include "skymaps/HealpixDiffuseFunc.h"
@@ -333,6 +334,7 @@ def __repr__(self): return self.__str__()
 %include skymaps/LivetimeCube.h
 %include skymaps/EffectiveArea.h
 %include skymaps/IsotropicPowerLaw.h
+%include skymaps/IsotropicConstant.h
 %include skymaps/IParams.h
 %include skymaps/BandBackground.h
 %include skymaps/SkyIntegrator.h
