@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: lande  Fri Jun 17 18:46:36 PDT 2011
+ScienceTools-scons/skymaps/skymaps
+
+Added Files:
+	IsotropicConstant.h 
+Log Message:
+Adding new object IsotropicConstant
+    *
+------------------------------------------------------------
 User: lande  Fri Jun 17 18:46:26 PDT 2011
 ScienceTools-scons/skymaps/src
 
