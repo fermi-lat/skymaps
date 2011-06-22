@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: lande  Tue Jun 21 19:46:18 PDT 2011
+ScienceTools-scons/skymaps/skymaps
+
+Modified Files:
+	SkyImage.h 
+Log Message:
+Add interpolate function
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-02-10-08, operation: add
 Package: skymaps
