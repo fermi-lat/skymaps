@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: lande  Tue Jun 21 19:47:46 PDT 2011
+ScienceTools-scons/skymaps/src
+
+Modified Files:
+	IsotropicConstant.cxx 
+Log Message:
+Explicity mention parameter not being used
+    *
+------------------------------------------------------------
 User: lande  Tue Jun 21 19:46:33 PDT 2011
 ScienceTools-scons/skymaps/skymaps
 
