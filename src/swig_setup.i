@@ -47,6 +47,7 @@
 #include "skymaps/SkySpectrum.h"
 #include "skymaps/BinnedPhotonData.h"
 #include "skymaps/DiffuseFunction.h"
+#include "skymaps/SkyImageSpectrum.h"
 #include "skymaps/CompositeSkySpectrum.h"
 #include "skymaps/CompositeSkyFunction.h"
 #include "skymaps/PhotonMap.h"
@@ -331,6 +332,7 @@ def __repr__(self): return self.__str__()
 %feature("kwargs");  // using keywords for these
 %include skymaps/IsotropicSpectrum.h
 %include skymaps/DiffuseFunction.h
+%include skymaps/SkyImageSpectrum.h
 %include skymaps/LivetimeCube.h
 %include skymaps/EffectiveArea.h
 %include skymaps/IsotropicPowerLaw.h
