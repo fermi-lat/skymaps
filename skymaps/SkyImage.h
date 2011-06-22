@@ -175,6 +175,8 @@ public:
     /// @brief change the value to use for invalid
     static double setNaN(double nan);
 
+    bool interpolate()const{return m_interpolate;}
+
 private:
     //! @brief internal routine to convert SkyDir to pixel index
     unsigned int pixel_index(const astro::SkyDir& pos, int layer=-1) const;
