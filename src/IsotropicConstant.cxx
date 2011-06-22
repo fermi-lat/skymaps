@@ -16,7 +16,7 @@ IsotropicConstant::~IsotropicConstant()
 {
 }
 
-double IsotropicConstant::value(const astro::SkyDir& dir, double energy)const
+double IsotropicConstant::value(const astro::SkyDir& /*dir*/, double energy)const
 {
     return m_constant;
 }
