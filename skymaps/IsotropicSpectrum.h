@@ -27,7 +27,7 @@ class IsotropicSpectrum : public skymaps::SkySpectrum {
 public:
  
     /** @brief ctor to just define an isotropic function
-        @param filename text file with two columns: enrgy in MeV, flux in cm^-2 s^-1 
+        @param filename text file with two columns: energy in MeV, flux in ph cm^2 s^-1 MeV^-1 sr^-1
         */
     IsotropicSpectrum(const std::string& filename);
     virtual ~IsotropicSpectrum();
