@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: lande  Tue Jun 21 19:48:29 PDT 2011
+ScienceTools-scons/skymaps/skymaps
+
+Added Files:
+	SkyImageSpectrum.h 
+Log Message:
+Adding SkyImageSpectrum object.
+    *
+------------------------------------------------------------
 User: lande  Tue Jun 21 19:47:46 PDT 2011
 ScienceTools-scons/skymaps/src
 
