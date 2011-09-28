@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: heather  Wed Sep 28 12:40:15 PDT 2011
+skymaps
+
+Modified Files:
+	SConscript 
+Log Message:
+patch for opt windows builds
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-09-25-01, operation: add
 Package: skymaps
