@@ -30,7 +30,7 @@ namespace skymaps {
     public:
         WeightedSkyDir(const astro::SkyDir& sdir=astro::SkyDir(), double weight=1): SkyDir(sdir), m_weight(weight){}
         double weight()const{return m_weight;}
-        double set_weight(double weight) {m_weight=weight;}
+        double set_weight(double weight) {m_weight=weight; return m_weight;}
     private:
         double m_weight;
     };
