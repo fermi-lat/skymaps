@@ -1,4 +1,17 @@
 ------------------------------------------------------------
+User: wallacee  Fri Sep 30 14:23:28 PDT 2011
+skymaps/src
+
+Modified Files:
+	BinnedPhotonData.cxx 
+Log Message:
+A few changes to handle a longstanding bug where BinnedPhotonData::write()
+wrote out event class 0 as -2**31. event_class, nside, and counts are now
+all declared as unsigned long, and written to the fits file as the '1V'
+datatype.
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-02-10-10, operation: add
 Package: skymaps
