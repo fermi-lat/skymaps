@@ -101,7 +101,7 @@ BinnedPhotonData::BinnedPhotonData(const std::string & inputFile,  const std::st
 
         for(tip::Table::ConstIterator itor = table.begin(); itor != table.end(); ++itor)
         {
-            long level, index, count;
+            unsigned long level, index, count;
             (*itor)["LEVEL"].get(level);
             (*itor)["INDEX"].get(index);
             (*itor)["COUNT"].get(count);
@@ -159,7 +159,7 @@ BinnedPhotonData::BinnedPhotonData(const std::string & inputFile,  const std::st
 
         for(tip::Table::ConstIterator itora = table.begin(); itora != table.end(); ++itora)
         {
-            long nside, event_class, count;
+            unsigned long nside, event_class, count;
             double emin, emax, sigma, gamma;
             (*itora)["NSIDE"].get(nside);
             (*itora)["EVENT_CLASS"].get(event_class);
@@ -306,10 +306,7 @@ void BinnedPhotonData::add(const BinnedPhotonData& other)
 
 }
 
-
-
-double BinnedPhotonData::density (const astro::SkyDir & sd) const
-{
+double BinnedPhotonData::density (const astro::SkyDir & sd) const {
     double result(0);
     static double norm((M_PI/180)*(M_PI/180) ); // normalization factor: 1/degree
 
@@ -409,13 +406,13 @@ void BinnedPhotonData::write(const std::string & outputFile, bool clobber) const
     tip::IFileSvc::instance().appendTable(outputFile, band_table);
     tip::Table & table = *tip::IFileSvc::instance().editTable( outputFile, band_table);
 
-    table.appendField("NSIDE", "1J");
-    table.appendField("EVENT_CLASS", "1J");
+    table.appendField("NSIDE", "1V");
+    table.appendField("EVENT_CLASS", "1V");
     table.appendField("EMIN", "1D");
     table.appendField("EMAX", "1D");
     table.appendField("SIGMA", "1D");
     table.appendField("GAMMA", "1D");
-    table.appendField("COUNT", "1J"); // Number of pixels in this band
+    table.appendField("COUNT", "1V"); // Number of pixels in this band
     table.setNumRecords(size());
 
     // get iterators for the Table and the Band list
