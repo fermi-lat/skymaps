@@ -1,4 +1,19 @@
 ------------------------------------------------------------
+User: wallacee  Thu Oct 27 14:14:18 PDT 2011
+skymaps/src
+
+Modified Files:
+	swig_setup.i 
+Log Message:
+Added to Gti:
+	__getstate__ and __setstate__ to allow serialization (hope I did this
+	  right, seems to work)
+	__eq__ and __ne__ to allow comparison with == and !=. Probably sensible
+    	to move this to the C++, but this was easier for now
+Also added #include <cstddef> to make the module build with gcc 4.6.
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-09-25-02, operation: add
 Package: skymaps
