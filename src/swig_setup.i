@@ -26,6 +26,7 @@
 
 %{
 #define SWIG_FILE_WITH_INIT
+#include <cstddef>
 #include <stdexcept>
 #include <vector>
 #include <utility>
@@ -142,7 +143,7 @@ public:
       case 3: throw std::range_error("StopIteration"); //must be exactly this string
       default: throw std::range_error("IndexError");
       }
-   }
+}
    size_t __len__() { return 3; }
 // make it pickle   
    %insert("python") %{
@@ -292,9 +293,22 @@ def __str__(self):  return ('HepRotation:'+ 3* ('\n\t'+3*'%9.5f')) % tuple([self
 
       }
  %insert("python") %{
+def __getstate__(self):  return [(g.minValue(),g.maxValue()) for g in self]
+def __setstate__(self,intervals):
+    self.this = _skymaps.new_Gti()
+    self.thisown=1
+    for interval in intervals: _skymaps.Gti_insertInterval(self.this,interval[0],interval[1])
 def __str__(self):  return 'Gti: %d intervals from %d to %d, on time %.0f'% (self.getNumIntervals(), self.minValue(),self.maxValue(), self.computeOntime())
 def __repr__(self): return self.__str__()
-
+def __eq__(self,other):
+    if self.getNumIntervals()!=other.getNumIntervals():
+        return False
+    if self.getNumIntervals()==1:
+        return (self.minValue()==other.minValue() and self.maxValue()==other.maxValue())
+    else:
+        return sum([self[i]!=other[i] for i in xrange(self.getNumIntervals())])==0
+def __ne__(self,other):
+    return not self==other
 %}
 
 }
