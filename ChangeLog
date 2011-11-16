@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: lande  Tue Nov 15 20:54:42 PST 2011
+ScienceTools-scons/skymaps/src
+
+Modified Files:
+	SkyImage.cxx 
+Log Message:
+Return 0 outside SkyImage when interpolate=True
+    *
+------------------------------------------------------------
 User: wallacee  Thu Oct 27 14:14:18 PDT 2011
 skymaps/src
 
