@@ -7,6 +7,7 @@ $Id$
  --------- -----   --- -----------------------------------------------------------------------
  * EOH *
 
+ skymaps-02-10-11 15-Nov-2011  lande Change default value outside SkyImage
  skymaps-02-10-10 28-Sep-2011 heather Patch WeightedSkyDir.h for opt Windows
  skymaps-02-10-09 21-Jun-2011  lande Adding new object SkyImageSpectrum.
  skymaps-02-10-08 17-Jun-2011  lande New object IsotropicConstant
