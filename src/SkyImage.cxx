@@ -312,11 +312,13 @@ double SkyImage::pixelValue(const astro::SkyDir& pos,unsigned  int layer)const
         //    std::cout << x1 << "\t" << x2 << "\t" << y1 << "\t" << y2 << std::endl;
         //}
 
-        // protect against going over edges -- not sure why this should happen, but it does.
-        if (x1 < 0) { x1 = 0; x2 = 0; }
-        if (y1 < 0) { y1 = 0; y2 = 0; }
-        if (x2 > m_naxis1 -1) { x2 = m_naxis1 - 1; x1 = m_naxis1 - 1; }
-        if (y2 > m_naxis2 -1) { y2 = m_naxis2 - 1; y1 = m_naxis2 - 1; }
+        // Return intensity of 0 outside the edges
+        if (x1 < 0) { return 0; }
+        if (y1 < 0) { return 0; }
+        if (x2 > m_naxis1 -1) { return 0; }
+        if (y2 > m_naxis2 -1) { return 0; }
+
+
               
         double v11( m_imageData[offset + x1 + y1*m_naxis1] );
         double v12( m_imageData[offset + x1 + y2*m_naxis1] );
