@@ -292,23 +292,29 @@ def __str__(self):  return ('HepRotation:'+ 3* ('\n\t'+3*'%9.5f')) % tuple([self
       return new_gti;
 
       }
+    bool __eq__(const skymaps::Gti& other) {
+        return self->operator==(other);
+    }
+    bool __neq__(const skymaps::Gti& other) {
+        return self->operator!=(other);
+    }
+    std::vector<double> get_edges(bool starts) {
+        std::vector<double> edges;
+        for(skymaps::GtiBase::ConstIterator it(self->begin()); it != self->end(); ++it) {
+           edges.push_back(starts?it->first:it->second); 
+        }
+        return edges;
+    }
  %insert("python") %{
-def __getstate__(self):  return [(g.minValue(),g.maxValue()) for g in self]
+def __getstate__(self):
+    starts = self.get_edges(True)
+    stops = self.get_edges(False)
+    return [starts,stops]
 def __setstate__(self,intervals):
-    self.this = _skymaps.new_Gti()
-    self.thisown=1
-    for interval in intervals: _skymaps.Gti_insertInterval(self.this,interval[0],interval[1])
+    starts,stops = intervals
+    self.this = _skymaps.new_Gti(starts,stops)
 def __str__(self):  return 'Gti: %d intervals from %d to %d, on time %.0f'% (self.getNumIntervals(), self.minValue(),self.maxValue(), self.computeOntime())
 def __repr__(self): return self.__str__()
-def __eq__(self,other):
-    if self.getNumIntervals()!=other.getNumIntervals():
-        return False
-    if self.getNumIntervals()==1:
-        return (self.minValue()==other.minValue() and self.maxValue()==other.maxValue())
-    else:
-        return sum([self[i]!=other[i] for i in xrange(self.getNumIntervals())])==0
-def __ne__(self,other):
-    return not self==other
 %}
 
 }
