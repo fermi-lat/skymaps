@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: kerrm  Wed Nov 23 19:41:22 PST 2011
+skymaps/src
+
+Modified Files:
+	GtiBase.cxx 
+Log Message:
+Added constructor to allow for faster initialization from known intervals.
+
+    *
+------------------------------------------------------------
 User: kerrm  Wed Nov 23 19:40:25 PST 2011
 skymaps/src
 
