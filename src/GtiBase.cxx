@@ -18,6 +18,16 @@
 using namespace skymaps;
 GtiBase::GtiBase(): m_intervals() {}
 
+GtiBase::GtiBase(std::vector<double> & starts, std::vector<double> & stops): m_intervals() {
+    assert(starts.size()==stops.size());
+    std::vector<double>::const_iterator it1(starts.begin());
+    std::vector<double>::const_iterator it2(stops.begin());
+    for (; it1 != starts.end(); ++it1, ++it2) {
+        m_intervals.insert(Interval_t(*it1,*it2));
+    }
+    consolidate();
+}
+
   GtiBase::GtiBase(const std::string & file_name, const std::string & ext_name): m_intervals() {
     using namespace st_facilities;
 
