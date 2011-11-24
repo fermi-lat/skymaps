@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: kerrm  Wed Nov 23 19:42:02 PST 2011
+skymaps/skymaps
+
+Modified Files:
+	Gti.h GtiBase.h 
+Log Message:
+New constructor to allow fast initialization from known intervals.
+
+    *
+------------------------------------------------------------
 User: kerrm  Wed Nov 23 19:41:22 PST 2011
 skymaps/src
 
