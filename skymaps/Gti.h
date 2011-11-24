@@ -38,6 +38,8 @@ public:
 
    Gti(const skymaps::GtiBase & gti) : skymaps::GtiBase(gti) {}
 
+   Gti(std::vector<double> starts,std::vector<double> stops) : skymaps::GtiBase(starts,stops) {}
+
    bool accept(double time) const;
 
    void writeExtension(const std::string & filename) const;

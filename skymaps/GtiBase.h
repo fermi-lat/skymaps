@@ -29,6 +29,12 @@ namespace skymaps {
       /// \brief Construct a GTI object which contains no intervals.
       GtiBase();
 
+      /** \brief Construct a GTI object which contains intervals specified by vectors.
+          \param starts A series of start times.
+          \param stops A series of stop times.
+      */
+      GtiBase(std::vector<double> & starts, std::vector<double> & stops);
+
       /** \brief Construct a GTI object, reading its intervals from the given file.
           \param file_name The input file.
           \param ext_name The extension in the file containing the GTI information.
