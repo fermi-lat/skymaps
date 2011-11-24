@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: kerrm  Wed Nov 23 19:40:25 PST 2011
+skymaps/src
+
+Modified Files:
+	swig_setup.i 
+Log Message:
+Some tweaks to make pickling GTIs faster.
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: skymaps-02-10-11, operation: add
 Package: skymaps
