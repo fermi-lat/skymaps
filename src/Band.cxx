@@ -54,14 +54,16 @@ Band::Band(int nside, int event_class, double emin,double emax,
 
 
 
-#if 0
 Band::Band(const Band& other)
 : m_nside(1)
 {
     add(other);
 }
-#endif
 
+Band::~Band()
+{
+	delete m_healpix;
+}
 
 void Band::add(const astro::SkyDir& dir, int count)
 {
@@ -190,10 +192,11 @@ void Band::add(const Band& other)
         m_gamma = other.gamma();
         m_emin = other.emin();
         m_emax = other.emax();
-	m_sigma2 = other.sigma2();
-	m_gamma2 = other.gamma2();
-	m_frac2  = other.frac2();
-	m_source = other.source(); // source ids
+        m_sigma2 = other.sigma2();
+        m_gamma2 = other.gamma2();
+        m_frac2  = other.frac2();
+        m_source = other.source(); // source ids
+		m_event_class = other.event_class();
     }
 
     for( Band::const_iterator it= other.begin(); it!=other.end(); ++it){

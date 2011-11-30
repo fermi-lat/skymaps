@@ -43,8 +43,9 @@ namespace skymaps {
             double sigma, double gamma, double sigma2=-1, double gamma2=-1, double frac2=0);
 
         ///! copy ctor
-        //Band(const Band& other);
+        Band(const Band& other);
 
+		~Band();
         ///@brief implement SkyFunction interface
         ///@param dir direction in sky
         ///@return contents of pixel, if exists, otherwise zero
