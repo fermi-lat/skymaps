@@ -1,5 +1,24 @@
 ------------------------------------------------------------
 User: wallacee  Wed Nov 30 09:12:04 PST 2011
+skymaps/src
+
+Modified Files:
+	Band.cxx PhotonBinner.cxx BinnedPhotonData.cxx 
+Log Message:
+Changes to fix a memory leak and hopefully speed up filling of BinnedPhotonData
+objects a bit.
+Band: uncomment the copy ctor, with a fix to the initialization of m_event_class
+	  add a dtor that deletes m_healpix
+PhotonBinner: add a method to return the key of the band a photon should go in
+	without instantiating the Band object
+BinnedPhotonData:
+	Change addPhoton and addBand to use the above changes. Fixes memory leak
+	caused by adding shallow copies of Bands to the band list. Hopefully
+	improves performance by avoiding creating a Band for every photon.
+
+    *
+------------------------------------------------------------
+User: wallacee  Wed Nov 30 09:12:04 PST 2011
 skymaps/skymaps
 
 Modified Files:
