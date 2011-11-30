@@ -139,23 +139,16 @@ skymaps::Band PhotonBinner::operator()(const astro::Photon& p)const
         return Band(nside,event_class,*(it-1),*(it),0,0);
     }
     // setup for old-style levels, with sigma and gamma for the given energy
-    const std::vector<double>& elist ( event_class<=0? s_fenergy : s_benergy );
 
-    std::vector<double>::const_iterator it=
-        std::lower_bound(elist.begin(), elist.end(), energy, std::less<double>());
-    int level ( it-elist.begin()-1);
-    double sigma( s_sigma_level[level] * scale_factor(level) )
-        ,  gamma( s_gamma_level[level] )
-        ,  elow( elist[level] )
-        ,  ehigh( elist[level+1] );
-    unsigned int nside ( 1<<level );
-
+	double elow,ehigh,sigma,gamma,nside;
     if( m_bins_per_decade>0){
-        // no, new binning
-        bool high(ehigh==1e6); 
-        it= std::lower_bound(m_bins.begin(), m_bins.end(), energy, std::less<double>());
+        // new binning
+		// eew: not sure what below line was for...
+        // bool high(ehigh==1e6); 
+		std::vector<double>::const_iterator it= 
+			std::lower_bound(m_bins.begin(), m_bins.end(), energy, std::less<double>());
         elow = *(it-1); ehigh = *(it);
-        double ebar(sqrt(elow*ehigh));
+        double ebar = sqrt(elow*ehigh);
 
         //  set sigma/gamma from CALDB; nside inversion prop to sigma
         sigma = IParams::sigma(ebar,event_class);
@@ -163,10 +156,50 @@ skymaps::Band PhotonBinner::operator()(const astro::Photon& p)const
         nside = m_sigma_scale/sigma;
         nside=nside>max_nside?max_nside:nside;
         nside=nside<min_nside?min_nside:nside;
-    }
+    }else{
+        const std::vector<double>& elist ( event_class<=0? s_fenergy : s_benergy );
+
+        std::vector<double>::const_iterator it=
+            std::lower_bound(elist.begin(), elist.end(), energy, std::less<double>());
+        int level ( it-elist.begin()-1);
+        sigma = s_sigma_level[level] * scale_factor(level); 
+        gamma = s_gamma_level[level];
+        elow  = elist[level];
+        ehigh = elist[level+1];
+        nside = 1<<level;
+	}
     return  Band(nside, event_class, elow, ehigh, sigma, gamma);
 }
 
+int PhotonBinner::get_band_key(const astro::Photon& p)
+{
+	double energy(p.energy());
+	if(energy>=infinite) energy=0.9999 * infinite;
+	int event_class(p.eventClass());
+	if( event_class<0 || event_class >15) event_class = 0;
+
+    if (m_user_nside) {
+		//Expect this to be a rare use case, just make the Band to get the key
+        std::vector<double>::const_iterator it = std::lower_bound(m_bins.begin(), m_bins.end(), energy, std::less<double>());
+        int nside(event_class==0?m_fnside[it - m_bins.begin() -1]:m_bnside[it - m_bins.begin() -1]);
+        return int(Band(nside,event_class,*(it-1),*(it),0,0));
+    }	
+	double elow;
+    if( m_bins_per_decade>0){
+		std::vector<double>::const_iterator it =
+			std::lower_bound(m_bins.begin(), m_bins.end(), energy, std::less<double>());
+        elow = *(it-1);
+    }else{
+        const std::vector<double>& elist ( event_class<=0? s_fenergy : s_benergy );
+
+        std::vector<double>::const_iterator it=
+            std::lower_bound(elist.begin(), elist.end(), energy, std::less<double>());
+        int level ( it-elist.begin()-1);
+		elow = elist[level];
+	}
+	int key (event_class + 10*static_cast<int>(elow+.5));
+	return key;
+}
 
 void PhotonBinner::setupbins() {
 #if 1

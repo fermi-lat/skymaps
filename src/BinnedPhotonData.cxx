@@ -247,18 +247,22 @@ void BinnedPhotonData::addPhoton(const astro::Photon& gamma, int count)
         }
     }
 
-    // create a emmpty band with this photon's properties
-    Band newband (m_binner(gamma));
-    int key(newband);
+    // create an empty band with this photon's properties
+    //Band newband (m_binner(gamma));
+    //int key(newband);
+	
+	// get band key for this photon
+	int key(m_binner.get_band_key(gamma));
 
     // is it already in our list?
     iterator it=std::lower_bound(begin(), end(), key, std::less<int>());
-    int newkey(*it);
+    //int newkey(*it); //not used?
 
     if( key!=(*it) || empty() ){
         // no, create new entry and copy in the Band
-        it = insert(it, newband);
+        it = insert(it, m_binner(gamma));
     }
+	
 
     // now add the counts to the band's pixel
     (*it).add(gamma.dir(), count);
@@ -272,16 +276,19 @@ void BinnedPhotonData::addPhoton(const astro::Photon& gamma, int count)
 void BinnedPhotonData::addBand(const astro::Photon &gamma) {
 
     // create a emmpty band with this photon's properties
-    Band newband (m_binner(gamma));
-    int key(newband);
+    //band newband (m_binner(gamma));
+    //int key(newband);
+
+	// get band key for this photon
+	int key(m_binner.get_band_key(gamma));
 
     // is it already in our list?
     iterator it=std::lower_bound(begin(), end(), key, std::less<int>());
-    int newkey(*it);
+    //int newkey(*it); //not used?
 
-    if( key!=(*it) ){
+    if( key!=(*it) || empty() ){
         // no, create new entry and copy in the Band
-        it = insert(it, newband);
+        it = insert(it, m_binner(gamma));
     }
 }
 

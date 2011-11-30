@@ -52,6 +52,9 @@ namespace skymaps {
         virtual ~PhotonBinner(){};
         ///@brief bin a photon by returning an appropriate Band object
         virtual skymaps::Band operator()(const astro::Photon& photon)const;
+		
+		///@brief get the key of the band a photon belongs in
+		int get_band_key(const astro::Photon& photon);
            
         static void set_max_nside(unsigned int new_nside);
         static unsigned int  get_max_nside();
