@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: lande  Thu Apr  5 18:17:53 PDT 2012
+ScienceTools-scons/skymaps/skymaps
+
+Modified Files:
+	SkyImage.h 
+Log Message:
+fix memory leak in get_wsdl
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-09-27-01, operation: add
 Package: skymaps
