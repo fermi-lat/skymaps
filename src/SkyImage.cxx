@@ -424,21 +424,22 @@ unsigned int SkyImage::pixel_index(const astro::SkyDir& pos, int layer) const
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-BaseWeightedSkyDirList* SkyImage::get_wsdl(unsigned int layer)
+BaseWeightedSkyDirList SkyImage::get_wsdl(unsigned int layer)
 {
     checkLayer(layer);
     int offset = m_naxis1* m_naxis2 * layer;
 
-    BaseWeightedSkyDirList* rvals=new BaseWeightedSkyDirList();
+    BaseWeightedSkyDirList rvals;
 
     for( size_t k = 0; k< (unsigned int)(m_naxis1)*(m_naxis2); ++k){
         double 
             x = static_cast<int>(k%m_naxis1)+0 + m_ax1_offset, // wcs is 1-indexed
             y = static_cast<int>(k/m_naxis1)+0 + m_ax2_offset;
         if( m_wcs->testpix2sph(x,y)==0) {
-            astro::SkyDir* dir = new astro::SkyDir(x,y, *m_wcs);
+            astro::SkyDir dir(x,y, *m_wcs);
             float layer_val = m_imageData[offset + k];
-            rvals->push_back(*new skymaps::WeightedSkyDir(*dir,layer_val));
+            skymaps::WeightedSkyDir wsd(dir,layer_val);
+            rvals.push_back(wsd);
         }
     }
     return rvals;
