@@ -151,7 +151,7 @@ public:
 
     /** @brief Returns a vector of SkyDirs for all the valid pixels in the image.
      */
-    skymaps::BaseWeightedSkyDirList* get_wsdl(unsigned int layer=0);
+    skymaps::BaseWeightedSkyDirList get_wsdl(unsigned int layer=0);
     void set_wsdl(const skymaps::BaseWeightedSkyDirList& wsdl);
 
     /** @brief create new FITS file with different projection, or portion
