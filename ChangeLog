@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: lande  Thu Apr  5 18:17:53 PDT 2012
+ScienceTools-scons/skymaps/src
+
+Modified Files:
+	SkyImage.cxx 
+Log Message:
+fix memory leak in get_wsdl
+    *
+------------------------------------------------------------
+User: lande  Thu Apr  5 18:17:53 PDT 2012
 ScienceTools-scons/skymaps/skymaps
 
 Modified Files:
