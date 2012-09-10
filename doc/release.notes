@@ -7,6 +7,7 @@ $Id$
  --------- -----   --- -----------------------------------------------------------------------
  * EOH *
 
+ skymaps-02-13-00 10-Sep-2012  lande bugfix
  skymaps-02-12-01 19-Jun-2012  lande Fix memory leak
  skymaps-02-12-00 05-Apr-2012  lande fix mem leak
  skymaps-02-11-00 08-Dec-2011    jrb memory leak fix (jrb tagging for Toby)
