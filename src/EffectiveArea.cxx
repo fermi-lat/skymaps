@@ -13,8 +13,6 @@ $Header$
 
 #include "tip/IFileSvc.h"
 #include "tip/Table.h"
-#include "st_facilities/Util.h"
-
 
 namespace{
 
@@ -419,9 +417,7 @@ EffectiveArea::EffectiveArea(std::string irfname, std::string filename)
         std::cerr << "EffectiveArea: could not open " << filename<< "["<<table_name <<"]" << std::endl;
         throw;
     }
-
-    if (st_facilities::Util::isFitsFile(filename)) {
-
+    try{
         const std::string par_table_name("EFFICIENCY_PARS");
         const tip::Table * efficiency_params = tip::IFileSvc::instance().readTable(filename, "EFFICIENCY_PARAMS");
         long nrows;
@@ -450,7 +446,7 @@ EffectiveArea::EffectiveArea(std::string irfname, std::string filename)
              m_haveEfficiencyPars = false;
          };
          delete efficiency_params;
-    } else {
+    }catch(const std::exception& ){
         //std::cerr << "EffectiveArea: could not open " << filename << "[EFFICIENCY_PARAMS]"<<std::endl;
         m_haveEfficiencyPars = false;
     }
