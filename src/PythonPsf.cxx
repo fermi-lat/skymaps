@@ -121,17 +121,17 @@ PythonPsf::PythonPsf(const svd& sigma1_in, const svd& sigma2_in,
                      const svd& gamma1_in, const svd& gamma2_in,
                      const svd& nc_in, const svd& nt_in,
                      const svd& weights_in)
-: sigma1(vec_product(sigma1_in,sigma1_in))
+: sigma1(vec_product(sigma1_in,sigma1_in)) // NB pre-multiplication
 , sigma2(vec_product(sigma2_in,sigma2_in))
 , gamma1(new const svd(gamma1_in))
 , gamma2(new const svd(gamma2_in))
-, nc(vec_product(nc_in,weights_in))
+, nc(vec_product(nc_in,weights_in)) // NB pre-multiplication
 , nt(vec_product(nt_in,weights_in))
 , weights(0)
 , newstyle(true)
-, mysize(sigma1_in.size())
-, result1(new double[mysize])
-, result2(new double[mysize])
+, m_size(sigma1_in.size())
+, m_result1(new double[m_size])
+, m_result2(new double[m_size])
 {}
 
 PythonPsf::PythonPsf(const svd& sigma1_in,
@@ -145,21 +145,21 @@ PythonPsf::PythonPsf(const svd& sigma1_in,
 , nt(0)
 , weights(new const svd(weights_in))
 , newstyle(false)
-, mysize(sigma1_in.size())
-, result1(new double[mysize])
-, result2(0)
+, m_size(sigma1_in.size())
+, m_result1(new double[m_size])
+, m_result2(0)
 {}
 
 PythonPsf::~PythonPsf() {
     delete sigma1;
     delete gamma1;
-    delete[] result1;
+    delete[] m_result1;
     if (newstyle) {
         delete sigma2;
         delete gamma2;
         delete nc;
         delete nt;
-        delete[] result2;
+        delete[] m_result2;
     }
     else{
         delete weights;
@@ -167,19 +167,20 @@ PythonPsf::~PythonPsf() {
 }
 
 void PythonPsf::psf_base(double delta, double* result, svd_cit sit, svd_cit git, svd_cit wit) {
-    for (double* ptr (result); ptr< result + mysize; ++ptr) {
-        double u(0.5*delta*delta/(*sit));
-        double y( (*wit++)*(1-1./(*git)) * pow(1+u/(*git),-(*git)) );
-        *ptr = density?y/(2*M_PI*(*sit)):y;
-        ++sit; ++git;
+    double d(0.5*delta*delta);
+    for (double* ptr (result); ptr< result + m_size; ++ptr,++sit,++wit,++git) {
+        double u(d/(*sit)),g(*git);
+        double f( (1.-1./g)*pow(1.+u/g,-g) );
+        *ptr = (*wit)*f ;
     }
 }
 
 void PythonPsf::int_base(double delta, double* result, svd_cit sit, svd_cit git, svd_cit wit) {
-    for (double* ptr (result); ptr< result + mysize; ++ptr) {
-        double u( 0.5*delta*delta/(*sit++) );
-        *ptr = (*wit++)*(pow(1+u/(*git),1-(*git)));
-        ++git;
+    double d(0.5*delta*delta);
+    for (double* ptr (result); ptr< (result + m_size); ++ptr,++sit,++wit,++git) {
+        double u( d/(*sit) ),g(*git);
+        double f( pow(1.+u/g,1.-g) );
+        *ptr = (*sit)*(*wit)*f;
     }
 }
 
@@ -190,29 +191,29 @@ double PythonPsf::operator() (const astro::SkyDir& sd1, const astro::SkyDir& sd2
 double PythonPsf::operator() (double delta) {
     double result(0);
     if (newstyle) {
-        psf_base(delta,result1,sigma1->begin(),gamma1->begin(),nc->begin());
-        psf_base(delta,result2,sigma2->begin(),gamma2->begin(),nt->begin());
-        for (double* ptr (result2); ptr < (result2 + mysize); ++ptr) result += *ptr;
+        psf_base(delta,m_result1,sigma1->begin(),gamma1->begin(),nc->begin());
+        psf_base(delta,m_result2,sigma2->begin(),gamma2->begin(),nt->begin());
+        for (double* ptr (m_result2); ptr < (m_result2 + m_size); ++ptr) result += *ptr;
     }
     else {
-        psf_base(delta,result1,sigma1->begin(),gamma1->begin(),weights->begin());
+        psf_base(delta,m_result1,sigma1->begin(),gamma1->begin(),weights->begin());
     }
-    for (double* ptr (result1); ptr < (result1 + mysize); ++ptr) result += *ptr;
+    for (double* ptr (m_result1); ptr < (m_result1 + m_size); ++ptr) result += *ptr;
     return result;
 }
 
 double PythonPsf::integral_from_zero(double delta) {
     double result(0);
     if (newstyle) {
-        int_base(delta,result1,sigma1->begin(),gamma1->begin(),nc->begin());
-        int_base(delta,result1,sigma1->begin(),gamma1->begin(),nt->begin());
-        for (double* ptr (result2); ptr < (result2 + mysize); ++ptr) result += *ptr;
+        int_base(delta,m_result1,sigma1->begin(),gamma1->begin(),nc->begin());
+        int_base(delta,m_result2,sigma2->begin(),gamma2->begin(),nt->begin());
+        for (double* ptr (m_result2); ptr < (m_result2 + m_size); ++ptr) result += *ptr;
     }
     else {
-        int_base(delta,result1,sigma1->begin(),gamma1->begin(),weights->begin());
+        int_base(delta,m_result1,sigma1->begin(),gamma1->begin(),weights->begin());
     }
-    for (double* ptr (result1); ptr < (result1 + mysize); ++ptr) result += *ptr;
-    return 1 - result;
+    for (double* ptr (m_result1); ptr < (m_result1 + m_size); ++ptr) result += *ptr;
+    return 1 - (2*M_PI)*result; // 2pi from normalization
 }
 
 double PythonPsf::integral(double dmin, double dmax) {
@@ -285,7 +286,7 @@ void PythonPsf::print_parameters() {
         svd::const_iterator git = gamma1->begin();
         svd::const_iterator wit = weights->begin();
         std::cout << "Sigma   " << "Gamma   " << "Weight" << std::endl;
-        for (int i(0); i < mysize; ++i) {
+        for (int i(0); i < m_size; ++i) {
             std::cout << *sit++ << "  " << *git++ << "  " << *wit++ << std::endl;
         }
     }
