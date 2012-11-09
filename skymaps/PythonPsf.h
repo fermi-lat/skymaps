@@ -21,11 +21,13 @@ namespace skymaps {
 class PythonPsf
 {
 public:
+    // constructor for King function mixture
     PythonPsf(const svd& sigma1, const svd& sigma2,
               const svd& gamma1, const svd& gamma2,
               const svd& nc, const svd& nt,
               const svd& weights);
 
+    // constructor for single King function
     PythonPsf(const svd& sigma1_in,
               const svd& gamma1_in,
               const svd& weights_in);
@@ -53,7 +55,7 @@ public:
 private:
     static bool density;
     
-    const svd* sigma1;
+    const svd* sigma1; // storage for the parameters (in incidence angle)
     const svd* sigma2;
     const svd* gamma1;
     const svd* gamma2;
@@ -63,10 +65,10 @@ private:
     
     bool newstyle;
     
-    const int mysize;
+    const size_t m_size;
 
-    double* result1;
-    double* result2;
+    double* m_result1; // buffers for moving results internally
+    double* m_result2; // one for each King function, if using two
 
     void psf_base(double delta, double* result, svd_cit sit, svd_cit git, svd_cit wit);
     void int_base(double delta, double* result, svd_cit sit, svd_cit git, svd_cit wit);
