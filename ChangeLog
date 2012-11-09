@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: kerrm  Thu Nov  8 18:31:41 PST 2012
+skymaps/skymaps
+
+Modified Files:
+	PythonPsf.h 
+Log Message:
+Some changes to fix PSF, clean up code.
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-09-30-01, operation: add
 Package: skymaps
