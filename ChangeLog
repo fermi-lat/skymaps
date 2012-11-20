@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: kerrm  Tue Nov 20 15:41:41 PST 2012
+skymaps/skymaps
+
+Modified Files:
+	PythonPsf.h 
+Log Message:
+Change PythonPsf integral interface to match Python version.
+
+    *
+------------------------------------------------------------
 User: kerrm  Thu Nov  8 18:31:42 PST 2012
 skymaps/src
 
