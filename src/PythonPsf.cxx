@@ -97,7 +97,7 @@ public:
         double c(cos(x));
         double r2( sqrt(m_rr_sq + m_off*m_off*(c*c - 1)) );
         double de( m_off*c - r2 );
-        return m_psf->integral(de,de+2*r2);
+        return m_psf->integral(de+2*r2,de);
     }
     double calculate() { return quad(0,m_ulimit)/M_PI; }
 
@@ -216,7 +216,7 @@ double PythonPsf::integral_from_zero(double delta) {
     return 1 - (2*M_PI)*result; // 2pi from normalization
 }
 
-double PythonPsf::integral(double dmin, double dmax) {
+double PythonPsf::integral(double dmax, double dmin) {
     if (dmin==0.) {return integral_from_zero(dmax);}
     return integral_from_zero(dmax) - integral_from_zero(dmin);
 }
