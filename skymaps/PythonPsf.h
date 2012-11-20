@@ -36,7 +36,7 @@ public:
 
     double operator() (const astro::SkyDir& sd1, const astro::SkyDir& sd2);
     double operator() (double delta);
-    double integral(double dmin, double dmax);
+    double integral(double dmax, double dmin=0);
     double integral_from_zero(double delta);
     double inverse_integral_on_axis(double frac);
     double overlap_circle(const astro::SkyDir& center, double radius, const astro::SkyDir& src_pos);
