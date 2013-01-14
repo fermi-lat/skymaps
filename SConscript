@@ -33,7 +33,7 @@ progEnv.Tool('registerTargets',
              package = package,
              includes = listFiles([package+'/*.h']),
              libraryCxts = [[lib, libEnv]],
-             testAppCxts = [[testapp, progEnv]],
+             ##  testAppCxts = [[testapp, progEnv]],
              data = ['data/LivetimeCubeTemplate', 'data/aeff_P6_v1_diff_front.fits'],
              swigLibraryCxts = [[pyLib, swigEnv]],
              python = ['src/skymaps.py']
