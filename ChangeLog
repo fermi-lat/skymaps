@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: jrb  Mon Jan 14 11:52:38 PST 2013
+ScienceTools-scons/skymaps
+
+Modified Files:
+	SConscript 
+Log Message:
+do not build test program; it fails everywhere anyway
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-09-31-01, operation: add
 Package: skymaps
