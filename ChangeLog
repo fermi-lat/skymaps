@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Thu Mar  7 13:22:47 PST 2013
+skymaps/src
+
+Modified Files:
+	swig_setup.i 
+Log Message:
+add link to PointingTransform
+    *
+------------------------------------------------------------
 User: burnett  Thu Mar  7 13:22:15 PST 2013
 skymaps/src
 
