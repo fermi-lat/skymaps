@@ -39,9 +39,11 @@
 #include "astro/JulianDate.h"
 #include "astro/SolarSystem.h"
 #include "astro/GPS.h"
+// new!
+#include "astro/PointingTransform.h"
 
 #include "healpix/Healpix.h"
-#include "healpix/HealPixel.h"
+#include "healpix/HealPixel.h" 
 #include "healpix/HealpixMap.h"
 
 #include "skymaps/SkyImage.h"
