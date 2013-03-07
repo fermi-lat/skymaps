@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Thu Mar  7 13:22:15 PST 2013
+skymaps/src
+
+Modified Files:
+	SkySpectrum.cxx 
+Log Message:
+add vector_value function
+    *
+------------------------------------------------------------
 User: burnett  Thu Mar  7 13:22:14 PST 2013
 skymaps/skymaps
 
