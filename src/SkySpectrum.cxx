@@ -143,3 +143,11 @@ void SkySpectrum::setName(const std::string& name)
     m_name = name;
 }
     
+std::vector<double> SkySpectrum::vector_value(const astro::SkyDir& dir, std::vector<double>& energies)const
+{
+    std::vector<double> rvals;
+    for (std::vector<double>::const_iterator it = energies.begin(); it != energies.end(); ++it) {
+        rvals.push_back(value(dir,*it));
+    }
+    return rvals;
+}

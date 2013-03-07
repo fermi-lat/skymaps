@@ -8,6 +8,7 @@ $Header$
 #define skymaps_SkySpectrum_h
 
 #include "astro/SkyFunction.h"
+#include <vector>
 
 namespace skymaps {
     class Band; // forward declaration
@@ -34,6 +35,10 @@ public:
     ///@brief return differential value 
     ///@param e energy in MeV
     virtual double value(const astro::SkyDir& dir, double e)const=0;
+	
+	///@brief evaluate for a set of energies
+	///@param energies list of energies
+    std::vector<double> vector_value(const astro::SkyDir& dir, std::vector<double>& energies)const;
 
     ///@brief use a band to select interval. A subclass can use it to select subclass
     /// base class implemention integrates over band
