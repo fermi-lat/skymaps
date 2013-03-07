@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Thu Mar  7 13:22:14 PST 2013
+skymaps/skymaps
+
+Modified Files:
+	SkySpectrum.h 
+Log Message:
+add vector_value function
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-09-31-02, operation: add
 Package: skymaps
