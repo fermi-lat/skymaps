@@ -1,5 +1,98 @@
 ------------------------------------------------------------
 TAG
+Tag name: ScienceTools-09-35-00, operation: add
+Package: skymaps
+User: jchiang  Mon Jan  5 22:46:30 2015
+Files:
+  skymaps/.cvsignore  1.2
+  skymaps/ChangeLog  1.1123
+  skymaps/SConscript  1.130
+  skymaps/skymapsLib.py  1.8
+  skymaps/cmt/.cvsignore  1.1.1.1
+  skymaps/cmt/requirements  1.108
+  skymaps/data/LivetimeCubeTemplate  1.1
+  skymaps/data/aeff_P6_v1_diff_front.fits  1.1
+  skymaps/doc/release.notes  1.124
+  skymaps/python/.cvsignore  1.1
+  skymaps/skymaps/BinnedPhotonData.h  1.21
+  skymaps/skymaps/PsfSkySpectrum.h  1.1
+  skymaps/skymaps/PsfFunction.h  1.3
+  skymaps/skymaps/HealpixDiffuseFunc.h  1.4
+  skymaps/skymaps/GtiBase.h  1.2
+  skymaps/skymaps/CompositeSkySpectrum.h  1.2
+  skymaps/skymaps/Band.h  1.28
+  skymaps/skymaps/PsfSkyFunction.h  1.4
+  skymaps/skymaps/EffectiveArea.h  1.5
+  skymaps/skymaps/LivetimeCube.h  1.11
+  skymaps/skymaps/Gti.h  1.2
+  skymaps/skymaps/PythonPsf.h  1.4
+  skymaps/skymaps/Background.h  1.15
+  skymaps/skymaps/Convolution.h  1.2
+  skymaps/skymaps/SmoothedSkySpectrum.h  1.1
+  skymaps/skymaps/ExposureWeighter.h  1.1
+  skymaps/skymaps/PythonUtilities.h  1.6
+  skymaps/skymaps/DiffuseFunction.h  1.3
+  skymaps/skymaps/Exposure.h  1.11
+  skymaps/skymaps/PySkySpectrum.h  1.1
+  skymaps/skymaps/SkyImageSpectrum.h  1.1
+  skymaps/skymaps/WeightedSkyDir.h  1.2
+  skymaps/skymaps/SkySpectrum.h  1.4
+  skymaps/skymaps/ComplexSkySpectrum.h  1.1
+  skymaps/skymaps/PySkyFunction.h  1.3
+  skymaps/skymaps/CompositeSkyFunction.h  1.1
+  skymaps/skymaps/PhotonMap.h  1.8
+  skymaps/skymaps/IsotropicConstant.h  1.1
+  skymaps/skymaps/SkyIntegrator.h  1.3
+  skymaps/skymaps/IParams.h  1.12
+  skymaps/skymaps/BandBackground.h  1.1
+  skymaps/skymaps/SkyImage.h  1.12
+  skymaps/skymaps/IsotropicSpectrum.h  1.4
+  skymaps/skymaps/PhotonBinner.h  1.11
+  skymaps/skymaps/IsotropicPowerLaw.h  1.2
+  skymaps/skymaps/SpectralFunction.h  1.4
+  skymaps/src/SkyIntegrator.cxx  1.5
+  skymaps/src/ExposureWeighter.cxx  1.2
+  skymaps/src/BandBackground.cxx  1.1
+  skymaps/src/IsotropicConstant.cxx  1.2
+  skymaps/src/Background.cxx  1.16
+  skymaps/src/IsotropicSpectrum.cxx  1.3
+  skymaps/src/PythonUtilities.cxx  1.13
+  skymaps/src/PsfFunction.cxx  1.3
+  skymaps/src/WeightedSkyDir.cxx  1.1
+  skymaps/src/PySkySpectrum.cxx  1.2
+  skymaps/src/Band.cxx  1.27
+  skymaps/src/Exposure.cxx  1.10
+  skymaps/src/DiffuseFunction.cxx  1.8
+  skymaps/src/IParams.cxx  1.20
+  skymaps/src/EffectiveArea.cxx  1.13
+  skymaps/src/PythonPsf.cxx  1.6
+  skymaps/src/SkyImage.cxx  1.21
+  skymaps/src/PsfSkySpectrum.cxx  1.1
+  skymaps/src/CompositeSkyFunction.cxx  1.1
+  skymaps/src/GtiBase.cxx  1.2
+  skymaps/src/PySkyFunction.cxx  1.4
+  skymaps/src/Gti.cxx  1.2
+  skymaps/src/swig_setup.i  1.18
+  skymaps/src/SpectralFunction.cxx  1.7
+  skymaps/src/CompositeSkySpectrum.cxx  1.2
+  skymaps/src/PsfSkyFunction.cxx  1.3
+  skymaps/src/mainpage.h  1.2
+  skymaps/src/PhotonBinner.cxx  1.17
+  skymaps/src/HealpixDiffuseFunc.cxx  1.2
+  skymaps/src/SkyImageSpectrum.cxx  1.1
+  skymaps/src/ComplexSkySpectrum.cxx  1.1
+  skymaps/src/BinnedPhotonData.cxx  1.36
+  skymaps/src/LivetimeCube.cxx  1.16
+  skymaps/src/IsotropicPowerLaw.cxx  1.2
+  skymaps/src/SkySpectrum.cxx  1.4
+  skymaps/src/Convolution.cxx  1.7
+  skymaps/src/PhotonMap.cxx  1.11
+  skymaps/src/SmoothedSkySpectrum.cxx  1.1
+  skymaps/src/test/test_main.cxx  1.31
+
+    *
+------------------------------------------------------------
+TAG
 Tag name: ScienceTools-09-34-03, operation: add
 Package: skymaps
 User: glastrm  Mon Sep 29 21:15:18 2014
