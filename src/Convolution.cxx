@@ -10,7 +10,10 @@ $Header$
 #include "healpix/HealPixel.h"
 #include "skymaps/PsfFunction.h"
 #include "skymaps/IParams.h"
-#include "healpix/base/alm_filter_tools.h"
+
+// EAC, update include path
+#include "healpix/alm_filter_tools.h"
+
 #include <map>
 
 #include <iostream>
