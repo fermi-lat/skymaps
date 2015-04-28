@@ -386,7 +386,7 @@ double EffectiveArea::EfficiencyParameter::operator()(double logE)const{
 std::string EffectiveArea::s_CALDB;
 void EffectiveArea::set_CALDB(std::string CALDB){ s_CALDB=CALDB;}
 
-EffectiveArea::EffectiveArea(std::string irfname, std::string filename)
+EffectiveArea::EffectiveArea(std::string irfname, std::string filename, std::string table_name)
 : m_simple(false)
 , m_aeffTable(0)
 {
@@ -409,7 +409,8 @@ EffectiveArea::EffectiveArea(std::string irfname, std::string filename)
         filename = std::string(s_CALDB+"/bcf/ea/aeff_"+irfname+".fits");
     }
     m_cache.clear();
-    static std::string table_name("EFFECTIVE AREA");
+    // Now from arg
+    // static std::string table_name("EFFECTIVE AREA");
     try{
         //const tip::Table * table = tip::IFileSvc::instance().readTable(infile, table_name, "");
         m_aeffTable = new FitsTable(filename, table_name, "EFFAREA" );

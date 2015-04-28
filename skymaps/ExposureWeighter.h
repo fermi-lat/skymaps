@@ -26,7 +26,8 @@ class LivetimeCube;
 class ExposureWeighter {
 public:
 
-    ExposureWeighter(const std::string& faeff_str, const std::string& baeff_str, const std::string& livetimefile);
+    ExposureWeighter(const std::string& faeff_str, const std::string& baeff_str, const std::string& livetimefile, 
+        std::string fname="EFFECTIVE AREA", std::string bname="EFFECTIVE AREA");
 
     ~ExposureWeighter();
 

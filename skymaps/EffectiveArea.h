@@ -34,8 +34,9 @@ namespace skymaps {
         ///@param irfname name of irf, e.g. P6_v1_diff_front. Special value "simple" returns linear functionl Otherwise
         ///      the name is env('CALDB')/bcf/ea/aeff_<irfname>.fits 
         ///@param filename name of explicit file, if irfname not specified
+        ///@param table_name Name of the HDU. Default EFFECTIVE_AREA for old IRF format, 
         ///
-        EffectiveArea(std::string irfname="", std::string filename="");
+        EffectiveArea(std::string irfname="", std::string filename="", std::string table_name="EFFECTIVE AREA");
         ~EffectiveArea();
 
         ///@brief return a value 
