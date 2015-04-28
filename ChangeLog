@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Tue Apr 28 16:05:50 PDT 2015
+skymaps/skymaps
+
+Modified Files:
+	EffectiveArea.h ExposureWeighter.h 
+Log Message:
+allow for new IRF format in psf, aeff
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-10-00-04, operation: add
 Package: skymaps
