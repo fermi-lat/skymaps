@@ -11,9 +11,10 @@ $Header$
 
 using namespace skymaps;
 
-ExposureWeighter::ExposureWeighter(const std::string& faeff_str, const std::string& baeff_str, const std::string& livetimefile) :
-m_faeff(new EffectiveArea("",faeff_str)),
-m_baeff(new EffectiveArea("",baeff_str))
+ExposureWeighter::ExposureWeighter(const std::string& faeff_str, const std::string& baeff_str, const std::string& livetimefile,
+    std::string fname, std::string bname) :
+m_faeff(new EffectiveArea("",faeff_str, fname)),
+m_baeff(new EffectiveArea("",baeff_str, bname))
 {
     if (livetimefile.empty()) {
         m_uselt = false;
