@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Tue Apr 28 16:05:52 PDT 2015
+skymaps/src
+
+Modified Files:
+	EffectiveArea.cxx ExposureWeighter.cxx 
+Log Message:
+allow for new IRF format in psf, aeff
+    *
+------------------------------------------------------------
 User: burnett  Tue Apr 28 16:05:50 PDT 2015
 skymaps/skymaps
 
