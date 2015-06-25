@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: burnett  Thu Jun 25 11:00:17 PDT 2015
+skymaps/src
+
+Modified Files:
+	PhotonBinner.cxx 
+Log Message:
+implement PSF event type
+    *
+------------------------------------------------------------
+User: burnett  Thu Jun 25 11:00:17 PDT 2015
 skymaps/skymaps
 
 Modified Files:
