@@ -96,9 +96,9 @@ PhotonBinner::PhotonBinner(const std::vector<double>& bins)
 }
 
 PhotonBinner::PhotonBinner(const std::vector<double>&edges, const std::vector<int>&f_nside, const std::vector<int>&b_nside)
-: m_user_nside(true)
+: m_user_nside(true), m_psf_event_types(false)
 {
-    std::copy(edges.begin(), edges.end(), std::back_insert_iterator<std::vector<double> >(m_bins));
+    std::copy(edges.begin(), edges.end(), std::back_insert_iterator<std::vector<double> > (m_bins));
     std::copy(f_nside.begin(), f_nside.end(), std::back_insert_iterator<std::vector<int> >(m_fnside));
     std::copy(b_nside.begin(), b_nside.end(), std::back_insert_iterator<std::vector<int> >(m_bnside));
     if (m_bins.front() > 0) {
@@ -110,6 +110,33 @@ PhotonBinner::PhotonBinner(const std::vector<double>&edges, const std::vector<in
         m_bins.push_back(infinite);
         m_fnside.push_back(max_nside);
         m_bnside.push_back(max_nside);
+    }
+}
+// New ctor with event_types
+PhotonBinner::PhotonBinner(const std::vector<double>&edges, 
+            const std::vector<int>&psf0_nside, const std::vector<int>&psf1_nside,
+            const std::vector<int>&psf2_nside, const std::vector<int>&psf3_nside)
+: m_user_nside(true), m_psf_event_types(true)
+{
+    std::copy(edges.begin(), edges.end(), std::back_insert_iterator<std::vector<double> >(m_bins));
+    std::copy(psf0_nside.begin(), psf0_nside.end(), std::back_insert_iterator<std::vector<int> >(m_psf0_nside));
+    std::copy(psf1_nside.begin(), psf1_nside.end(), std::back_insert_iterator<std::vector<int> >(m_psf1_nside));
+    std::copy(psf2_nside.begin(), psf2_nside.end(), std::back_insert_iterator<std::vector<int> >(m_psf2_nside));
+    std::copy(psf3_nside.begin(), psf3_nside.end(), std::back_insert_iterator<std::vector<int> >(m_psf3_nside));
+    
+    if (m_bins.front() > 0) {
+        m_bins.insert(m_bins.begin(),0);
+        m_psf0_nside.insert(m_psf0_nside.begin(),min_nside);
+        m_psf1_nside.insert(m_psf1_nside.begin(),min_nside);
+        m_psf2_nside.insert(m_psf2_nside.begin(),min_nside);
+        m_psf3_nside.insert(m_psf3_nside.begin(),min_nside);
+    }
+    if (m_bins.back() < infinite) {
+        m_bins.push_back(infinite);
+        m_psf0_nside.push_back(max_nside);
+        m_psf1_nside.push_back(max_nside);
+        m_psf2_nside.push_back(max_nside);
+        m_psf3_nside.push_back(max_nside);
     }
 }
 
@@ -124,19 +151,40 @@ PhotonBinner::PhotonBinner(double emin, double ratio, int bins)
     setupbins();
 }
 
+int  PhotonBinner::event_type_index(int event_type)const
+{
+    if (!m_user_nside) return -1; // invalid call?
+    if (!m_psf_event_types) return event_type && 1;
+    if (event_type && 4) return 2;
+    if (event_type && 8) return 3;
+    if (event_type && 16) return 4;
+    if (event_type && 32) return 5;
+}
+
 
 skymaps::Band PhotonBinner::operator()(const astro::Photon& p)const
 {
     double energy ( p.energy() );
     if( energy>=infinite) energy=0.9999 * infinite;
-
-    int event_class (  p.eventClass() );
+    // note that event_class here is really event_type
+    int event_class (  p.eventClass() && 1 ); // mask off 
     if( event_class<0 || event_class>15) event_class=0; // should not happen?
+    
 
     if (m_user_nside) {
+        event_class = event_type_index(p.eventClass()); // an index 0,1,2,3,4,5 
         std::vector<double>::const_iterator it = std::lower_bound(m_bins.begin(), m_bins.end(), energy, std::less<double>());
-        int nside(event_class==0?m_fnside[it - m_bins.begin() -1]:m_bnside[it - m_bins.begin() -1]);
-        return Band(nside,event_class,*(it-1),*(it),0,0);
+        int ebin(it - m_bins.begin() -1);//energy bin index
+        int nside(event_class==0?m_fnside[ebin]:m_bnside[ebin]);
+        switch(event_class){   //ugly code -- should be a simple lookup :-(
+            case 0: nside= m_fnside[ebin];
+            case 1: nside= m_bnside[ebin];
+            case 2: nside= m_psf0_nside[ebin];
+            case 3: nside= m_psf1_nside[ebin];
+            case 4: nside= m_psf2_nside[ebin];
+            case 5: nside= m_psf3_nside[ebin];
+        }
+        return Band(nside, event_class, *(it-1), *(it), 0, 0);
     }
     // setup for old-style levels, with sigma and gamma for the given energy
 
