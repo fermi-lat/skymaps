@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Thu Jun 25 11:00:17 PDT 2015
+skymaps/skymaps
+
+Modified Files:
+	PhotonBinner.h 
+Log Message:
+implement PSF event type
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-10-00-05, operation: add
 Package: skymaps
