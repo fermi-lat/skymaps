@@ -39,6 +39,15 @@
 #include "astro/JulianDate.h"
 #include "astro/SolarSystem.h"
 #include "astro/GPS.h"
+
+// The following four includes are needed when building skymaps
+// directly from scratch since our usage of SCons does not recursively
+// search header files for dependencies.
+#include "facilities/Observer.h"
+#include "facilities/Scheduler.h"
+#include "astro/IGRF_data.h"
+#include "astro/PointingInfo.h"
+
 // new!
 #include "astro/PointingTransform.h"
 
