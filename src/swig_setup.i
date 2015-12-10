@@ -32,7 +32,11 @@
 #include <utility>
 #include <assert.h>
 
+// EAC, include the sub-classes of ProjBase
 #include "astro/SkyDir.h"
+#include "astro/ProjBase.h"
+#include "astro/HealpixProj.h"
+#include "astro/SkyProj.h"
 #include "astro/EarthCoordinate.h"
 #include "astro/Photon.h"
 #include "astro/IGRField.h"
@@ -52,7 +56,7 @@
 #include "astro/PointingTransform.h"
 
 #include "healpix/Healpix.h"
-#include "healpix/HealPixel.h" 
+#include "healpix/HealPixel.h"
 #include "healpix/HealpixMap.h"
 
 #include "skymaps/SkyImage.h"
@@ -217,6 +221,9 @@ def __str__(self):  return ('HepRotation:'+ 3* ('\n\t'+3*'%9.5f')) % tuple([self
    size_t __len__() {return self->size();}
    void __setitem__(int i, double v){ (*self)[i] = v;}
 }  
+// EAC, include the sub-classes of ProjBase
+%include astro/ProjBase.h
+%include astro/HealpixProj.h
 %include astro/SkyProj.h
 %include astro/SkyDir.h
 %include astro/Photon.h
