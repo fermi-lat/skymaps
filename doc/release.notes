@@ -7,6 +7,7 @@ $Id$
  --------- -----   --- -----------------------------------------------------------------------
  * EOH *
 
+ skymaps-02-16-00 09-Dec-2015 echarles Replace SkyProj with ProjBase
  skymaps-02-15-01 08-Jul-2015 jchiang fix for STGEN-160: enabling skymaps to be built without first separately building astro
  skymaps-02-15-00 29-Apr-2015 burnett Fixes for new IRF format
  skymaps-02-14-02 27-Mar-2015 echarles Update include path for healpix/alm_filter_tools.h
