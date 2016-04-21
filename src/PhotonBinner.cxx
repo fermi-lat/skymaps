@@ -7,7 +7,6 @@ $Header$
 #include "skymaps/PhotonBinner.h"
 #include "skymaps/Band.h"
 #include "skymaps/IParams.h"
-#include "astro/Photon.h"
 #include <algorithm>
 #include <functional>
 #include <map>
@@ -15,6 +14,8 @@ $Header$
 #include <iostream>
 #include <iomanip>
 #include <iterator>
+#include <sstream>
+
 using namespace skymaps;
 
 namespace {
@@ -47,6 +48,19 @@ std::vector<double> PhotonBinner::s_fenergy(front_list,front_list+sizeof(front_l
 std::vector<double> PhotonBinner::s_benergy(back_list,  back_list+sizeof(back_list)/sizeof(double));
 std::vector<double> PhotonBinner::s_gamma_level(gamma_list,gamma_list+14);
 std::vector<double> PhotonBinner::s_sigma_level(sigma_list,sigma_list+14);
+
+//static list of event type names
+static std::string PhotonBinner::s_event_type_names[] = {"front","back","PSF0","PSF1","PSF2","PSF3"};
+
+std::string PhotonBinner::event_type_name(int index)
+{
+	if (index<0){
+		return "None";
+	}else{
+		return s_event_type_names[index];
+	}
+}
+
 
 //minimum nside (default 1 is base Healpix pixelization)
 unsigned int PhotonBinner::min_nside(1);
@@ -112,7 +126,7 @@ PhotonBinner::PhotonBinner(const std::vector<double>&edges, const std::vector<in
         m_bnside.push_back(max_nside);
     }
 }
-// New ctor with event_types
+// New ctor with PSF event_types
 PhotonBinner::PhotonBinner(const std::vector<double>&edges, 
             const std::vector<int>&psf0_nside, const std::vector<int>&psf1_nside,
             const std::vector<int>&psf2_nside, const std::vector<int>&psf3_nside)
@@ -153,38 +167,68 @@ PhotonBinner::PhotonBinner(double emin, double ratio, int bins)
 
 int  PhotonBinner::event_type_index(int event_type)const
 {
-    if (!m_user_nside) return -1; // invalid call?
-    if (!m_psf_event_types) return event_type && 1;
-    if (event_type && 4) return 2;
-    if (event_type && 8) return 3;
-    if (event_type && 16) return 4;
-    if (event_type && 32) return 5;
+	//This should be fine in any case...
+    //if (!m_user_nside) return -1; // invalid call?
+	if (event_type <0) return -1; // Used as default some places. If it's invalid in a particular context, deal with it there.
+    if (!m_psf_event_types) return event_type & 1;
+    if (event_type & 4) return 2;
+    if (event_type & 8) return 3;
+    if (event_type & 16) return 4;
+    if (event_type & 32) return 5;
+#if 1
+    std::stringstream s;
+    s << "Bad event_type : "<< event_type ;
+    throw std::runtime_error(s.str());
+#else
+    throw std::runtime_error("Bad event type");
+#endif
 }
 
 
-skymaps::Band PhotonBinner::operator()(const astro::Photon& p)const
+int count(100);
+
+skymaps::Band PhotonBinner::operator()(const skymaps::Photon& p)const
 {
     double energy ( p.energy() );
     if( energy>=infinite) energy=0.9999 * infinite;
-    // note that event_class here is really event_type
-    int event_class (  p.eventClass() && 1 ); // mask off 
-    if( event_class<0 || event_class>15) event_class=0; // should not happen?
-    
+    int event_type = event_type_index(p.event_type()); // an index 0,1,2,3,4,5
+										  // note: for front/back, event_type() *should* always be = to eventClass()...
+   
 
     if (m_user_nside) {
-        event_class = event_type_index(p.eventClass()); // an index 0,1,2,3,4,5 
         std::vector<double>::const_iterator it = std::lower_bound(m_bins.begin(), m_bins.end(), energy, std::less<double>());
         int ebin(it - m_bins.begin() -1);//energy bin index
-        int nside(event_class==0?m_fnside[ebin]:m_bnside[ebin]);
-        switch(event_class){   //ugly code -- should be a simple lookup :-(
-            case 0: nside= m_fnside[ebin];
-            case 1: nside= m_bnside[ebin];
-            case 2: nside= m_psf0_nside[ebin];
-            case 3: nside= m_psf1_nside[ebin];
-            case 4: nside= m_psf2_nside[ebin];
-            case 5: nside= m_psf3_nside[ebin];
+        int nside; 
+        if (!m_psf_event_types) {
+            nside = event_type==0?m_fnside[ebin]:m_bnside[ebin];
+            if (count-- >0){
+              std::cout << "event_type, ebin " << p.eventClass() <<" "<< event_type <<" "<< nside<<" " << std::endl;
+            }
         }
-        return Band(nside, event_class, *(it-1), *(it), 0, 0);
+        else {
+            //nside = 25; event_type=0; //What's this for?
+            switch(event_type){   //ugly code -- should be a simple lookup :-(
+                case 2: nside= m_psf0_nside[ebin];break;
+                case 3: nside= m_psf1_nside[ebin];break;
+                case 4: nside= m_psf2_nside[ebin];break;
+                case 5: nside= m_psf3_nside[ebin];break;
+#if 1 //don't know why this does not compile
+				default:
+                    nside=0;
+			        std::stringstream s;
+                    s << "Bad event_type index, event_type: "<< event_type <<" "<<p.eventClass();
+                    throw std::runtime_error(s.str());
+					break;
+#else
+                throw std::runtime_error("Bad event type index");
+#endif
+
+            }
+            if (count-- >0){
+                std::cout << "event_type, ebin " << p.event_type() << " "<<event_type <<" "<< nside<<" " << std::endl;
+                }
+        }
+        return Band(nside, event_type, *(it-1), *(it), 0, 0);
     }
     // setup for old-style levels, with sigma and gamma for the given energy
 
@@ -199,13 +243,13 @@ skymaps::Band PhotonBinner::operator()(const astro::Photon& p)const
         double ebar = sqrt(elow*ehigh);
 
         //  set sigma/gamma from CALDB; nside inversion prop to sigma
-        sigma = IParams::sigma(ebar,event_class);
-        gamma = IParams::gamma(ebar,event_class);
+        sigma = IParams::sigma(ebar,event_type);
+        gamma = IParams::gamma(ebar,event_type);
         nside = m_sigma_scale/sigma;
         nside=nside>max_nside?max_nside:nside;
         nside=nside<min_nside?min_nside:nside;
     }else{
-        const std::vector<double>& elist ( event_class<=0? s_fenergy : s_benergy );
+        const std::vector<double>& elist ( event_type<=0? s_fenergy : s_benergy );
 
         std::vector<double>::const_iterator it=
             std::lower_bound(elist.begin(), elist.end(), energy, std::less<double>());
@@ -216,21 +260,34 @@ skymaps::Band PhotonBinner::operator()(const astro::Photon& p)const
         ehigh = elist[level+1];
         nside = 1<<level;
 	}
-    return  Band(nside, event_class, elow, ehigh, sigma, gamma);
+    return  Band(nside, event_type, elow, ehigh, sigma, gamma);
 }
 
-int PhotonBinner::get_band_key(const astro::Photon& p)
+int PhotonBinner::get_band_key(const skymaps::Photon& p)
 {
 	double energy(p.energy());
 	if(energy>=infinite) energy=0.9999 * infinite;
-	int event_class(p.eventClass());
-	if( event_class<0 || event_class >15) event_class = 0;
+	int event_type = event_type_index(p.event_type());
+	if( event_type<0 || event_type >15) event_type = 0; //Not sure what the point is here, but likely not relevant anymore... - EEW
 
     if (m_user_nside) {
 		//Expect this to be a rare use case, just make the Band to get the key
+		//Not rare anymore: This is the default mode for the dataman python interface,
+		//and currently the only way to get the PSF-based event types. - EEW
         std::vector<double>::const_iterator it = std::lower_bound(m_bins.begin(), m_bins.end(), energy, std::less<double>());
-        int nside(event_class==0?m_fnside[it - m_bins.begin() -1]:m_bnside[it - m_bins.begin() -1]);
-        return int(Band(nside,event_class,*(it-1),*(it),0,0));
+		int nside;
+		
+		if(!m_psf_event_types){
+			//Front/Back should be 1/2 for pass 8?
+            nside = event_type==0?m_fnside[it - m_bins.begin() -1]:m_bnside[it - m_bins.begin() -1];
+		}else{
+			if(event_type==2) nside=m_psf0_nside[it - m_bins.begin() -1];
+			if(event_type==3) nside=m_psf1_nside[it - m_bins.begin() -1];
+			if(event_type==4) nside=m_psf2_nside[it - m_bins.begin() -1];
+			if(event_type==5) nside=m_psf3_nside[it - m_bins.begin() -1];
+		}
+
+        return int(Band(nside,event_type,*(it-1),*(it),0,0));
     }	
 	double elow;
     if( m_bins_per_decade>0){
@@ -238,14 +295,14 @@ int PhotonBinner::get_band_key(const astro::Photon& p)
 			std::lower_bound(m_bins.begin(), m_bins.end(), energy, std::less<double>());
         elow = *(it-1);
     }else{
-        const std::vector<double>& elist ( event_class<=0? s_fenergy : s_benergy );
+        const std::vector<double>& elist ( event_type<=0? s_fenergy : s_benergy );
 
         std::vector<double>::const_iterator it=
             std::lower_bound(elist.begin(), elist.end(), energy, std::less<double>());
         int level ( it-elist.begin()-1);
 		elow = elist[level];
 	}
-	int key (event_class + 10*static_cast<int>(elow+.5));
+	int key (event_type + 10*static_cast<int>(elow+.5));
 	return key;
 }
 
@@ -279,5 +336,4 @@ void PhotonBinner::setupbins() {
     }
 #endif
 }
-
 

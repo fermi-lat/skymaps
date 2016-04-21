@@ -13,9 +13,6 @@ $Header$
 #include "skymaps/Gti.h"
 #include <list>
 #include <iostream>
-
-namespace astro {class Photon;}
-
 #include <string>
 
 namespace skymaps {
@@ -50,10 +47,10 @@ namespace skymaps {
         virtual double integral(const astro::SkyDir& dir, double a, double b)const;
 
         ///@brief add a photon to data base according to its energy, event class, and direction
-        void addPhoton(const astro::Photon& gamma, int count=1);
+        void addPhoton(const skymaps::Photon& gamma, int count=1);
 
         ///@brief add a band to set of bands
-        void addBand(const astro::Photon& gamma);
+        void addBand(const skymaps::Photon& gamma);
 
         ///@brief add another BinnedPhotonData object
         /// The corresponding Band objects must be consistent

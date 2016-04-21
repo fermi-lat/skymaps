@@ -38,7 +38,7 @@
 #include "astro/HealpixProj.h"
 #include "astro/SkyProj.h"
 #include "astro/EarthCoordinate.h"
-#include "astro/Photon.h"
+//#include "astro/Photon.h" //included from skymaps/Photon.h below
 #include "astro/IGRField.h"
 #include "astro/JulianDate.h"
 #include "astro/SolarSystem.h"
@@ -92,6 +92,7 @@
 #include "skymaps/PsfSkySpectrum.h"
 #include "skymaps/PythonUtilities.h"
 #include "skymaps/PythonPsf.h"
+#include "skymaps/Photon.h"
 
 #include "CLHEP/Vector/Rotation.h"
 #include "CLHEP/Vector/RotationX.h"
@@ -226,7 +227,7 @@ def __str__(self):  return ('HepRotation:'+ 3* ('\n\t'+3*'%9.5f')) % tuple([self
 %include astro/HealpixProj.h
 %include astro/SkyProj.h
 %include astro/SkyDir.h
-%include astro/Photon.h
+//%include astro/Photon.h //included from skymaps/Photon.h below
 %include astro/IGRField.h
 
 %include astro/JulianDate.h
@@ -273,6 +274,7 @@ def __str__(self):  return ('HepRotation:'+ 3* ('\n\t'+3*'%9.5f')) % tuple([self
 %include skymaps/PsfSkySpectrum.h
 %include skymaps/PythonUtilities.h
 %include skymaps/PythonPsf.h
+%include skymaps/Photon.h
 
 %extend skymaps::BaseWeightedSkyDirList{
 // provide access to the WeightedSKyDir objects as an array

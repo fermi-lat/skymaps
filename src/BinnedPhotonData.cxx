@@ -8,7 +8,6 @@ $Header$
 #include "skymaps/IParams.h"
 
 #include "healpix/HealPixel.h"
-#include "astro/Photon.h"
 
 #include "tip/IFileSvc.h"
 #include "tip/Table.h"
@@ -24,7 +23,6 @@ $Header$
 #include <cstdio>
 
 using astro::SkyDir;
-using astro::Photon;
 
 using namespace skymaps;
 
@@ -112,7 +110,7 @@ BinnedPhotonData::BinnedPhotonData(const std::string & inputFile,  const std::st
             SkyDir sdir(p());
 
             // create its band, using the binner (assuming consistent!)
-            addPhoton( astro::Photon(sdir, energy, time, 0), count);
+            addPhoton( skymaps::Photon(sdir, energy, time, 0), count);
             m_pixels ++;
         }
         delete ptable; 
@@ -223,7 +221,7 @@ BinnedPhotonData::BinnedPhotonData(const std::string & inputFile,  const std::st
     }
 }
 
-void BinnedPhotonData::addPhoton(const astro::Photon& gamma, int count)
+void BinnedPhotonData::addPhoton(const skymaps::Photon& gamma, int count)
 {   
     if(gamma.eventClass()>1) return; //?
 
@@ -273,7 +271,7 @@ void BinnedPhotonData::addPhoton(const astro::Photon& gamma, int count)
     m_photons+= count;
 }
 
-void BinnedPhotonData::addBand(const astro::Photon &gamma) {
+void BinnedPhotonData::addBand(const skymaps::Photon &gamma) {
 
     // create a emmpty band with this photon's properties
     //band newband (m_binner(gamma));
@@ -377,10 +375,11 @@ void BinnedPhotonData::info(std::ostream& out)const
     {
         const Band& band = *it;
         int pixels(band.size()), photons(band.photons());
+		std::string event_type = PhotonBinner::event_type_name(band.event_class());
         out <<std::setw(4) << i
             <<std::setw(7) << int(band.emin()+0.5)
             <<std::setw(8) << int(band.emax()+0.5)
-            <<std::setw(6) << band.event_class()
+            <<std::setw(6) << event_type
             <<std::setw(8) << int(band.sigma()*180/M_PI*3600+0.5) // convert to arcsec
             <<std::setw(8) << band.nside()
             <<std::setw(10)<< pixels

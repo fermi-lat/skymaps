@@ -22,7 +22,6 @@ $Header$
 #include "facilities/commonUtilities.h"
 
 
-#include "astro/Photon.h"
 #include "astro/SkyDir.h"
 
 
@@ -34,7 +33,6 @@ $Header$
 namespace{
 
 }
-using astro::Photon;
 using astro::SkyDir;
 
 using namespace skymaps;
