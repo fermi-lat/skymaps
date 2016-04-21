@@ -1,5 +1,16 @@
 ------------------------------------------------------------
 User: wallacee  Wed Apr 20 17:22:21 PDT 2016
+skymaps/src
+
+Modified Files:
+	BinnedPhotonData.cxx PhotonBinner.cxx swig_setup.i 
+Log Message:
+Enable use of PSF event types in binned data files.
+
+
+    *
+------------------------------------------------------------
+User: wallacee  Wed Apr 20 17:22:21 PDT 2016
 skymaps/skymaps
 
 Modified Files:
