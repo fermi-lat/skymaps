@@ -1,5 +1,16 @@
 ------------------------------------------------------------
 User: wallacee  Wed Apr 20 17:22:21 PDT 2016
+skymaps/src/test
+
+Modified Files:
+	test_main.cxx 
+Log Message:
+Enable use of PSF event types in binned data files.
+
+
+    *
+------------------------------------------------------------
+User: wallacee  Wed Apr 20 17:22:21 PDT 2016
 skymaps/src
 
 Modified Files:
