@@ -34,7 +34,7 @@ namespace skymaps {
 
         /** @brief ctor
             @param nside The HEALpix nside parameter. Total number of pixels will be 12*nside*nside
-            @param event_class The LAT event class number, 0/1 for front/back currently
+            @param event_class Event class index, 0...5 for front, back, PSF0...3
             @param emin,emax energy range
             @param sigma The sigma parameter, a scale factor for the PSF
             @param gamma the power law for the PSF

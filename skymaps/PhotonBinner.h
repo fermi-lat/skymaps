@@ -9,15 +9,14 @@ $Header$
 
 //#include "skymaps/BinnedPhoton.h"
 
-namespace astro {class Photon;}
-//namespace skymaps {class BinnedPhoton;}
 
+//namespace skymaps {class BinnedPhoton;}
 #include <string>
 #include <vector>
 #include <map>
 
-
 #include "skymaps/Band.h"
+#include "skymaps/Photon.h"
 
 namespace skymaps {
     
@@ -63,10 +62,10 @@ namespace skymaps {
 
         virtual ~PhotonBinner(){};
         ///@brief bin a photon by returning an appropriate Band object
-        virtual skymaps::Band operator()(const astro::Photon& photon)const;
+        virtual skymaps::Band operator()(const skymaps::Photon& photon)const;
 		
 		///@brief get the key of the band a photon belongs in
-		int get_band_key(const astro::Photon& photon);
+		int get_band_key(const skymaps::Photon& photon);
         
         //@brief return an index for the event type: 0,1 for front, back, or 2,3,4,5 for PSF0..3 depending value 
         int event_type_index(int event_type)const;
@@ -79,6 +78,11 @@ namespace skymaps {
 
         static void set_sigma_scale(double sigscale);
         static double get_sigma_scale();
+		
+		//@brief return the the name of an event type (front, back, PSF0...3) corresponding to the given index (0...5)
+		static std::string event_type_name(int index); 
+		
+
 
     private:
         /**@brief setupbins  sets up bin to pixel connection with current bin set
@@ -106,9 +110,7 @@ namespace skymaps {
         static unsigned int max_nside;
         static unsigned int min_nside;
         static double m_sigma_scale;
-        
-
-        
+		static std::string s_event_type_names[];
     };
 }
 
