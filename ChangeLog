@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: wallacee  Wed Apr 27 11:48:35 PDT 2016
+skymaps/skymaps
+
+Added Files:
+	Photon.h 
+Log Message:
+Add header for skymaps::Photon
+
+    *
+------------------------------------------------------------
 User: wallacee  Wed Apr 20 17:22:21 PDT 2016
 skymaps/src/test
 
