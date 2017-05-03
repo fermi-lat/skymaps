@@ -139,7 +139,7 @@ BinnedPhotonData::BinnedPhotonData(const std::string & inputFile,  const std::st
             version_number = 1;
         }
 
-        if (version_number < 1 || version_number > 1)
+        if (version_number < 1 || version_number > 2)
         {
             throw std::runtime_error(std::string("BinnedPhotonData:: Invalid input file version."));
         }
@@ -157,14 +157,18 @@ BinnedPhotonData::BinnedPhotonData(const std::string & inputFile,  const std::st
 
         for(tip::Table::ConstIterator itora = table.begin(); itora != table.end(); ++itora)
         {
-            unsigned long nside, event_class, count;
-            double emin, emax, sigma, gamma;
+            //THB unsigned long nside, event_class, count;
+            int nside, event_class, count;
+            
+            double emin, emax, sigma=0, gamma=0;
             (*itora)["NSIDE"].get(nside);
             (*itora)["EVENT_CLASS"].get(event_class);
             (*itora)["EMIN"].get(emin);
             (*itora)["EMAX"].get(emax);
-            (*itora)["SIGMA"].get(sigma);
-            (*itora)["GAMMA"].get(gamma);
+            if( version_number==1){
+                (*itora)["SIGMA"].get(sigma);
+                (*itora)["GAMMA"].get(gamma);
+                }
             (*itora)["COUNT"].get(count);
             Band b(nside, event_class, emin, emax, sigma, gamma);
             push_back(b);
@@ -394,8 +398,8 @@ void BinnedPhotonData::info(std::ostream& out)const
 
 void BinnedPhotonData::write(const std::string & outputFile, bool clobber) const
 {
-
-    int version_number(1); /* Use this number to indicate when the layout of the fits file changes.  This will allow
+    // Set this to 2
+    int version_number(2); /* Use this number to indicate when the layout of the fits file changes.  This will allow
                            the read() function to interpret and input all defined output forrmats. */
 
     if (clobber)
@@ -405,20 +409,20 @@ void BinnedPhotonData::write(const std::string & outputFile, bool clobber) const
             throw std::runtime_error(std::string(" Cannot remove file " + outputFile));
     }
 
-    unsigned int total_pixels(0), total_photons(0);
-
+    //THB unsigned int total_pixels(0), total_photons(0);
+    int total_pixels(0), total_photons(0);
     {
     // First, add header table to the file
     tip::IFileSvc::instance().appendTable(outputFile, band_table);
     tip::Table & table = *tip::IFileSvc::instance().editTable( outputFile, band_table);
-
-    table.appendField("NSIDE", "1V");
-    table.appendField("EVENT_CLASS", "1V");
+    // THB change "1V" back to "1J"
+    table.appendField("NSIDE", "1J");
+    table.appendField("EVENT_CLASS", "1J");
     table.appendField("EMIN", "1D");
     table.appendField("EMAX", "1D");
     table.appendField("SIGMA", "1D");
     table.appendField("GAMMA", "1D");
-    table.appendField("COUNT", "1V"); // Number of pixels in this band
+    table.appendField("COUNT", "1J"); // Number of pixels in this band
     table.setNumRecords(size());
 
     // get iterators for the Table and the Band list
@@ -456,8 +460,8 @@ void BinnedPhotonData::write(const std::string & outputFile, bool clobber) const
     tip::IFileSvc::instance().appendTable(outputFile, pixel_table);
     tip::Table & table = *tip::IFileSvc::instance().editTable( outputFile, pixel_table);
 
-    table.appendField("INDEX", "1V"); // Healpix index for pixel
-    table.appendField("COUNT", "1V"); // Number of photons in this pixel
+    table.appendField("INDEX", "1J"); // Healpix index for pixel
+    table.appendField("COUNT", "1J"); // Number of photons in this pixel
     table.setNumRecords(total_pixels);
 
     // initialize iterator for the Table 
@@ -467,9 +471,9 @@ void BinnedPhotonData::write(const std::string & outputFile, bool clobber) const
     {
         // Output pixel info
         for(std::map<int, int>::const_iterator pitor = band_iterator->begin(); pitor != band_iterator->end(); ++pitor, ++itor)
-        {
-            (*itor)["INDEX"].set(pitor->first);
-            (*itor)["COUNT"].set(pitor->second);
+        { //THB force int
+            (*itor)["INDEX"].set(int(pitor->first));
+            (*itor)["COUNT"].set(int(pitor->second));
         }
     }
 
