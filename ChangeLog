@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Wed May  3 06:52:50 PDT 2017
+skymaps/src
+
+Modified Files:
+	BinnedPhotonData.cxx 
+Log Message:
+implement version 2 with no SIGMA or GAMMA columns
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-11-05-03, operation: add
 Package: skymaps
