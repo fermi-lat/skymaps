@@ -175,17 +175,13 @@ int  PhotonBinner::event_type_index(int event_type)const
     if (event_type & 8) return 3;
     if (event_type & 16) return 4;
     if (event_type & 32) return 5;
-#if 1
     std::stringstream s;
     s << "Bad event_type : "<< event_type ;
     throw std::runtime_error(s.str());
-#else
-    throw std::runtime_error("Bad event type");
-#endif
 }
 
 
-int count(100);
+int count(10);
 
 skymaps::Band PhotonBinner::operator()(const skymaps::Photon& p)const
 {
@@ -212,16 +208,12 @@ skymaps::Band PhotonBinner::operator()(const skymaps::Photon& p)const
                 case 3: nside= m_psf1_nside[ebin];break;
                 case 4: nside= m_psf2_nside[ebin];break;
                 case 5: nside= m_psf3_nside[ebin];break;
-#if 1 //don't know why this does not compile
 				default:
                     nside=0;
 			        std::stringstream s;
                     s << "Bad event_type index, event_type: "<< event_type <<" "<<p.eventClass();
                     throw std::runtime_error(s.str());
 					break;
-#else
-                throw std::runtime_error("Bad event type index");
-#endif
 
             }
             if (count-- >0){
