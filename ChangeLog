@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: jrb  Fri May  5 17:52:13 PDT 2017
+skymaps
+
+Modified Files:
+	SConscript 
+Log Message:
+updates so that ST_User can be ROOTless
+    *
+------------------------------------------------------------
 User: burnett  Wed May  3 06:53:42 PDT 2017
 skymaps/src
 
