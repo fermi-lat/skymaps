@@ -19,7 +19,17 @@ libEnv.Tool('addLinkDeps', package=package, toBuild='shared')
 progEnv.Tool(libname)
 testapp = progEnv.Program(testname, listFiles(['src/test/*.cxx']))
 
-lib = libEnv.SharedLibrary(package, listFiles(['src/*.cxx']))
+if libEnv.get('CONTAINERNAME','') != 'ScienceTools_User':
+    lib = libEnv.SharedLibrary(package, listFiles(['src/*.cxx']))
+else:
+    lib = libEnv.SharedLibrary(package, listFiles(['src/B*.cxx',
+                                                   'src/Compos*.cxx',
+                                                   'src/Convolution.cxx',
+                                                   'src/DiffuseFunction.cxx',
+                                                   'src/E*.cxx','src/G*.cxx',
+                                                   'src/H*.cxx', 'src/I*.cxx',
+                                                   'src/L*.cxx', 'src/P*.cxx',
+                                                   'src/S*.cxx','src/W*.cxx']))
 
 # SWIG
 swigEnv = baseEnv.Clone()
