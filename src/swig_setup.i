@@ -380,7 +380,7 @@ def __repr__(self): return self.__str__()
 %include skymaps/IParams.h
 %include skymaps/BandBackground.h
 %include skymaps/SkyIntegrator.h
-// %include skymaps/ComplexSkySpectrum.h
+%include skymaps/ComplexSkySpectrum.h
 %include skymaps/SmoothedSkySpectrum.h
 %include skymaps/ExposureWeighter.h
 
