@@ -71,8 +71,8 @@ public:
 
     class FitsIO {
        public:
-          FitsIO::FitsIO(const std::string & filename);
-          FitsIO::~FitsIO();
+          FitsIO(const std::string & filename);
+          ~FitsIO();
 	  
 	  healpix::HealpixArray<std::vector<double> >& skymap(){ return *m_skymap;};
 	  std::vector<double>& energies(){ return m_energies; };
