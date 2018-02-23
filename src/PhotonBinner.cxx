@@ -50,7 +50,7 @@ std::vector<double> PhotonBinner::s_gamma_level(gamma_list,gamma_list+14);
 std::vector<double> PhotonBinner::s_sigma_level(sigma_list,sigma_list+14);
 
 //static list of event type names
-static std::string PhotonBinner::s_event_type_names[] = {"front","back","PSF0","PSF1","PSF2","PSF3"};
+std::string PhotonBinner::s_event_type_names[] = {"front","back","PSF0","PSF1","PSF2","PSF3"};
 
 std::string PhotonBinner::event_type_name(int index)
 {
