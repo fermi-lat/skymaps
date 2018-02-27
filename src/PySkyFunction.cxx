@@ -20,10 +20,10 @@ using namespace embed_python;
 
 
 PySkyFunction::PySkyFunction(std::string modulename, std::string functionname)
-: m_module(&embed_python::Module("" , modulename))
-, m_fun(embed_python::Module("" , modulename).attribute(functionname) )
+  : m_fun(Module("" , modulename).attribute(functionname) )
 {
-
+  auto tmp = new Module("" , modulename);
+  m_module = tmp;  
 }
 
 PySkyFunction::PySkyFunction(PyObject* callable)
