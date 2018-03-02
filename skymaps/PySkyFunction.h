@@ -40,12 +40,12 @@ namespace skymaps {
     public:
 
         /** @brief ctor
-        @param modulename name of python module 
+        @param modulename name of python module
         @param functionname name of a python function that takes arguments x,y,z, returns a function
-        
+
         */
         PySkyFunction(std::string modulename, std::string functionname);
-
+        ~PySkyFunction();
 
         /** @brief ctor
         @param callable a callable python object
