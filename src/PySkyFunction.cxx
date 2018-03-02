@@ -1,5 +1,5 @@
 /** @file PySkyFunction.cxx
-@brief implement class PySkyFunction 
+@brief implement class PySkyFunction
 
 $Header$
 */
@@ -9,7 +9,7 @@ $Header$
 #include "skymaps/PySkyFunction.h"
 #include "embed_python/Module.h"
 #ifdef _DEBUG
-#undef _DEBUG /* Link with python24.lib and not python24_d.lib */ 
+#undef _DEBUG /* Link with python24.lib and not python24_d.lib */
 #endif
 #include <Python.h>
 
@@ -22,8 +22,12 @@ using namespace embed_python;
 PySkyFunction::PySkyFunction(std::string modulename, std::string functionname)
   : m_fun(Module("" , modulename).attribute(functionname) )
 {
-  auto tmp = new Module("" , modulename);
-  m_module = tmp;  
+  m_module = new Module("" , modulename);
+}
+
+PySkyFunction::~PySkyFunction()
+{
+  delete m_module;
 }
 
 PySkyFunction::PySkyFunction(PyObject* callable)
@@ -31,7 +35,7 @@ PySkyFunction::PySkyFunction(PyObject* callable)
 {
     if (PyErr_Occurred()) {
         PyErr_Print();
-        throw std::runtime_error("PySkyFunction: error in ctor"); 
+        throw std::runtime_error("PySkyFunction: error in ctor");
     }
 }
 
@@ -51,7 +55,7 @@ double PySkyFunction::operator()(const astro::SkyDir& dir)const
     PyObject* retobj  = PyObject_CallObject(m_fun, args);
     if (PyErr_Occurred()) {
         PyErr_Print();
-        throw std::runtime_error("PySkyFunction: error calling function"); 
+        throw std::runtime_error("PySkyFunction: error calling function");
     }
      Py_DECREF(list);
      Py_DECREF(args);
@@ -115,12 +119,12 @@ double PySkyFunction::average(const astro::SkyDir& dir, double angle, double tol
 
 // Calculate average for a given level
 double PySkyFunction::level_ave(const astro::SkyDir& dir, double angle, int level) const
-{   
+{
 
     int nside(1 << level);
     std::vector<int> v;
     healpix::Healpix hpx(nside, healpix::Healpix::NESTED, astro::SkyDir::GALACTIC);
-    hpx.query_disc(dir, angle, v); 
+    hpx.query_disc(dir, angle, v);
     double av(0);
 
     for (std::vector<int>::const_iterator it = v.begin(); it != v.end(); ++it)
