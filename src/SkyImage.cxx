@@ -485,7 +485,7 @@ void SkyImage::writeEnergies(){
 
     // Check if the extension exists already. If not, add it.
     try{
-        std::auto_ptr<const tip::Table> 
+        std::unique_ptr<const tip::Table> 
             gtiTable(tip::IFileSvc::instance().readTable(filename, tablename));
     } catch (tip::TipException & eObj) {
         if (!st_facilities::Util::expectedException(eObj, "Could not open FITS extension"))
@@ -507,7 +507,7 @@ void SkyImage::writeEnergies(){
         fits_close_file(fptr, &status);
         ::fitsReportError(status);
     }
-   std::auto_ptr<tip::Table> 
+   std::unique_ptr<tip::Table> 
       gtiTable(tip::IFileSvc::instance().editTable(filename, tablename));
 
 
