@@ -37,7 +37,7 @@ GtiBase::GtiBase(std::vector<double> & starts, std::vector<double> & stops): m_i
     // Iterate over input files.
     for (FileSys::FileNameCont::iterator itor = file_cont.begin(); itor != file_cont.end(); ++itor) {
       // Open GTI extension.
-      std::auto_ptr<const tip::Table> gti_table(tip::IFileSvc::instance().readTable(*itor, ext_name));
+      std::unique_ptr<const tip::Table> gti_table(tip::IFileSvc::instance().readTable(*itor, ext_name));
 
       // Fill container with intervals from the extension.
       for (tip::Table::ConstIterator itor = gti_table->begin(); itor != gti_table->end(); ++itor) {

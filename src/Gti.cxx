@@ -61,7 +61,7 @@ bool Gti::accept(double time) const {
 void Gti::writeExtension(const std::string & filename) const {
    try {
 // Check if the extension exists already. If not, add it.
-      std::auto_ptr<const tip::Table> 
+      std::unique_ptr<const tip::Table> 
          gtiTable(tip::IFileSvc::instance().readTable(filename, "GTI"));
    } catch (tip::TipException & eObj) {
       if (!st_facilities::Util::
@@ -83,7 +83,7 @@ void Gti::writeExtension(const std::string & filename) const {
       fits_close_file(fptr, &status);
       ::fitsReportError(status);
    }
-   std::auto_ptr<tip::Table> 
+   std::unique_ptr<tip::Table> 
       gtiTable(tip::IFileSvc::instance().editTable(filename, "GTI"));
 
 // Assume that setting the number of records to zero erases the existing
