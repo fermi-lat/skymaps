@@ -78,6 +78,9 @@ target_link_libraries(
   Python3::Python
 )
 
+###### Tests ######
+# add_executable(test_skymaps)
+
 ###############################################################
 # Installation
 ###############################################################
@@ -86,7 +89,7 @@ install(DIRECTORY data/ DESTINATION ${FERMI_INSTALL_DATADIR})
 
 install(
   TARGETS skymaps swig_skymaps
-  # EXPORT fermiTargets
+  EXPORT fermiTargets
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib
