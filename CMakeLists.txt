@@ -39,12 +39,14 @@ add_library(
   src/WeightedSkyDir.cxx
 )
 target_include_directories(
-  skymaps PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-  $<INSTALL_INTERFACE:>
+  skymaps
+  PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> $<INSTALL_INTERFACE:>
 )
 
-target_link_libraries(skymaps PUBLIC facilities tip st_facilities healpix embed_python timeSystem)
+target_link_libraries(
+  skymaps
+  PUBLIC facilities tip st_facilities healpix embed_python timeSystem
+)
 
 set(UseSWIG_TARGET_NAME_PREFERENCE STANDARD)
 
@@ -65,30 +67,27 @@ set_property(
 set_property(TARGET swig_skymaps PROPERTY SWIG_MODULE_NAME _skymaps)
 
 target_include_directories(
-  swig_skymaps PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-  $<INSTALL_INTERFACE:>
+  swig_skymaps
+  PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> $<INSTALL_INTERFACE:>
 )
 
 target_link_libraries(
   swig_skymaps
-  PRIVATE skymaps
-  astro
-  CLHEP::CLHEP
-  Python3::Python
+  PRIVATE skymaps astro CLHEP::CLHEP Python3::Python Python3::NumPy
 )
 
 ###### Tests ######
-# add_executable(test_skymaps)
+add_executable(test_skymaps src/test/test_main.cxx)
+target_link_libraries(test_skymaps PUBLIC skymaps)
 
 ###############################################################
 # Installation
 ###############################################################
 install(DIRECTORY skymaps DESTINATION ${FERMI_INSTALL_INCLUDEDIR})
-install(DIRECTORY data/ DESTINATION ${FERMI_INSTALL_DATADIR})
+install(DIRECTORY data/ DESTINATION ${FERMI_INSTALL_DATADIR}/skymaps)
 
 install(
-  TARGETS skymaps swig_skymaps
+  TARGETS skymaps swig_skymaps test_skymaps
   EXPORT fermiTargets
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
   LIBRARY DESTINATION lib
