@@ -1,7 +1,7 @@
 include(UseSWIG)
 
 add_library(
-  skymaps SHARED
+  skymaps 
   src/Background.cxx
   src/Band.cxx
   src/BandBackground.cxx
