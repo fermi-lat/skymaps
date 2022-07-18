@@ -74,6 +74,10 @@ target_link_libraries(
                        Python3::NumPy
 )
 
+if(APPLE)
+  target_link_options(swig_skymaps PRIVATE -bundle -flat_namespace)
+endif()
+
 # Tests ######
 add_executable(test_skymaps src/test/test_main.cxx)
 target_link_libraries(test_skymaps PUBLIC skymaps)
