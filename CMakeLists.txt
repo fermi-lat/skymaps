@@ -71,7 +71,6 @@ target_include_directories(
 
 target_link_libraries(
   swig_skymaps PRIVATE skymaps astro CLHEP::CLHEP Python3::Python
-                       Python3::NumPy
 )
 
 if(APPLE)

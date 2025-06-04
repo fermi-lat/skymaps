@@ -2,28 +2,6 @@
 // $Header$
 #define PySwigIterator skymaps_PySwigIterator
 
-%init %{
-    import_array();
-%}
-
-%typemap(in) (double* rvals,int rvals_size) {
-    PyObject* c = $input;
-    assert (PyArray_ISCONTIGUOUS(c));
-    $1 = (double *) PyArray_DATA(c);
-    $2 = int(PyArray_DIM(c,0));
-}
-
-%typemap(in) (double* lons,int lons_size,double* lats, int lats_size) {
-    PyObject* c1 = $input;
-    PyObject* c2 = $input;
-    assert(PyArray_ISCONTIGUOUS(c1));
-    assert(PyArray_ISCONTIGUOUS(c2));
-    $1 = (double *) PyArray_DATA(c1);
-    $2 = int(PyArray_DIM(c1,0));
-    $3 = (double *) PyArray_DATA(c2);
-    $4 = int(PyArray_DIM(c2,0));
-}
-
 %{
 #define SWIG_FILE_WITH_INIT
 #include <cstddef>
@@ -99,8 +77,6 @@
 #include "CLHEP/Vector/RotationZ.h"
 #include "CLHEP/Vector/EulerAngles.h"
 #include "CLHEP/Vector/ThreeVector.h"
-
-#include "numpy/arrayobject.h"
 
 %}
 %include stl.i
