@@ -78,6 +78,8 @@ if(APPLE)
 endif()
 
 # Tests ######
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
 add_executable(test_skymaps src/test/test_main.cxx)
 target_link_libraries(test_skymaps PUBLIC skymaps)
 
