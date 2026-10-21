@@ -48,7 +48,8 @@ target_link_libraries(
 )
 
 set(UseSWIG_TARGET_NAME_PREFERENCE STANDARD)
-set(CMAKE_SWIG_FLAGS -w362 -w389 -w401 -w402 -w503 -w509)
+set(CMAKE_SWIG_FLAGS -py3-stable-abi -w362 -w389 -w401 -w402 -w503 -w509)
+#set(CMAKE_SWIG_FLAGS -w362 -w389 -w401 -w402 -w503 -w509)
 
 # SWIG generates the python wrapper library
 set_property(SOURCE src/swig_setup.i PROPERTY CPLUSPLUS ON)
