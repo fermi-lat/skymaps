@@ -71,7 +71,7 @@ target_include_directories(
 )
 
 target_link_libraries(
-  swig_skymaps PRIVATE skymaps astro CLHEP::VectorS Python3::Python
+  swig_skymaps PRIVATE skymaps astro CLHEP::VectorS Python3::SABIModule
 )
 
 if(APPLE)
