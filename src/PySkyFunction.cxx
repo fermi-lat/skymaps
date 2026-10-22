@@ -11,6 +11,10 @@ $Header$
 #ifdef _DEBUG
 #undef _DEBUG /* Link with python24.lib and not python24_d.lib */
 #endif
+// Use only the Python stable ABI. The build normally defines this; keep a fallback for standalone builds.
+#ifndef Py_LIMITED_API
+#define Py_LIMITED_API 0x03080000
+#endif
 #include <Python.h>
 
 #include <stdexcept>
