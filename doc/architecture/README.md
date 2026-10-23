@@ -83,8 +83,22 @@ original use, Python scripts (pointlike) drove the SWIG module.
 - **Python:** the SWIG module `skymaps` (`_skymaps`), from
   `src/swig_setup.i`.
 - **Data:** `data/LivetimeCubeTemplate` and
-  `data/aeff_P6_v1_diff_front.fits` (used by the test).
+  `data/aeff_P6_v1_diff_front.fits` (used by the test). `CMakeLists.txt`
+  would install them to `share/fermitools/data/skymaps`, but
+  `LivetimeCube.cxx` and the test look them up with
+  `getDataPath("skymaps")`, which is `refdata/fermi/skymaps`, so they
+  would not be found at run time.
 - **Applications, par files:** none.
+
+### Environment variables
+
+| Variable | Read in | Effect |
+|----------|---------|--------|
+| `CALDB` | `IParams.cxx`, `EffectiveArea.cxx` (cached in a static on first use) | Root for hand-built `$CALDB/bcf/psf/...` and `$CALDB/bcf/ea/aeff_<irf>.fits` paths when no file name is given. Unset throws `std::invalid_argument`. |
+
+`FERMI_INST_DIR` is used indirectly through `getDataPath`. Variables set
+by conda activation are described under "Runtime environment" in
+ScienceTools' `docs/architecture/README.md`.
 
 ## Build and test
 
@@ -100,6 +114,9 @@ from the top-level build. It defines:
   CTest, but it is installed to `bin/`. It uses
   `getDataPath("skymaps")`, writes `test_philivetimecube.fits` to the
   current directory, and probably needs `CALDB` for the IRF classes.
+  `recipe/tests/ST-unit-test` does not list it (see "Testing" in
+  ScienceTools' `docs/architecture/README.md`), and no skymaps reference
+  data exists anywhere.
 
 **Would it build?** On 2026-10-22, against the current `RelWithDebInfo`
 tree and the heads of all submodules, a `-fsyntax-only` compile of all 35
