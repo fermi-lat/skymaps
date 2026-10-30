@@ -44,7 +44,9 @@ target_include_directories(
 )
 
 target_link_libraries(
-  skymaps PUBLIC facilities tip st_facilities healpix embed_python timeSystem Python3::Python
+  skymaps
+  PUBLIC facilities tip st_facilities healpix embed_python timeSystem
+  PRIVATE Python3::Python
 )
 
 set(UseSWIG_TARGET_NAME_PREFERENCE STANDARD)
